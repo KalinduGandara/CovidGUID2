@@ -31,10 +31,10 @@ class AuthController extends Controller
                 $response->redirect('/');
                 exit;
             }
-            return $this->render('login',['model'=>$loginForm]);
+            return $this->render('login2',['model'=>$loginForm]);
         }
         $this->setLayout('auth');
-        return $this->render('login',['model'=>$loginForm]);
+        return $this->render('login2',['model'=>$loginForm]);
     }
 
     public function register(Request $request)

@@ -15,37 +15,130 @@ abstract class DbModel extends Model
 
     abstract public static function primaryKey(): string;
 
+    public function update($where,$data)
+    {
+        $tableName = $this->tableName();
+
+        $attributes = array_filter(array_keys($data),array($this, 'isAttributes'));
+
+        $str = array();
+        foreach ($attributes as $value){
+            array_push($str, "$value=:$value ");
+        }
+        $whereAttribute = array_keys($where);
+        $sql = implode(" AND ",array_map(fn($attr)=>"$attr = :$attr",$whereAttribute));
+        $SQL = "UPDATE $tableName SET ".implode(',',$str)." WHERE $sql";
+
+        $statement = self::prepare($SQL);
+
+        foreach ($attributes as $attribute) {
+            $statement->bindValue(":$attribute",$data["$attribute"]);
+        }
+        foreach ($whereAttribute as $attribute) {
+            $statement->bindValue(":$attribute",$where["$attribute"]);
+        }
+
+        try {
+            return $statement->execute();
+        }catch (\Exception $e){
+            throw new \Exception("Something went Wrong",500);
+        }
+    }
     public function save()
     {
         $tableName = $this->tableName();
-        $attributes = $this->attributes();
-        $params = array_map(fn($n) => ":$n", $attributes);
+        $attributes = array_filter($this->attributes(),array($this, 'checkParamsEmpty'));
+        $params = array_map(fn($v)=>":$v",$attributes);
         $SQL = "INSERT INTO $tableName (".implode(',',$attributes).")VALUES(".implode(',',$params).")";
         $statement = self::prepare($SQL);
 
         foreach ($attributes as $attribute) {
-            $statement->bindValue(":$attribute",$this->{$attribute});
+            if ($this->{$attribute})
+                $statement->bindValue(":$attribute",$this->{$attribute});
         }
         $statement->execute();
         return true;
     }
+    public function delete($where)
+    {
+        $tableName = $this->tableName();
 
-    public static function findOne($where)
+
+        $whereAttribute = array_keys($where);
+        $sql = implode(" AND ",array_map(fn($attr)=>"$attr = :$attr",$whereAttribute));
+        $SQL = "DELETE FROM $tableName WHERE $sql";
+
+        $statement = self::prepare($SQL);
+
+        foreach ($whereAttribute as $attribute) {
+            $statement->bindValue(":$attribute",$where["$attribute"]);
+        }
+
+        try {
+            return $statement->execute();
+        }catch (\Exception $e){
+            throw new \Exception("Something went Wrong",500);
+        }
+    }
+
+    public static function findOne($where)//:self
     {
         $tableName = static::tableName();
         $attribute = array_keys($where);
-        $sql = implode("AND ",array_map(fn($attr)=>"$attr = :$attr",$attribute));
+        $sql = implode(" AND ",array_map(fn($attr)=>"$attr = :$attr",$attribute));
         $statement = self::prepare("SELECT * FROM $tableName WHERE $sql");
 
         foreach ($where as $key => $value) {
             $statement->bindValue(":$key",$value);
         }
+
+        try {
+            $statement->execute();
+            return $statement->fetchObject(static::class);
+        }catch (\Exception $e){
+            throw new \Exception("Item not Found",404);
+        }
+    }
+    public static function getAllWhere($where)
+    {
+        $tableName = static::tableName();
+        $attribute = array_keys($where);
+        $sql = implode(" AND ",array_map(fn($attr)=>"$attr = :$attr",$attribute));
+        $SQL = "SELECT * FROM $tableName WHERE $sql";
+
+        $statement = self::prepare($SQL);
+        foreach ($where as $key => $value) {
+            $statement->bindValue(":$key",$value);
+        }
         $statement->execute();
-        return $statement->fetchObject(static::class);
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    public static function getAll()
+    {
+        $tableName = static::tableName();
+        $statement = self::prepare("SELECT * FROM $tableName");
+
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public static function prepare($sql)
     {
         return App::$app->db->pdo->prepare($sql);
+    }
+
+    public function checkParamsEmpty($attribute)
+    {
+        if ($this->{$attribute})
+            return true;
+        return false;
+    }
+
+    private function isAttributes($attribute):bool
+    {
+        $attributes = $this->attributes();
+        return in_array($attribute,$attributes);
     }
 }

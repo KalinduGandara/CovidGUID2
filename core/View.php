@@ -11,15 +11,18 @@ class View
     public function renderView($view,$params =[])
     {
         $viewContent = $this->renderOnlyView($view,$params);
-        $layoutContent = $this->layoutContent();
+        $layoutContent = $this->layoutContent($params);
         return str_replace('{{content}}', $viewContent, $layoutContent);
 
     }
 
-    protected function layoutContent()
+    protected function layoutContent($params)
     {
-        $layout = App::$app->controller->layout ?? 'main';
+        $layout = App::$app->controller->layout ?? 'main2';
         ob_start();
+        foreach ($params as $key => $value) {
+            $$key = $value;
+        }
         include_once App::$ROOT_DIR . "/views/layouts/$layout.php";
         return ob_get_clean();
     }

@@ -7,15 +7,23 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 use app\models\ContactForm;
+use app\models\LoginForm;
 
 class SiteController extends Controller
 {
     public function home()
     {
+        $loginForm = new LoginForm();
+        $posts = \app\models\Post::getAllWhere(['post_status'=>'published']);
+        $categories = \app\models\Category::getAll();
         $params = [
-            'name' => "Kalindu"
+            'name' => "Kalindu",
+            'posts'=>$posts,
+            'categories'=>$categories,
+            'model'=>$loginForm
         ];
-        return $this->render('home',$params);
+//        $this->setLayout('main2');
+        return $this->render('home2',$params);
     }
     public function contact(Request $request,Response $response)
     {

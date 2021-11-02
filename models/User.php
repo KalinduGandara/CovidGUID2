@@ -30,6 +30,7 @@ class User extends UserModel
     public function save()
     {
         $this->status = self::STATUS_INACTIVE;
+        $this->type = self::PUBLIC_USER;
         $this->password = password_hash($this->password,PASSWORD_DEFAULT);
         return parent::save();
     }
