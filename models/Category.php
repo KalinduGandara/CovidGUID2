@@ -6,6 +6,7 @@ namespace app\models;
 
 class Category extends \app\core\db\DbModel
 {
+    public string $cat_title = '';
 
     public static function tableName(): string
     {
@@ -26,6 +27,12 @@ class Category extends \app\core\db\DbModel
     {
         return [
             'cat_title' => [self::RULE_REQUIRED]
+        ];
+    }
+    public function labels(): array
+    {
+        return [
+            'cat_title' => 'Category Title'
         ];
     }
 }

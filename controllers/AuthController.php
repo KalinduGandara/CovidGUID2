@@ -31,9 +31,10 @@ class AuthController extends Controller
                 $response->redirect('/');
                 exit;
             }
+            $this->setLayout('auth2');
             return $this->render('login2',['model'=>$loginForm]);
         }
-        $this->setLayout('auth');
+        $this->setLayout('auth2');
         return $this->render('login2',['model'=>$loginForm]);
     }
 
@@ -49,10 +50,10 @@ class AuthController extends Controller
                 App::$app->response->redirect('/');
                 exit;
             }
-
+            $this->setLayout('auth2');
             return $this->render('register',['model'=>$user]);
         }
-        $this->setLayout('auth');
+        $this->setLayout('auth2');
         return $this->render('register',['model'=>$user]);
     }
 

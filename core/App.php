@@ -93,4 +93,12 @@ class App
     {
         return !self::$app->user;
     }
+
+    public static function isAdmin()
+    {
+        if (self::isGuest()){
+            return false;
+        }
+        return self::$app->user->type;
+    }
 }

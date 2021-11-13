@@ -1,4 +1,6 @@
 <?php
+
+use app\controllers\AdminController;
 use app\controllers\AuthController;
 use app\controllers\SiteController;
 use app\core\App;
@@ -23,6 +25,18 @@ $app = new App(dirname(__DIR__),$config);
 $app->router->get('/',[SiteController::class,'home']);
 $app->router->get('/contact',[SiteController::class,'contact']);
 $app->router->post('/contact',[SiteController::class,'contact']);
+
+
+$app->router->get('/post',[SiteController::class,'post']);
+
+$app->router->get('/admin',[AdminController::class,'index']);
+$app->router->get('/admin/posts',[AdminController::class,'posts']);
+//$app->router->post('/admin/posts',[AdminController::class,'posts']);
+$app->router->get('/admin/categories',[AdminController::class,'categories']);
+$app->router->post('/admin/categories',[AdminController::class,'categories']);
+$app->router->get('/admin/users',[AdminController::class,'users']);
+
+
 
 
 $app->router->get('/login',[AuthController::class,'login']);
