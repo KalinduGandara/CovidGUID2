@@ -6,6 +6,8 @@ namespace app\controllers;
 
 use app\core\App;
 use app\core\Controller;
+use app\core\middlewares\AdminMiddleware;
+use app\core\middlewares\AuthMiddleware;
 use app\core\Request;
 use app\core\Response;
 use app\models\Category;
@@ -14,6 +16,10 @@ use app\models\Post;
 class AdminController extends Controller
 {
     public string $layout = 'admin';
+    public function __construct()
+    {
+        $this->registerMiddleware(new AdminMiddleware());
+    }
 
     public function index()
     {
@@ -32,6 +38,7 @@ class AdminController extends Controller
     public function categories(Request $request,Response $response)
     {
         $category = new Category();
+        $mode = '';
         if (isset($_GET['edit_id'])){
             $mode = 'update';
             $category = Category::findOne(['cat_id'=>$_GET['edit_id']]);
@@ -57,7 +64,6 @@ class AdminController extends Controller
 
 
         $categories = Category::getAll();
-
 
         return $this->render('admin_categories', ['categories'=>$categories,'model'=>$category,'mode'=>$mode]);
 

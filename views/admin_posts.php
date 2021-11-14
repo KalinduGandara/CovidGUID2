@@ -13,9 +13,9 @@
 //} else {
 //    header("Location: ../");
 //}
-if (!\app\core\App::isAdmin()) {
-    header("Location: /");
-}
+//if (!\app\core\App::isAdmin()) {
+//    header("Location: /");
+//}
 ?>
 
     <div id="wrapper">
