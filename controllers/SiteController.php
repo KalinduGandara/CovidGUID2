@@ -8,6 +8,7 @@ use app\core\Request;
 use app\core\Response;
 use app\models\Category;
 use app\models\ContactForm;
+use app\models\Guideline;
 use app\models\LoginForm;
 use app\models\Post;
 
@@ -16,11 +17,11 @@ class SiteController extends Controller
     public function home()
     {
         $loginForm = new LoginForm();
-        $posts = Post::getAllWhere(['post_status'=>'published']);
+        $guidelines = Guideline::getAll();
         $categories = Category::getAll();
         $params = [
             'name' => "Kalindu",
-            'posts'=>$posts,
+            'guidelines'=>$guidelines,
             'categories'=>$categories,
             'model'=>$loginForm
         ];
@@ -43,15 +44,13 @@ class SiteController extends Controller
     }
     public function post(Request $request,Response $response)
     {
-        $post_id = $_GET["post_id"];
-        $post = Post::findOne(['post_id'=>$post_id]);
+        $guid_id = $_GET["guid_id"];
+        $guideline = Guideline::findOne(['guid_id'=>$guid_id]);
         $categories = Category::getAll();
         $params = [
-//            'name' => "Kalindu",
-            'post'=>$post,
+            'guideline'=>$guideline,
             'categories'=>$categories,
-//            'model'=>$loginForm
         ];
-        return $this->render('post',$params);
+        return $this->render('guideline',$params);
     }
 }

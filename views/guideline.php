@@ -1,11 +1,3 @@
-<?php //include "includes/db.php" ?>
-<?php //include "includes/header.php" ?>
-<?php //include "admin/functions.php" ?>
-
-    <!-- Navigation -->
-<!--    --><?php //include "includes/navigation.php"
-//echo "asd"?>
-    
 
     <!-- Page Content -->
     <div class="container">
@@ -23,46 +15,20 @@
                 <!-- Blog Posts -->
 
                 <?php 
-//                    $post_id = $_GET['post_id'];
-//                    $query = "SELECT * FROM posts WHERE post_id=$post_id";
-//                    $query_result = mysqli_query($connection, $query);
-//                    confirmQuery($query_result);
 
-//                    $row = mysqli_fetch_assoc($query_result);
-//                    $post_title = $row['post_title'];
-//                    $post_author = $row['post_author'];
-//                    $post_date = $row['post_date'];
-//                    $post_image = $row['post_image'];
-//                    $post_content = $row['post_content'];
-//                    $post_last_edited = $row['post_last_edited'];
-                /** @var $post \app\models\Post */
-//                var_dump($post);
-                $post_id = $post->post_id;
-                $post_title = $post->post_title;
-                $post_author = $post->post_author;
-                $post_date = $post->post_date;
-                $post_image = $post->post_image;
-                $post_content = $post->post_content;
-                $post_last_edited = $post->post_last_edited;
+                $guid_id = $guideline->guid_id;
+                $guid_title = $guideline->guid_title;
+                $guid_body = $guideline->guid_body;
+                $cat_id = $guideline->cat_id;
+                $guid_status = $guideline->guid_status;
+
                 ?>
 
                     <h2>
-                        <a href="#"><?php echo $post_title ?></a>
+                        <a href="#"><?php echo $guid_title ?></a>
                     </h2>
-                    <p class="lead">
-                        by <a href="/"><?php echo $post_author ?></a>
-                    </p>
-                    <p><span class="glyphicon glyphicon-time"></span> Posted on <?php echo $post_date ?>
-                    <?php
-                        if (!empty($post_last_edited)) {
-                            echo ", Last edited on $post_last_edited";
-                        }
-                    ?>
-                    </p>
-                    <hr>
-                    <img class="img-responsive" src="images/<?php echo $post_image ?>" alt="post image is missing">
-                    <hr>
-                    <p><?php echo $post_content ?></p>
+
+                    <p><?php echo $guid_body ?></p>
                     <!-- <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a> -->
 
                     <hr>

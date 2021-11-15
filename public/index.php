@@ -30,7 +30,7 @@ $app->router->post('/contact', [SiteController::class, 'contact']);
 $app->router->get('/post', [SiteController::class, 'post']);
 
 $app->router->get('/admin', [AdminController::class, 'index']);
-$app->router->get('/admin/posts', [AdminController::class, 'posts']);
+$app->router->get('/admin/guidelines', [AdminController::class, 'guidelines']);
 //$app->router->post('/admin/posts',[AdminController::class,'posts']);
 $app->router->get('/admin/categories', [AdminController::class, 'categories']);
 $app->router->post('/admin/categories', [AdminController::class, 'categories']);

@@ -9,6 +9,7 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 use app\models\Category;
+use app\models\Guideline;
 use app\models\Post;
 
 class AdminController extends Controller
@@ -20,12 +21,12 @@ class AdminController extends Controller
         return $this->render('admin_index', []);
     }
 
-    public function posts()
+    public function guidelines()
     {
-        $posts = Post::getAll();
+        $guidelines = Guideline::getAll();
         $categories = Category::getAll();
 
-        return $this->render('admin_posts', ['posts'=>$posts,'categories'=>$categories]);
+        return $this->render('admin_guidelines', ['guidelines'=>$guidelines,'categories'=>$categories]);
 
     }
 

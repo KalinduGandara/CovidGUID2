@@ -36,13 +36,13 @@
                     </li>
                     
                     <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#posts_dropdown"><i class="fa fa-fw fa-arrows-v"></i> Posts <i class="fa fa-fw fa-caret-down"></i></a>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#posts_dropdown"><i class="fa fa-fw fa-arrows-v"></i> Guidelines <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="posts_dropdown" class="collapse">
                             <li>
-                                <a href=/admin/posts>View all posts</a>
+                                <a href=/admin/guidelines>View all Guidelines</a>
                             </li>
                             <li>
-                                <a href="/admin/posts?source=add_post">Add post</a>
+                                <a href="/admin/guidelines?source=add_post">Add a Guideline</a>
                             </li>
                         </ul>
                     </li>
