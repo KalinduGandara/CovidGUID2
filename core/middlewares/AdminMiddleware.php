@@ -12,7 +12,7 @@ class AdminMiddleware extends BaseMiddleware
 
     public function execute()
     {
-        if (App::isGuest()){
+        if (!App::isAdmin()){
             if (empty($this->actions) || in_array(App::$app->controller->action,$this->actions)){
                 throw new ForbiddenException();
             }

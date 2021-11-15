@@ -33,7 +33,7 @@ $app->router->get('/admin',[AdminController::class,'index']);
 $app->router->get('/admin/posts',[AdminController::class,'posts']);
 //$app->router->post('/admin/posts',[AdminController::class,'posts']);
 $app->router->get('/admin/categories',[AdminController::class,'categories']);
-$app->router->post('/admin/categories',[AdminController::class,'categories']);
+//$app->router->post('/admin/categories',[AdminController::class,'categories']);
 $app->router->get('/admin/users',[AdminController::class,'users']);
 
 

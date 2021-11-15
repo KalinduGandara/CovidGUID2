@@ -25,7 +25,12 @@ class SiteController extends Controller
             'model'=>$loginForm
         ];
 //        $this->setLayout('main2');
+        if (App::isGuest()){
+            return $this->render('home2',$params);
+        }
+
         return $this->render('home2',$params);
+
     }
     public function contact(Request $request,Response $response)
     {
