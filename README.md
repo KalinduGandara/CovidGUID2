@@ -10,6 +10,7 @@ CS 2062 - Object Oriented Software Development project
 
 - clone the repository from github.com
 - navigate in to the directory of the repository
+- run ```composer install```
 - create a `.env` file according to following Template
   ```
   DB_DSN = mysql:host=localhost;port= /*your MYSQL listening port*/;

@@ -21,6 +21,7 @@ class Database
 
     public function applyMigrations()
     {
+        $this->createDatabase();
         $this->createMigrationTable();
         $appliedMigrations =  $this->getAppliedMigrations();
 
@@ -52,6 +53,11 @@ class Database
             $this->log("All Migrations are applied");
         }
 
+    }
+
+    public function createDatabase(){
+        $this->pdo->exec("CREATE DATABASE IF NOT EXISTS covidguide");
+        $this->pdo->exec("USE covidguide");
     }
 
     public function createMigrationTable()
