@@ -99,6 +99,6 @@ class App
         if (self::isGuest()){
             return false;
         }
-        return self::$app->user->type;
+        return self::$app->user->type == 0;
     }
 }
