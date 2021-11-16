@@ -53,7 +53,7 @@ abstract class DbModel extends Model
         $statement = self::prepare($SQL);
 
         foreach ($attributes as $attribute) {
-            if ($this->{$attribute})
+            if (isset($this->{$attribute}))
                 $statement->bindValue(":$attribute",$this->{$attribute});
         }
         $statement->execute();
@@ -131,7 +131,7 @@ abstract class DbModel extends Model
 
     public function checkParamsEmpty($attribute)
     {
-        if ($this->{$attribute})
+        if (isset($this->{$attribute}))
             return true;
         return false;
     }
