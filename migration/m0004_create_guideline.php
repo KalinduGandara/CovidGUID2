@@ -7,16 +7,12 @@ class m0004_create_guideline
     {
         $db = \app\core\App::$app->db;
         $SQL = "CREATE TABLE IF NOT EXISTS `guidelines` (
-                  `guideline_id` int(3) NOT NULL AUTO_INCREMENT,
-                  `guideline_title` varchar(255) NOT NULL,
-                  `guideline_description` text NOT NULL,
-                  `guideline_author` varchar(255) NOT NULL,
-                  `guideline_date` date NOT NULL,
-                  `guideline_image` text NOT NULL,
-                  `guideline_tags` varchar(255) NOT NULL,
-                  `guideline_status` varchar(255) NOT NULL DEFAULT 'draft',
-                  `guideline_last_edited` date DEFAULT NULL,
-                  PRIMARY KEY (`guideline_id`)
+                  `guid_id` int(3) NOT NULL AUTO_INCREMENT,
+                  `guid_title` varchar(255) NOT NULL,
+                  `guid_body` text NOT NULL,
+                  `cat_id` INT NOT NULL ,
+                  `guid_status` TEXT NOT NULL ,
+                  PRIMARY KEY (`guid_id`)
                ) ENGINE = INNODB;";
         $db->pdo->exec($SQL);
     }
