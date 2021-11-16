@@ -29,8 +29,8 @@ class User extends UserModel
 
     public function save()
     {
-        $this->status = self::STATUS_INACTIVE;
-        $this->type = self::PUBLIC_USER;
+        $this->status = $this->status != self::STATUS_INACTIVE ? $this->status : self::STATUS_INACTIVE;
+        $this->type = $this->type != self::PUBLIC_USER ? $this->type : self::PUBLIC_USER;
         $this->password = password_hash($this->password,PASSWORD_DEFAULT);
         return parent::save();
     }
@@ -53,7 +53,7 @@ class User extends UserModel
 
     public function attributes(): array
     {
-        return ['firstname','lastname','email','password' ,'status'];
+        return ['firstname','lastname','email','password' ,'status','type'];
     }
     public function labels(): array
     {
@@ -62,6 +62,7 @@ class User extends UserModel
             'lastname' => 'Last Name',
             'email' => 'Email',
             'password' => 'Password',
+            'type'=>'Role',
             'confirmPassword' => 'Confirm Password'
         ];
     }
