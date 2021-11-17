@@ -1,4 +1,3 @@
-
 <?php
 
 ?>
@@ -38,9 +37,49 @@
         <!-- /.row -->
         <?php
         $model = new \app\models\Guideline();
-        $form = \app\core\form\Form::begin('','post');
+        ?>
+        <div class="container">
+        <?php
+        $form = \app\core\form\Form::begin('', 'post');
         echo $form->field($model, 'guid_title');
-        echo $form->field($model, 'guid_body');
+        //        echo $form->field($model, 'guid_body');
+        ?>
+        <fieldset>
+            <legend><h5><b>Guideline Description</b></h5></legend>
+            <div class="container" id="body">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <h5 class="text-center">Property</h5>
+                    </div>
+                    <div class="col-xs-6">
+                        <h5 class="text-center">Value</h5>
+                    </div>
+                </div>
+            </div>
+            <button type="button" onclick="addNewField()">Add a Field</button>
+            <script>
+                function addNewField() {
+                    const div = document.createElement('div');
+
+                    div.className = 'row';
+
+                    div.innerHTML = `
+                <div class="row">
+                    <div class="col-xs-6">
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col-xs-6">
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+  `;
+
+                    document.getElementById('body').appendChild(div);
+                }
+
+            </script>
+        </fieldset>
+        <?php
         echo $form->field($model, 'cat_id');
         echo $form->field($model, 'guid_status');
         ?>
@@ -48,6 +87,7 @@
         <button type="submit" class="btn btn-primary">Submit</button>
         <?php $form::end(); ?>
 
+        </div>
 
 
     </div>
