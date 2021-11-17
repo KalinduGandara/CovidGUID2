@@ -90,6 +90,7 @@ class AdminController extends Controller
             }
             if ($_GET['source']=='edit_user') {
                 $mode = 'edit';
+                /** @var $user User*/
                 $user = User::findOne(['id'=>$_GET['edit_user_id']]);
                 $user->password = '';
                 if ($request->method() == 'post'){

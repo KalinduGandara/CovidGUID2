@@ -74,19 +74,22 @@
                 <?php if (\app\core\App::isGuest()){ ?>
 
                 <li>
-                    <a href="login">Login</a>
+                    <a href="/login">Login</a>
                 </li>
                     <li>
-                        <a href="register">Register</a>
+                        <a href="/register">Register</a>
                     </li>
                 <?php }else{?>
+                    <li>
+                        <a href="/profile">Profile</a>
+                    </li>
                     <?php if (\app\core\App::isAdmin()){ ?>
                         <li>
-                            <a href="admin">Admin</a>
+                            <a href="/admin">Admin</a>
                         </li>
                     <?php }?>
                     <li>
-                        <a href="logout">Logout</a>
+                        <a href="/logout">Logout</a>
                     </li>
                 <?php }?>
                 <?php

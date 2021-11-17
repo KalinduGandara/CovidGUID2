@@ -81,6 +81,8 @@
                     <?php echo $form->field($model,'confirmPassword')->passwordField() ?>
                     <br>
                     <button type="submit" class="btn btn-primary">Submit</button>
+                    <?php \app\core\form\Form::end();?>
+
                 </div>
             <?php } elseif ($mode == 'edit') { ?>
             <div class="container">
@@ -105,6 +107,7 @@
                 <?php echo $form->field($model,'confirmPassword')->passwordField() ?>
                 <br>
                 <button type="submit" class="btn btn-primary">Submit</button>
+                <?php \app\core\form\Form::end();?>
             </div>
             <?php } ?>
 

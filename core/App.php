@@ -89,16 +89,24 @@ class App
         $this->session->remove('user');
     }
 
-    public static function isGuest()
+    public static function isGuest():bool
     {
         return !self::$app->user;
     }
 
-    public static function isAdmin()
+    public static function isAdmin():bool
     {
         if (self::isGuest()){
             return false;
         }
         return self::$app->user->type == 0;
     }
+    public static function isOfficer():bool
+    {
+        if (self::isGuest()){
+            return false;
+        }
+        return self::isAdmin() || self::$app->user->type == 1;
+    }
+
 }

@@ -22,6 +22,8 @@ class AuthController extends Controller
 
     public function login(Request $request,Response $response)
     {
+        if (!App::isGuest())
+            $response->redirect('/');
         $loginForm = new LoginForm();
 
         if ($request->method() === 'post') {
