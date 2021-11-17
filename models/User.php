@@ -29,11 +29,19 @@ class User extends UserModel
 
     public function save()
     {
-        $this->status = self::STATUS_INACTIVE;
-        $this->type = self::PUBLIC_USER;
+        $this->status = $this->status != self::STATUS_INACTIVE ? $this->status : self::STATUS_INACTIVE;
+        $this->type = $this->type != self::PUBLIC_USER ? $this->type : self::PUBLIC_USER;
         $this->password = password_hash($this->password,PASSWORD_DEFAULT);
         return parent::save();
     }
+    public function update($id,$data)
+    {
+        $this->status = $this->status != self::STATUS_INACTIVE ? $this->status : self::STATUS_INACTIVE;
+        $this->type = $this->type != self::PUBLIC_USER ? $this->type : self::PUBLIC_USER;
+        $data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
+        return parent::update($id,$data);
+    }
+
 
     public function rules(): array
     {
@@ -53,7 +61,7 @@ class User extends UserModel
 
     public function attributes(): array
     {
-        return ['firstname','lastname','email','password' ,'status'];
+        return ['firstname','lastname','email','password' ,'status','type'];
     }
     public function labels(): array
     {
@@ -62,6 +70,7 @@ class User extends UserModel
             'lastname' => 'Last Name',
             'email' => 'Email',
             'password' => 'Password',
+            'type'=>'Role',
             'confirmPassword' => 'Confirm Password'
         ];
     }
@@ -75,4 +84,47 @@ class User extends UserModel
     {
         return $this->firstname.' '.$this->lastname;
     }
+    public function deleteUser($id)
+    {
+
+        $SQL = "UPDATE users SET status=2 WHERE id=$id";
+
+        $statement = self::prepare($SQL);
+
+
+        try {
+            return $statement->execute();
+        }catch (\Exception $e){
+            throw new \Exception("Something went Wrong",500);
+        }
+    }
+    public function changeStatus($id)
+    {
+        $user = User::findOne(['id'=>$id]);
+
+        $status  = $user->status;
+        if ($status == self::STATUS_INACTIVE)
+            $status = self::STATUS_ACTIVE;
+        elseif ($status == self::STATUS_ACTIVE)
+            $status = self::STATUS_INACTIVE;
+//        echo '<pre>';
+//        var_dump($this);
+//        echo '</pre>';
+//        exit();
+
+        $SQL = "UPDATE users SET status=$status WHERE id=$id";
+//        echo '<pre>';
+//        var_dump($SQL);
+//        var_dump($id);
+//        echo '</pre>';
+//        exit();
+
+        $statement = self::prepare($SQL);
+        try {
+            return $statement->execute();
+        }catch (\Exception $e){
+            throw new \Exception("Something went Wrong",500);
+        }
+    }
+
 }

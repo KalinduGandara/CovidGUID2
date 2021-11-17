@@ -13,6 +13,53 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Notifications
+                        <?php
+                        //                        $query = "SELECT * from `notifications` where `status` = 'unread' order by `date` DESC";
+                        if(true){
+                            ?>
+                            <span class="badge badge-light"><?php echo 5; ?></span>
+                            <?php
+                        }
+                        ?>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown01">
+                        <?php
+                        //                        $query = "SELECT * from `notifications` order by `date` DESC";
+                        $list = [['type'=>'comment','date'=>'2018-02-09 00:21:21']];
+                        if(count($list)>0){
+                            foreach($list as $i){
+                                ?>
+                                <a style ="
+                                <?php
+                                if($i['status']=='unread'){
+                                    echo "font-weight:bold;";
+                                }
+                                ?>
+                                        " class="dropdown-item" href="view.php?id=<?php echo $i['id'] ?>">
+                                    <small><i><?php echo date('F j, Y, g:i a',strtotime($i['date'])) ?></i></small><br/>
+                                    <?php
+
+                                    if($i['type']=='comment'){
+                                        echo "Someone commented on your post.";
+                                    }else if($i['type']=='like'){
+                                        echo ucfirst($i['name'])." liked your post.";
+                                    }
+
+                                    ?>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <?php
+                            }
+                        }else{
+                            echo "No Records yet.";
+                        }
+                        ?>
+                    </div>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
 
                 <?php
 //                echo "asd";
@@ -27,19 +74,22 @@
                 <?php if (\app\core\App::isGuest()){ ?>
 
                 <li>
-                    <a href="login">Login</a>
+                    <a href="/login">Login</a>
                 </li>
                     <li>
-                        <a href="register">Register</a>
+                        <a href="/register">Register</a>
                     </li>
                 <?php }else{?>
+                    <li>
+                        <a href="/profile">Profile</a>
+                    </li>
                     <?php if (\app\core\App::isAdmin()){ ?>
                         <li>
-                            <a href="admin">Admin</a>
+                            <a href="/admin">Admin</a>
                         </li>
                     <?php }?>
                     <li>
-                        <a href="logout">Logout</a>
+                        <a href="/logout">Logout</a>
                     </li>
                 <?php }?>
                 <?php

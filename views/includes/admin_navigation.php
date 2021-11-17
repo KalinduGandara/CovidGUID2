@@ -23,7 +23,7 @@
 
                         <li class="divider"></li>
                         <li>
-                            <a href="../includes/logout.php"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                            <a href="/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                         </li>
                     </ul>
                 </li>
@@ -36,13 +36,13 @@
                     </li>
                     
                     <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#posts_dropdown"><i class="fa fa-fw fa-arrows-v"></i> Posts <i class="fa fa-fw fa-caret-down"></i></a>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#posts_dropdown"><i class="fa fa-fw fa-arrows-v"></i> Guidelines <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="posts_dropdown" class="collapse">
                             <li>
-                                <a href=/admin/posts>View all posts</a>
+                                <a href=/admin/guidelines>View all Guidelines</a>
                             </li>
                             <li>
-                                <a href="/admin/posts?source=add_post">Add post</a>
+                                <a href="/admin/guidelines?source=add_post">Add a Guideline</a>
                             </li>
                         </ul>
                     </li>
@@ -52,16 +52,13 @@
                     
                     <!-- class="active" -->
                     <li>
-                        <a href="comments.php"><i class="fa fa-fw fa-file"></i> Comments</a>
-                    </li>
-                    <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Users <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="demo" class="collapse">
                             <li>
-                                <a href="admin/users">View all users</a>
+                                <a href="/admin/users">View all users</a>
                             </li>
                             <li>
-                                <a href="admin/users?source=add_user">Add user</a>
+                                <a href="/admin/users?source=add_user">Add user</a>
                             </li>
                         </ul>
                     </li>

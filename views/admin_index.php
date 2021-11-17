@@ -12,9 +12,9 @@
 //    $username = $_SESSION['username'];
 //} else {
 //echo \app\core\App::isAdmin();
-    if (!\app\core\App::isAdmin()) {
-        header("Location: /");
-    }
+//    if (!\app\core\App::isAdmin()) {
+//        header("Location: /");
+//    }
 //}
 
 ?>
