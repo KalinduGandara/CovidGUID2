@@ -36,6 +36,7 @@ $app->router->get('/admin/guidelines', [AdminController::class, 'guidelines']);
 $app->router->get('/admin/categories', [AdminController::class, 'categories']);
 $app->router->post('/admin/categories', [AdminController::class, 'categories']);
 $app->router->get('/admin/users', [AdminController::class, 'users']);
+$app->router->post('/admin/users', [AdminController::class, 'users']);
 
 //officer routes
 $app->router->get('/officer', [OfficerController::class, 'index']);
