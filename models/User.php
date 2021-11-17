@@ -34,6 +34,14 @@ class User extends UserModel
         $this->password = password_hash($this->password,PASSWORD_DEFAULT);
         return parent::save();
     }
+    public function update($id,$data)
+    {
+        $this->status = $this->status != self::STATUS_INACTIVE ? $this->status : self::STATUS_INACTIVE;
+        $this->type = $this->type != self::PUBLIC_USER ? $this->type : self::PUBLIC_USER;
+        $data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
+        return parent::update($id,$data);
+    }
+
 
     public function rules(): array
     {
