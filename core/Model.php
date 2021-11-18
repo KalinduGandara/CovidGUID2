@@ -27,7 +27,7 @@ abstract class Model
 
     public function validate(string $srule) //I add variable call $srule and it checks given string('min','max'email',unique) argument is similar if it is similar then dont validate that rule 
     {
-        foreach ($this->rules() as $attribute => $rules) {
+        foreach ($this->rules() as $attribute => $rules) { //thushalya
             $value = $this->{$attribute};
             foreach ($rules as $rule) {
                 $ruleName = $rule;
