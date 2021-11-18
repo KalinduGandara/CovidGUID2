@@ -96,7 +96,7 @@ class AdminController extends Controller
                 if ($request->method() == 'post'){
                     $user->loadData($request->getBody());
                     //TODO need add validate (bug)
-                    if ($user->update(['id'=>$_GET['edit_user_id']],$request->getBody())){
+                    if ($user->validate('unique') && $user->update(['id'=>$_GET['edit_user_id']],$request->getBody())){
                         return $response->redirect('/admin/users');
                     }
                 }
