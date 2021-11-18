@@ -20,7 +20,7 @@ class AuthController extends Controller
         $this->registerMiddleware(new AuthMiddleware(['profile']));
     }
 
-    public function login(Request $request,Response $response)
+    public function login(Request $request, Response $response)
     {
         if (!App::isGuest())
             $response->redirect('/');
@@ -29,15 +29,15 @@ class AuthController extends Controller
         if ($request->method() === 'post') {
             $loginForm->loadData($request->getBody());
 
-            if ($loginForm->validate() && $loginForm->login()) {
+            if ($loginForm->validate('') && $loginForm->login()) {
                 $response->redirect('/');
                 exit;
             }
             $this->setLayout('auth2');
-            return $this->render('login2',['model'=>$loginForm]);
+            return $this->render('login2', ['model' => $loginForm]);
         }
         $this->setLayout('auth2');
-        return $this->render('login2',['model'=>$loginForm]);
+        return $this->render('login2', ['model' => $loginForm]);
     }
 
     public function register(Request $request)
@@ -47,27 +47,44 @@ class AuthController extends Controller
         if ($request->method() === 'post') {
             $user->loadData($request->getBody());
 
-            if ($user->validate() && $user->save()) {
-                App::$app->session->setFlash('success','Thanks for Registering');
+            if ($user->validate('') && $user->save()) {
+                App::$app->session->setFlash('success', 'Thanks for Registering');
                 App::$app->response->redirect('/');
                 exit;
             }
             $this->setLayout('auth2');
-            return $this->render('register',['model'=>$user]);
+            return $this->render('register', ['model' => $user]);
         }
         $this->setLayout('auth2');
-        return $this->render('register',['model'=>$user]);
+        return $this->render('register', ['model' => $user]);
     }
 
-    public function logout(Request $request,Response $response )
+    public function logout(Request $request, Response $response)
     {
         App::$app->logout();
         $response->redirect('/');
-
     }
 
-    public function profile()
+    public function profile(Request $request)
+
     {
-        return $this->render('profile');
+        $currentuser = APP::$app->user;
+        $user = User::findOne(['id' => $currentuser->id]);
+        $user->password = '';
+
+
+        if ($request->method() === 'post') {
+            $user->loadData($request->getBody());
+
+            if ($user->validate('unique')  && $user->update(['id' => $user->id], $request->getBody())) {
+                App::$app->session->setFlash('success', 'Thanks for Registering');
+                App::$app->response->redirect('/');
+                exit;
+            }
+            $this->setLayout('auth2');
+            return $this->render('profile', ['model' => $user]);
+        }
+        $this->setLayout('auth2');
+        return $this->render('profile', ['model' => $user]);
     }
 }

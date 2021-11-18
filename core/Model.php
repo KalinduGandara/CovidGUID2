@@ -25,44 +25,44 @@ abstract class Model
 
     abstract public function rules(): array;
 
-    public function validate()
+    public function validate(string $srule) //I add variable call $srule and it checks given string('min','max'email',unique) argument is similar if it is similar then dont validate that rule 
     {
-        foreach ($this->rules() as $attribute => $rules) {
+        foreach ($this->rules() as $attribute => $rules) { //thushalya
             $value = $this->{$attribute};
             foreach ($rules as $rule) {
                 $ruleName = $rule;
                 if (!is_string($ruleName)) {
                     $ruleName = $rule[0];
                 }
-                if ($ruleName === self::RULE_REQUIRED && !$value) {
+                if ($ruleName === self::RULE_REQUIRED  && !$value && $ruleName !== $srule) {
                     $this->addErrorForRule($attribute, self::RULE_REQUIRED);
                 }
-                if ($ruleName === self::RULE_EMAIL && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                if ($ruleName === self::RULE_EMAIL && !filter_var($value, FILTER_VALIDATE_EMAIL) && $ruleName !== $srule) {
                     $this->addErrorForRule($attribute, self::RULE_EMAIL);
                 }
-                if ($ruleName === self::RULE_MIN && strlen($value) < $rule['min']) {
+                if ($ruleName === self::RULE_MIN && strlen($value) < $rule['min'] && $ruleName !== $srule) {
                     $this->addErrorForRule($attribute, self::RULE_MIN, $rule);
                 }
-                if ($ruleName === self::RULE_MAX && strlen($value) > $rule['max']) {
+                if ($ruleName === self::RULE_MAX && strlen($value) > $rule['max'] && $ruleName !== $srule) {
                     $this->addErrorForRule($attribute, self::RULE_MAX, $rule);
                 }
-                if ($ruleName === self::RULE_MATCH && $value !== $this->{$rule['match']}){
+                if ($ruleName === self::RULE_MATCH && $value !== $this->{$rule['match']} && $ruleName !== $srule) {
                     $rule['match'] = $this->getLabels($rule['match']);
                     $this->addErrorForRule($attribute, self::RULE_MATCH, $rule);
                 }
-                if ($ruleName === self::RULE_UNIQUE){
+                if ($ruleName === self::RULE_UNIQUE && $ruleName !== $srule) {
                     $className = $rule['class'];
                     $uniqueAttr = $rule['attribute'] ?? $attribute;
 
                     $tableName = $className::tableName();
 
                     $statement = App::$app->db->prepare("SELECT * FROM $tableName WHERE $uniqueAttr = :attr");
-                    $statement->bindValue(":attr",$value);
+                    $statement->bindValue(":attr", $value);
                     $statement->execute();
                     $record = $statement->fetchObject();
 
-                    if ($record){
-                        $this->addErrorForRule($attribute,self::RULE_UNIQUE,['field'=>$this->getLabels($attribute)]);
+                    if ($record) {
+                        $this->addErrorForRule($attribute, self::RULE_UNIQUE, ['field' => $this->getLabels($attribute)]);
                     }
                 }
             }
@@ -75,17 +75,15 @@ abstract class Model
     {
         $message = $this->errorMessages()[$rule] ?? '';
         foreach ($params as $key => $value) {
-            $message = str_replace("{{$key}}",$value,$message);
+            $message = str_replace("{{$key}}", $value, $message);
         }
         $this->errors[$attribute][] = $message;
-
     }
 
     public function addError(string $attribute, string $message)
     {
 
         $this->errors[$attribute][] = $message;
-
     }
 
     public function errorMessages()
@@ -103,7 +101,6 @@ abstract class Model
     public function hasError($attribute)
     {
         return $this->errors[$attribute] ?? false;
-
     }
 
     public function getFirstError(string $attribute)
