@@ -1,5 +1,8 @@
 <?php
-
+    $category_options = [];
+    foreach ($categories as $category){
+        $category_options[$category['cat_id']] = $category['cat_title'];
+    }
 ?>
 
 <div id="wrapper">
@@ -32,60 +35,29 @@
     <div id="page-wrapper" class="container">
         <!-- Page Heading -->
         <h1 class="page-header">
-            Add a guideline
+            <?php
+            if(isset($mode) && $mode === 'update'){
+                echo 'Edit Guideline';
+                $model = $guideline;
+            }
+            else{
+                echo 'Add a Guideline';
+                $model = new \app\models\Guideline();
+            }
+            ?>
         </h1>
         <!-- /.row -->
-        <?php
-        $model = new \app\models\Guideline();
-        ?>
         <div class="container">
         <?php
-        $form = \app\core\form\Form::begin('', 'post');
-        echo $form->field($model, 'guid_title');
-        //        echo $form->field($model, 'guid_body');
-        ?>
-        <fieldset>
-            <legend><h5><b>Guideline Description</b></h5></legend>
-            <div class="container" id="body">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <h5 class="text-center">Property</h5>
-                    </div>
-                    <div class="col-xs-6">
-                        <h5 class="text-center">Value</h5>
-                    </div>
-                </div>
-            </div>
-            <button type="button" onclick="addNewField()">Add a Field</button>
-            <script>
-                function addNewField() {
-                    const div = document.createElement('div');
-
-                    div.className = 'row';
-
-                    div.innerHTML = `
-                <div class="row">
-                    <div class="col-xs-6">
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="col-xs-6">
-                        <input type="text" class="form-control">
-                    </div>
-                </div>
-  `;
-
-                    document.getElementById('body').appendChild(div);
-                }
-
-            </script>
-        </fieldset>
-        <?php
-        echo $form->field($model, 'cat_id');
-        echo $form->field($model, 'guid_status');
+            $form = \app\core\form\Form::begin('', 'post');
+            echo $form->field($model, 'guid_title');
+            echo $form->textareaField($model, 'guid_body');
+            echo $form->selectField($model, 'cat_id', $category_options);
+            echo $form->selectField($model, 'guid_status', [0=>'Active', 1=>'Drafted']);
         ?>
         <br/>
         <button type="submit" class="btn btn-primary">Submit</button>
-        <?php $form::end(); ?>
+        <?php $form->end(); ?>
 
         </div>
 

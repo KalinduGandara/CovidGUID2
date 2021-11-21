@@ -40,6 +40,7 @@ $app->router->get('/admin/users', [AdminController::class, 'users']);
 //officer routes
 $app->router->get('/officer', [OfficerController::class, 'index']);
 $app->router->get('/officer/guidelines', [OfficerController::class, 'guidelines']);
+$app->router->post('/officer/guidelines', [OfficerController::class, 'guidelines']);
 $app->router->post('/officer/add-guideline', [OfficerController::class, 'add_guideline']);
 $app->router->get('/officer/add-guideline',[OfficerController::class, 'add_guideline']);
 //$app->router->post('/officer/posts',[OfficerController::class,'posts']);

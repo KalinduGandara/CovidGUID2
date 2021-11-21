@@ -14,7 +14,7 @@ class Form
         return new Form();
     }
 
-    public static function end()
+    public function end()
     {
         echo '</form>';
     }
@@ -24,9 +24,20 @@ class Form
         return new InputField($model, $attribute);
     }
 
-    public function selectField(Model $model, $attribute)
+
+    /**
+     * @param Model $model
+     * @param string $attribute
+     * @param array $options Associative array ['value' => 'Display']
+     * @return SelectField
+     */
+    public function selectField(Model $model, string $attribute, array $options)
     {
-        return new SelectField($model,$attribute);
+        return new SelectField($model,$attribute, $options);
+    }
+
+    public function textareaField(Model $model, $attribute){
+        return new TextareaField($model,$attribute);
     }
 
 }

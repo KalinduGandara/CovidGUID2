@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\core\App;
 use app\core\Controller;
 use app\core\middlewares\AdminMiddleware;
+use app\core\middlewares\OfficerMiddleware;
 use app\core\Request;
 use app\core\Response;
 use app\models\Category;
@@ -15,6 +16,7 @@ class OfficerController extends Controller
     public string $layout = 'officer';
     public function __construct()
     {
+        $this->registerMiddleware(new OfficerMiddleware());
     }
 
     public function index()
@@ -22,11 +24,26 @@ class OfficerController extends Controller
         return $this->render('officer_index', []);
     }
 
-    public function guidelines()
+    public function guidelines(Request $request, Response $response)
     {
+        $guideline = new Guideline();
+        $categories = Category::getAll();
+        if(isset($_GET['delete_id'])){
+            $guideline->delete(['guid_id' => $_GET['delete_id']]);
+            App::$app->response->redirect('/officer/guidelines');
+            exit();
+        }
+        elseif (isset($_GET['edit_id'])){
+            if($request->method() === "post"){
+                $guideline->update(['guid_id' => $_GET['edit_id']], $request->getBody());
+                App::$app->response->redirect('/officer/guidelines');
+                exit();
+            }
+            $guideline = Guideline::findOne(['guid_id' => $_GET['edit_id']]);
+            return $this->render('officer_add_guideline',['categories' => $categories, 'mode'=>'update', 'guideline'=>$guideline]);
+        }
         $guidelines_fetched = Guideline::getAll();
         $guidelines = [];
-        $categories = Category::getAll();
         foreach ($guidelines_fetched as $guideline){
             $category =  array_search($guideline['cat_id'],array_column($categories,'cat_id'));
             $guideline['cat_title'] = $categories[$category]['cat_title'];
@@ -37,6 +54,7 @@ class OfficerController extends Controller
     }
 
     public function add_guideline(Request $request, Response $response){
+        $categories = Category::getAll();
         if ($request->method() === 'post'){
             $guideline = new Guideline();
             $guideline->loadData($request->getBody());
@@ -46,7 +64,7 @@ class OfficerController extends Controller
 //            var_dump($request->getBody());
 //            die();
         }
-        return $this->render('officer_add_guideline');
+        return $this->render('officer_add_guideline',['categories'=> $categories]);
 
     }
 
