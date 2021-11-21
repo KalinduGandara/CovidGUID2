@@ -34,7 +34,7 @@ class AuthController extends Controller
                 exit;
             }
             $this->setLayout('auth2');
-            return $this->render('login2',['model'=>$loginForm]);
+            return $this->render('login2', ['model' => $loginForm]);
         }
         $this->setLayout('auth2');
         return $this->render('login2',['model'=>$loginForm]);
@@ -66,8 +66,25 @@ class AuthController extends Controller
 
     }
 
-    public function profile()
+    public function profile(Request $request)
     {
-        return $this->render('profile');
+        $currentuser = APP::$app->user;
+        $user = User::findOne(['id' => $currentuser->id]);
+        $user->password = '';
+
+
+        if ($request->method() === 'post') {
+            $user->loadData($request->getBody());
+
+            if ($user->validate('unique')  && $user->update(['id' => $user->id], $request->getBody())) {
+                App::$app->session->setFlash('success', 'Thanks for Registering');
+                App::$app->response->redirect('/');
+                exit;
+            }
+            $this->setLayout('auth2');
+            return $this->render('profile', ['model' => $user]);
+        }
+        $this->setLayout('auth2');
+        return $this->render('profile', ['model' => $user]);
     }
 }

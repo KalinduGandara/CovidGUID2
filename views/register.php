@@ -14,5 +14,5 @@
     <?php echo $form->field($model,'confirmPassword')->passwordField() ?>
 <button type="submit" class="btn btn-primary">Submit</button>
 </div>
-<?php \app\core\form\Form::end();?>
+<?php $form->end();?>
 

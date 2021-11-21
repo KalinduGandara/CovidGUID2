@@ -15,7 +15,7 @@ $dotenv->load();
 $config = [
     'userClass' => User::class,
     'db' => [
-        'dsn' => $_ENV['DB_DSN'] . 'dbname=covidguide',
+        'dsn' => $_ENV['DB_DSN'],
         'user' => $_ENV['DB_USER'],
         'password' => $_ENV['DB_PASSWORD']
     ]
@@ -36,12 +36,14 @@ $app->router->get('/admin/guidelines', [AdminController::class, 'guidelines']);
 $app->router->get('/admin/categories', [AdminController::class, 'categories']);
 $app->router->post('/admin/categories', [AdminController::class, 'categories']);
 $app->router->get('/admin/users', [AdminController::class, 'users']);
+$app->router->post('/admin/users', [AdminController::class, 'users']);
 
 //officer routes
 $app->router->get('/officer', [OfficerController::class, 'index']);
 $app->router->get('/officer/guidelines', [OfficerController::class, 'guidelines']);
+$app->router->post('/officer/guidelines', [OfficerController::class, 'guidelines']);
 $app->router->post('/officer/add-guideline', [OfficerController::class, 'add_guideline']);
-$app->router->get('/officer/add-guideline',[OfficerController::class, 'add_guideline']);
+$app->router->get('/officer/add-guideline', [OfficerController::class, 'add_guideline']);
 //$app->router->post('/officer/posts',[OfficerController::class,'posts']);
 $app->router->get('/officer/categories', [OfficerController::class, 'categories']);
 $app->router->post('/officer/categories', [OfficerController::class, 'categories']);
@@ -55,5 +57,5 @@ $app->router->get('/logout', [AuthController::class, 'logout']);
 
 
 $app->router->get('/profile', [AuthController::class, 'profile']);
-
+$app->router->post('/profile', [AuthController::class, 'profile']);
 $app->run();
