@@ -14,7 +14,7 @@ class Form
         return new Form();
     }
 
-    public function end()
+    public static function end()
     {
         echo '</form>';
     }
