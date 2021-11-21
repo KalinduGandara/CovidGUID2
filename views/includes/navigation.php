@@ -88,6 +88,11 @@
                             <a href="/admin">Admin</a>
                         </li>
                     <?php }?>
+                    <?php if (\app\core\App::isOfficer()){ ?>
+                        <li>
+                            <a href="/officer">Officer</a>
+                        </li>
+                    <?php }?>
                     <li>
                         <a href="/logout">Logout</a>
                     </li>
