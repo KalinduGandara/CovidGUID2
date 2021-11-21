@@ -31,10 +31,6 @@ $app->router->post('/contact', [SiteController::class, 'contact']);
 $app->router->get('/post', [SiteController::class, 'post']);
 
 $app->router->get('/admin', [AdminController::class, 'index']);
-$app->router->get('/admin/guidelines', [AdminController::class, 'guidelines']);
-//$app->router->post('/admin/posts',[AdminController::class,'posts']);
-$app->router->get('/admin/categories', [AdminController::class, 'categories']);
-$app->router->post('/admin/categories', [AdminController::class, 'categories']);
 $app->router->get('/admin/users', [AdminController::class, 'users']);
 $app->router->post('/admin/users', [AdminController::class, 'users']);
 
@@ -44,7 +40,6 @@ $app->router->get('/officer/guidelines', [OfficerController::class, 'guidelines'
 $app->router->post('/officer/guidelines', [OfficerController::class, 'guidelines']);
 $app->router->post('/officer/add-guideline', [OfficerController::class, 'add_guideline']);
 $app->router->get('/officer/add-guideline', [OfficerController::class, 'add_guideline']);
-//$app->router->post('/officer/posts',[OfficerController::class,'posts']);
 $app->router->get('/officer/categories', [OfficerController::class, 'categories']);
 $app->router->post('/officer/categories', [OfficerController::class, 'categories']);
 

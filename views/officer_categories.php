@@ -42,7 +42,7 @@
                     <?php echo $form->field($model,'cat_title') ?>
                     <button type="submit" class="btn btn-primary">Submit</button>
 
-                    <?php \app\core\form\Form::end();?>
+                    <?php $form->end();?>
 <!--                    --><?php //if ($mode == 'update') {?>
 <!---->
 <!--                    --><?php //$form = \app\core\form\Form::begin('','post') ?>

@@ -98,7 +98,7 @@ class OfficerController extends Controller
 
         $categories = Category::getAll();
 
-        return $this->render('admin_categories', ['categories'=>$categories,'model'=>$category,'mode'=>$mode]);
+        return $this->render('officer_categories', ['categories'=>$categories,'model'=>$category,'mode'=>$mode]);
 
     }
 
