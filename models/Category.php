@@ -8,6 +8,12 @@ class Category extends \app\core\db\DbModel
 {
     public string $cat_title = '';
 
+    public function save()
+    {
+        $this->cat_status = 0;
+        return parent::save();
+    }
+
     public static function tableName(): string
     {
         return 'categories';
@@ -15,7 +21,7 @@ class Category extends \app\core\db\DbModel
 
     public function attributes(): array
     {
-        return ['cat_title'];
+        return ['cat_title','cat_status'];
     }
 
     public static function primaryKey(): string
