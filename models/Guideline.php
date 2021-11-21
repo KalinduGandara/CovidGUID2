@@ -8,7 +8,7 @@ class Guideline extends \app\core\db\DbModel
 {
     public string $guid_title = '';
     public string $guid_body = '';
-    public int $cat_id = 0;
+    public string $cat_id = '';
     public string $guid_status = '';
 
     public static function tableName(): string
@@ -47,7 +47,7 @@ class Guideline extends \app\core\db\DbModel
         return [
             'guid_title'=>"Enter the title",
             'guid_body'=>"Enter description",
-            'cat_id'=>"Enter category id",
+            'cat_id'=>"Select Category",
             'guid_status'=>"Enter the status",
         ];
     }
