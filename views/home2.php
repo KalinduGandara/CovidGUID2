@@ -14,6 +14,12 @@
             <!-- Display Categories -->
 
             <?php
+//            echo '<pre>';
+//            var_dump($categories);
+//            var_dump($guidelines);
+//
+//            echo '</pre>';
+//            exit();
 
             foreach ($categories as $category) {
 
