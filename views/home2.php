@@ -1,36 +1,39 @@
+<!-- Page Content -->
+<div class="container">
 
-    <!-- Page Content -->
-    <div class="container">
+    <div class="row">
 
-        <div class="row">
+        <!-- Blog Entries Column -->
+        <div class="col-md-8">
 
-            <!-- Blog Entries Column -->
-            <div class="col-md-8">
+            <h1 class="page-header">
+                Page Heading
+                <small>Secondary Text</small>
+            </h1>
 
-                <h1 class="page-header">
-                    Page Heading
-                    <small>Secondary Text</small>
-                </h1>
+            <!-- Display Categories -->
 
-                <!-- Display Categories -->
+            <?php
 
-                <?php
+            foreach ($categories as $category) {
 
-                foreach ($categories as $category) {
-
-                    $cat_id = $category['cat_id'];
-                    $cat_title = $category['cat_title'];
-//                    $cat_status = $category['cat_status'];
-                    include "components/category.php";
+                $cat_id = $category['cat_id'];
+                $cat_title = $category['cat_title'];
+                //                    $cat_status = $category['cat_status'];
+                $category_guidelines = [];
+                foreach ($guidelines as $guideline) {
+                    if ($guideline['cat_id'] === $cat_id) {
+                        array_push($category_guidelines, $guideline['guid_body']);
+                    }
                 }
-                ?>
-
-            </div>
-
-            <!-- Blog Sidebar Widgets Column -->
-            <?php include "includes/sidebar.php" ?>
+                include "components/category.php";
+            }
+            ?>
 
         </div>
-        <!-- /.row -->
 
+        <!-- Blog Sidebar Widgets Column -->
+        <?php include "includes/sidebar.php" ?>
 
+    </div>
+    <!-- /.row -->
