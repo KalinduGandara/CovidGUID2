@@ -20,12 +20,9 @@ class SiteController extends Controller
         $guidelines = Guideline::getAll();
         $categories = Category::getAll();
         $params = [
-            'name' => "Kalindu",
             'guidelines'=>$guidelines,
             'categories'=>$categories,
-            'model'=>$loginForm
         ];
-//        $this->setLayout('main2');
         if (App::isGuest()){
             return $this->render('home2',$params);
         }

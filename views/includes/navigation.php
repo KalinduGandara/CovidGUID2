@@ -8,7 +8,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">CMS Front</a>
+            <a class="navbar-brand" href="/">COVID Guid</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -86,6 +86,11 @@
                     <?php if (\app\core\App::isAdmin()){ ?>
                         <li>
                             <a href="/admin">Admin</a>
+                        </li>
+                    <?php }?>
+                    <?php if (\app\core\App::isOfficer()){ ?>
+                        <li>
+                            <a href="/officer">Officer</a>
                         </li>
                     <?php }?>
                     <li>

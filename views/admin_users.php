@@ -51,8 +51,10 @@
                                                                                                         elseif ($user_status == 1)
                                                                                                             echo 'Inactive'; ?></a></td>
                         <td><a href="users?source=edit_user&edit_user_id=<?php echo $user_id ?>">Edit</a></td>
+                        <?php if ($user_status !=2){ ?>
                         <td><a href="users?del_id=<?php echo $user_id ?>"
                                onclick="return confirm('Are you sure you want to delete?');">Delete</a></td>
+                        <?php } ?>
                     </tr>
 
                 <?php } ?>

@@ -1,23 +1,3 @@
-<?php //include "../includes/db.php" ?>
-<?php //include "includes/admin_header.php" ?>
-<?php //include "functions.php" ?>
-<?php //session_start() ?>
-
-<?php
-
-//if (!isset($_SESSION['password_mismatch']) && !isset($_SESSION['not_admin'])) {
-//    header("Location: ../");
-//}
-//if ($_SESSION['password_mismatch'] == false && $_SESSION['not_admin'] == false) {
-//    $username = $_SESSION['username'];
-//} else {
-//echo \app\core\App::isAdmin();
-//    if (!\app\core\App::isAdmin()) {
-//        header("Location: /");
-//    }
-//}
-
-?>
 
     <div id="wrapper">
 
@@ -210,32 +190,5 @@
 
         </div>
         <!-- /#page-wrapper -->
-
-        <script type="text/javascript">
-            google.charts.load('current', {'packages':['bar']});
-            google.charts.setOnLoadCallback(drawChart);
-
-            function drawChart() {
-                var data = google.visualization.arrayToDataTable([
-                ['Data', 'Count'],
-                <?php for ($i=0; $i < 6; $i++){
-                    echo "['{$x_axis[$i]}', {$y_axis[$i]}],";
-                } ?>
-                ]);
-
-                var options = {
-                chart: {
-                    title: 'CMS stats',
-                    subtitle: '',
-                }
-                };
-
-                var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
-
-                chart.draw(data, google.charts.Bar.convertOptions(options));
-            }
-                    </script>
-<!--        --><?php //include "includes/admin_footer.php" ?>
-
 
     
