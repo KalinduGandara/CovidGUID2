@@ -1,8 +1,8 @@
 <?php
-    $category_options = [];
-    foreach ($categories as $category){
-        $category_options[$category['cat_id']] = $category['cat_title'];
-    }
+$category_options = [];
+foreach ($categories as $category) {
+    $category_options[$category['cat_id']] = $category['cat_title'];
+}
 ?>
 
 <div id="wrapper">
@@ -36,11 +36,10 @@
         <!-- Page Heading -->
         <h1 class="page-header">
             <?php
-            if(isset($mode) && $mode === 'update'){
+            if (isset($mode) && $mode === 'update') {
                 echo 'Edit Guideline';
                 $model = $guideline;
-            }
-            else{
+            } else {
                 echo 'Add a Guideline';
                 $model = new \app\models\Guideline();
             }
@@ -48,21 +47,19 @@
         </h1>
         <!-- /.row -->
         <div class="container">
-        <?php
+            <?php
             $form = \app\core\form\Form::begin('', 'post');
             echo $form->field($model, 'guid_title');
             echo $form->textareaField($model, 'guid_body');
             echo $form->selectField($model, 'cat_id', $category_options);
-            echo $form->selectField($model, 'guid_status', [0=>'Active', 1=>'Drafted']);
-        ?>
-        <br/>
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <?php $form->end(); ?>
+            echo $form->selectField($model, 'guid_status', [0 => 'Active', 1 => 'Drafted']);
+            ?>
+            <br />
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <?php $form->end(); ?>
 
         </div>
 
 
     </div>
 </div>
-
-

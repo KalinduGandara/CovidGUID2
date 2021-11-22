@@ -32,7 +32,7 @@ class Category extends \app\core\db\DbModel
     public function rules(): array
     {
         return [
-            'cat_title' => [self::RULE_REQUIRED,[self::RULE_MIN,'min' => 8]]
+            'cat_title' => [self::RULE_REQUIRED]
         ];
     }
     public function labels(): array

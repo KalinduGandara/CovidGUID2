@@ -7,8 +7,8 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/">CMS Admin</a>
-        <a class="navbar-brand" href="/officer">Home Page</a>
+        <a class="navbar-brand" href="/">Home</a>
+<!--        <a class="navbar-brand" href="/officer">Home Page</a>-->
     </div>
     <!-- Top Menu Items -->
     <ul class="nav navbar-right top-nav">
@@ -18,7 +18,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo \app\core\App::$app->user->firstname ?> <b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li>
-                    <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+                    <a href="/profile"><i class="fa fa-fw fa-user"></i> Profile</a>
                 </li>
 
                 <li class="divider"></li>
@@ -52,7 +52,7 @@
 
             <!-- class="active" -->
             <li>
-                <a href="blank-page.html"><i class="fa fa-fw fa-file"></i> Profile</a>
+                <a href="/profile"><i class="fa fa-fw fa-file"></i> Profile</a>
             </li>
         </ul>
     </div>
