@@ -1,4 +1,3 @@
-
 <?php
 
 //if (!\app\core\App::isAdmin()) {
@@ -9,7 +8,7 @@
 <div id="wrapper">
 
     <!-- Navigation -->
-    <?php include "includes/admin_navigation.php" ?>
+    <?php include "includes/officer_navigation.php" ?>
 
     <div id="page-wrapper">
 
@@ -29,28 +28,33 @@
                 <div class="col-xs-6">
 
 
-<!--                    <form action="" method="post">-->
-<!--                        <div class="form-group">-->
-<!--                            <label for="cat_title" class="form-label">Category name</label>-->
-<!--                            <input type="text" class="form-control" name="cat_title" id="cat_title">-->
-<!--                        </div>-->
-<!--                        <div class="form-group">-->
-<!--                            <input type="submit" class="btn btn-primary" value="Add category" name="submit">-->
-<!--                        </div>-->
-<!--                    </form>-->
-                    <?php $form = \app\core\form\Form::begin('','post') ?>
-                    <?php echo $form->field($model,'cat_title') ?>
+                    <!--                    <form action="" method="post">-->
+                    <!--                        <div class="form-group">-->
+                    <!--                            <label for="cat_title" class="form-label">Category name</label>-->
+                    <!--                            <input type="text" class="form-control" name="cat_title" id="cat_title">-->
+                    <!--                        </div>-->
+                    <!--                        <div class="form-group">-->
+                    <!--                            <input type="submit" class="btn btn-primary" value="Add category" name="submit">-->
+                    <!--                        </div>-->
+                    <!--                    </form>-->
+                    <?php $form = \app\core\form\Form::begin('', 'post') ?>
+                    <?php echo $form->field($model, 'cat_title') ?>
                     <button type="submit" class="btn btn-primary">Submit</button>
 
-                    <?php \app\core\form\Form::end();?>
-<!--                    --><?php //if ($mode == 'update') {?>
-<!---->
-<!--                    --><?php //$form = \app\core\form\Form::begin('','post') ?>
-<!--                    --><?php //echo $form->field($model,'cat_title') ?>
-<!--                    <button type="submit" class="btn btn-primary">Submit</button>-->
-<!---->
-<!--                    --><?php //\app\core\form\Form::end();?>
-<!--                    --><?php //}?>
+                    <?php \app\core\form\Form::end(); ?>
+                    <!--                    --><?php //if ($mode == 'update') {
+                                                ?>
+                    <!---->
+                    <!--                    --><?php //$form = \app\core\form\Form::begin('','post') 
+                                                ?>
+                    <!--                    --><?php //echo $form->field($model,'cat_title') 
+                                                ?>
+                    <!--                    <button type="submit" class="btn btn-primary">Submit</button>-->
+                    <!---->
+                    <!--                    --><?php //\app\core\form\Form::end();
+                                                ?>
+                    <!--                    --><?php //}
+                                                ?>
 
 
                 </div>
@@ -60,31 +64,30 @@
 
                     <table class="table table-bordered table-hover">
                         <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Category name</th>
-                        </tr>
+                            <tr>
+                                <th>Id</th>
+                                <th>Category name</th>
+                            </tr>
                         </thead>
                         <tbody>
 
-                        <!-- query to get categories from database -->
-                        <!--                                -->
-                        <?php //get_all_categories();
-//                                while ($row = mysqli_fetch_assoc($result)) {
-                            foreach ($categories as $row){
-                                    $cat_id = $row["cat_id"];
-                                    $cat_title = $row["cat_title"];
-                                    echo "<tr>
+                            <!-- query to get categories from database -->
+                            <!--                                -->
+                            <?php //get_all_categories();
+                            //                                while ($row = mysqli_fetch_assoc($result)) {
+                            foreach ($categories as $row) {
+                                $cat_id = $row["cat_id"];
+                                $cat_title = $row["cat_title"];
+                                echo "<tr>
                                             <td>$cat_id</td>
                                             <td>$cat_title</td>
                                             <td><a href='categories?delete_id=$cat_id'>Delete</a></td>
                                             <td><a href='categories?edit_id=$cat_id'>Edit</a></td>
                                             </tr>";
+                            }
 
-                                }
 
-
-                                ?>
+                            ?>
 
                         </tbody>
                     </table>
@@ -96,6 +99,3 @@
 
     </div>
     <!-- /#page-wrapper -->
-
-
-    
