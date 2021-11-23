@@ -8,7 +8,7 @@
             <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="/">Home</a>
-<!--        <a class="navbar-brand" href="/officer">Home Page</a>-->
+        <!--        <a class="navbar-brand" href="/officer">Home Page</a>-->
     </div>
     <!-- Top Menu Items -->
     <ul class="nav navbar-right top-nav">
@@ -47,7 +47,16 @@
                 </ul>
             </li>
             <li>
-                <a href="/officer/categories"><i class="fa fa-fw fa-wrench"></i> Categories </a>
+                <!-- <a href="/officer/categories"><i class="fa fa-fw fa-wrench"></i> Categories </a> -->
+                <a href="javascript:;" data-toggle="collapse" data-target="#category_dropdown"><i class="fa fa-fw fa-arrows-v"></i> Categories <i class="fa fa-fw fa-caret-down"></i></a>
+                <ul id="category_dropdown" class="collapse">
+                    <li>
+                        <a href="/officer/categories">Create a Category</a>
+                    </li>
+                    <li>
+                        <a href="/officer/add-subcategory">Add a Subcategory</a>
+                    </li>
+                </ul>
             </li>
 
             <!-- class="active" -->

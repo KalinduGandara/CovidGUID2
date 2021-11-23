@@ -3,6 +3,10 @@ $category_options = [];
 foreach ($categories as $category) {
     $category_options[$category['cat_id']] = $category['cat_title'];
 }
+$subcategory_options = [];
+foreach ($subcategories as $subcategory) {
+    $subcategory_options[$subcategory['sub_category_id']] = $subcategory['sub_category_name'];
+}
 ?>
 
 <div id="wrapper">
@@ -49,9 +53,9 @@ foreach ($categories as $category) {
         <div class="container">
             <?php
             $form = \app\core\form\Form::begin('', 'post');
-            echo $form->field($model, 'guid_title');
-            echo $form->textareaField($model, 'guid_body');
             echo $form->selectField($model, 'cat_id', $category_options);
+            echo $form->selectField($model, 'sub_category_id', $subcategory_options);
+            echo $form->textareaField($model, 'guid_body');
             echo $form->selectField($model, 'guid_status', [0 => 'Active', 1 => 'Drafted']);
             ?>
             <br />

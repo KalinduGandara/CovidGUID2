@@ -72,13 +72,14 @@
 
                     <?php echo $form->field($model,'email') ?>
 <!--                    --><?php //echo $form->selectField($model,'type') ?>
-                    <div class="mb-3">
-                    <lable><b>Type</b></lable>
-                    <select required name="type" id="type" class="form-control">
-                        <option value="1">Officer</option>
-                        <option value="2">Public User</option>
-                    </select>
-                    </div>
+<!--                    <div class="mb-3">-->
+<!--                    <lable><b>Type</b></lable>-->
+<!--                    <select required name="type" id="type" class="form-control">-->
+<!--                        <option value="1">Officer</option>-->
+<!--                        <option value="2">Public User</option>-->
+<!--                    </select>-->
+<!--                    </div>-->
+                    <?php echo $form->selectField($model,'type',[1=>'Officer',2=>'Public User'])?>
                     <?php echo $form->field($model,'password')->passwordField() ?>
                     <?php echo $form->field($model,'confirmPassword')->passwordField() ?>
                     <br>
@@ -98,13 +99,14 @@
 
 <!--                --><?php //echo $form->field($model,'email') ?>
                 <!--                    --><?php //echo $form->selectField($model,'type') ?>
-                <div class="mb-3">
-                    <lable><b>Type</b></lable>
-                    <select required name="type" id="type" class="form-control">
-                        <option value="1">Officer</option>
-                        <option value="2">Public User</option>
-                    </select>
-                </div>
+<!--                <div class="mb-3">-->
+<!--                    <lable><b>Type</b></lable>-->
+<!--                    <select  required name="type" id="type" class="form-control">-->
+<!--                        <option  value="1">Officer</option>-->
+<!--                        <option selected value="2">Public User</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+                <?php echo $form->selectField($model,'type',[1=>'Officer',2=>'Public User'])?>
                 <?php echo $form->field($model,'password')->passwordField() ?>
                 <?php echo $form->field($model,'confirmPassword')->passwordField() ?>
                 <br>

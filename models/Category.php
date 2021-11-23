@@ -7,6 +7,9 @@ namespace app\models;
 class Category extends \app\core\db\DbModel
 {
     public string $cat_title = '';
+    public string $category_description = '';
+    public string $cat_id = '';
+
 
     public function save()
     {
@@ -21,7 +24,7 @@ class Category extends \app\core\db\DbModel
 
     public function attributes(): array
     {
-        return ['cat_title','cat_status'];
+        return ['cat_title', 'cat_status', 'category_description'];
     }
 
     public static function primaryKey(): string
@@ -32,13 +35,17 @@ class Category extends \app\core\db\DbModel
     public function rules(): array
     {
         return [
-            'cat_title' => [self::RULE_REQUIRED]
+            'cat_title' => [self::RULE_REQUIRED],
+            'category_description' => [self::RULE_REQUIRED]
         ];
     }
     public function labels(): array
     {
         return [
-            'cat_title' => 'Category Title'
+            'cat_title' => 'Category Title',
+            'category_description' => 'Category Description',
+            'cat_id' => "Select Category",
+
         ];
     }
 }
