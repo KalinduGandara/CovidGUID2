@@ -17,42 +17,42 @@
                     <a class="nav-link" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Notifications
                         <?php
                         //                        $query = "SELECT * from `notifications` where `status` = 'unread' order by `date` DESC";
-                        if(true){
-                            ?>
+                        if (true) {
+                        ?>
                             <span class="badge badge-light"><?php echo 5; ?></span>
-                            <?php
+                        <?php
                         }
                         ?>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdown01">
                         <?php
                         //                        $query = "SELECT * from `notifications` order by `date` DESC";
-                        $list = [['type'=>'comment','date'=>'2018-02-09 00:21:21']];
-                        if(count($list)>0){
-                            foreach($list as $i){
-                                ?>
-                                <a style ="
+                        $list = [['type' => 'comment', 'date' => '2018-02-09 00:21:21']];
+                        if (count($list) > 0) {
+                            foreach ($list as $i) {
+                        ?>
+                                <a style="
                                 <?php
-                                if($i['status']=='unread'){
+                                if ($i['status'] == 'unread') {
                                     echo "font-weight:bold;";
                                 }
                                 ?>
                                         " class="dropdown-item" href="view.php?id=<?php echo $i['id'] ?>">
-                                    <small><i><?php echo date('F j, Y, g:i a',strtotime($i['date'])) ?></i></small><br/>
+                                    <small><i><?php echo date('F j, Y, g:i a', strtotime($i['date'])) ?></i></small><br />
                                     <?php
 
-                                    if($i['type']=='comment'){
+                                    if ($i['type'] == 'comment') {
                                         echo "Someone commented on your post.";
-                                    }else if($i['type']=='like'){
-                                        echo ucfirst($i['name'])." liked your post.";
+                                    } else if ($i['type'] == 'like') {
+                                        echo ucfirst($i['name']) . " liked your post.";
                                     }
 
                                     ?>
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <?php
+                        <?php
                             }
-                        }else{
+                        } else {
                             echo "No Records yet.";
                         }
                         ?>
@@ -62,41 +62,41 @@
             <ul class="nav navbar-nav">
 
                 <?php
-//                echo "asd";
+                //                echo "asd";
 
-//                foreach ($categories as $category) {
-//                    $cat_title = $category['cat_title'];
-//                    echo "<li><a href='#'>$cat_title</a></li>";
-//                }
+                //                foreach ($categories as $category) {
+                //                    $cat_title = $category['cat_title'];
+                //                    echo "<li><a href='#'>$cat_title</a></li>";
+                //                }
                 ?>
 
 
-                <?php if (\app\core\App::isGuest()){ ?>
+                <?php if (\app\core\App::isGuest()) { ?>
 
-                <li>
-                    <a href="/login">Login</a>
-                </li>
+                    <li>
+                        <a href="/login">Login</a>
+                    </li>
                     <li>
                         <a href="/register">Register</a>
                     </li>
-                <?php }else{?>
+                <?php } else { ?>
                     <li>
                         <a href="/profile">Profile</a>
                     </li>
-                    <?php if (\app\core\App::isAdmin()){ ?>
+                    <?php if (\app\core\App::isAdmin()) { ?>
                         <li>
                             <a href="/admin">Admin</a>
                         </li>
-                    <?php }?>
-                    <?php if (\app\core\App::isOfficer()){ ?>
+                    <?php } ?>
+                    <?php if (\app\core\App::isOfficer()) { ?>
                         <li>
                             <a href="/officer">Officer</a>
                         </li>
-                    <?php }?>
+                    <?php } ?>
                     <li>
                         <a href="/logout">Logout</a>
                     </li>
-                <?php }?>
+                <?php } ?>
                 <?php
                 if (isset($_GET['post_id'])) {
                     $edit_post_id = $_GET['post_id'];

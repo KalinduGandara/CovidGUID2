@@ -37,8 +37,10 @@
                     <!--                            <input type="submit" class="btn btn-primary" value="Add category" name="submit">-->
                     <!--                        </div>-->
                     <!--                    </form>-->
+
                     <?php $form = \app\core\form\Form::begin('', 'post') ?>
                     <?php echo $form->field($model, 'cat_title') ?>
+                    <?php echo $form->textareaField($model, 'category_description') ?>
                     <button type="submit" class="btn btn-primary">Submit</button>
 
                     <?php \app\core\form\Form::end(); ?>
@@ -67,6 +69,7 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Category name</th>
+                                <th>Category description</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,9 +81,11 @@
                             foreach ($categories as $row) {
                                 $cat_id = $row["cat_id"];
                                 $cat_title = $row["cat_title"];
+                                $category_description = $row["category_description"];
                                 echo "<tr>
                                             <td>$cat_id</td>
                                             <td>$cat_title</td>
+                                            <td>$category_description</td>
                                             <td><a href='categories?delete_id=$cat_id'>Delete</a></td>
                                             <td><a href='categories?edit_id=$cat_id'>Edit</a></td>
                                             </tr>";

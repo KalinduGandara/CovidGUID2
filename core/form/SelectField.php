@@ -18,6 +18,7 @@ class SelectField extends BaseField
     public function __construct(Model $model, string $attribute ,array $options)
     {
         $this->options = $options;
+        $this->attribute = $attribute;
         parent::__construct($model, $attribute);
     }
 
@@ -26,11 +27,16 @@ class SelectField extends BaseField
     {
         $options = '';
         foreach ($this->options as $value => $display){
-            $options .= '<option value="'.$value.'">'.$display.'</option>';
+            if ($value ==$this->model->{$this->attribute}) {
+                $options .= '<option selected value="' . $value . '">' . $display . '</option>';
+            }
+            else {
+                $options .= '<option value="' . $value . '">' . $display . '</option>';
+            }
         }
 
         return sprintf('<select name="%s"  value="%s" class="form-control %s">
-                        <option selected disabled></option>'.
+                        '.
                                 $options
                                 .'</select>',
             $this->attribute,
