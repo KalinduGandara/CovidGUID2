@@ -52,7 +52,7 @@ class OfficerController extends Controller
             $guideline['sub_category_name'] = $subcategories[$subcategory]['sub_category_name'];
             $guidelines[] = $guideline;
         }
-        return $this->render('officer_guidelines', ['guidelines' => $guidelines]);
+        return $this->render('officer_guidelines', ['subcategories'=> $subcategories,'guidelines' => $guidelines]);
     }
 
     public function add_guideline(Request $request, Response $response)
