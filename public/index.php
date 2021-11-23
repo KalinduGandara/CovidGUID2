@@ -42,6 +42,8 @@ $app->router->post('/officer/add-guideline', [OfficerController::class, 'add_gui
 $app->router->get('/officer/add-guideline', [OfficerController::class, 'add_guideline']);
 $app->router->get('/officer/categories', [OfficerController::class, 'categories']);
 $app->router->post('/officer/categories', [OfficerController::class, 'categories']);
+$app->router->get('/officer/add-subcategory', [OfficerController::class, 'add_subcategory']);
+$app->router->post('/officer/add-subcategory', [OfficerController::class, 'add_subcategory']);
 
 
 $app->router->get('/login', [AuthController::class, 'login']);

@@ -14,12 +14,7 @@
             <!-- Display Categories -->
 
             <?php
-            //            echo '<pre>';
-            //            var_dump($categories);
-            //            var_dump($guidelines);
-            //
-            //            echo '</pre>';
-            //            exit();
+
 
             foreach ($categories as $category) {
 
@@ -27,6 +22,7 @@
                 $cat_title = $category['cat_title'];
                 //                    $cat_status = $category['cat_status'];
 
+                $category_description = $category['category_description'];
                 include "components/category.php";
             }
             ?>

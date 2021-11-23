@@ -85,7 +85,7 @@
                     foreach ($categories as $category) {
                         $cat_id = $category['cat_id'];
                         $cat_title = $category['cat_title'];
-                        echo "<li><a href='category.php?cat_id=$cat_id'>$cat_title</a></li>";
+                        echo "<li><a href='\?cat_id=$cat_id'>$cat_title</a></li>";
                     }
                     ?>
 
