@@ -55,9 +55,25 @@
         </form>
         <hr>
         <?php
-            foreach ($guidelines as $guideline){
-                include "components/guideline.php";
+//            foreach ($guidelines as $guideline){
+//                include "components/guideline.php";
+//            }
+        foreach ($subcategories as $subcategory){
+            $sub_category_name = $subcategory['sub_category_name'];
+            $category_name = '';
+            //                    $cat_status = $category['cat_status'];
+
+            $sub_category_id = $subcategory['sub_category_id'];
+            $sub_category_guidelines = [];
+            foreach ($guidelines as $guideline) {
+                if ($guideline['sub_category_id'] == $sub_category_id) {
+                    array_push($sub_category_guidelines, $guideline);
+                    //TODO: need to be refactored.
+                    $category_name = $guideline['cat_title'];
+                }
             }
+            include "components/officer_subcategory.php";
+        }
         ?>
     </div>
 </div>
