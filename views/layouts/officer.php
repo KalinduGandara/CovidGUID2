@@ -31,6 +31,11 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
 
+    <!-- jQuery -->
+    <script src="/js/jquery.js"></script>
+
+    <script src="/js/scripts.js"></script>
+
 </head>
 
 <body>
@@ -39,11 +44,6 @@
 
 </div>
 <!-- /#wrapper -->
-
-<!-- jQuery -->
-<script src="/js/jquery.js"></script>
-
-<script src="/js/scripts.js"></script>
 
 <!-- Bootstrap Core JavaScript -->
 <script src="/bootstrap-5.1.3-dist/js/bootstrap.min.js"></script>

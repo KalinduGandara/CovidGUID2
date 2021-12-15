@@ -9,7 +9,7 @@ class Guideline extends \app\core\db\DbModel
     public string $cat_id = '';
     public string $sub_category_id = '';
     public string $guid_id = '';
-    public string $guidline = '';
+    public string $guideline = '';
     public string $guid_status = '';
 
     public static function tableName(): string
@@ -21,7 +21,7 @@ class Guideline extends \app\core\db\DbModel
     {
         return [
             'sub_category_id',
-            'guidline',
+            'guideline',
             'cat_id',
             'guid_status'
         ];
@@ -36,7 +36,7 @@ class Guideline extends \app\core\db\DbModel
     {
         return [
             'sub_category_id' => [self::RULE_REQUIRED],
-            'guidline' => [self::RULE_REQUIRED],
+            'guideline' => [self::RULE_REQUIRED],
             'cat_id' => [self::RULE_REQUIRED],
             'guid_status' => [self::RULE_REQUIRED],
         ];
@@ -46,7 +46,7 @@ class Guideline extends \app\core\db\DbModel
     {
         return [
             'sub_category_id' => "Select SubCategory",
-            'guidline' => "Enter description",
+            'guideline' => "Enter description",
             'cat_id' => "Select Category",
             'guid_status' => "Enter the status",
         ];

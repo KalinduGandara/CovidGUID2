@@ -41,7 +41,7 @@ class OfficerController extends Controller
                 exit();
             }
             $guideline = Guideline::findOne(['guid_id' => $_GET['edit_id']]);
-            return $this->render('officer_add_guideline', ['subcategories' => $subcategories, 'categories' => $categories, 'mode' => 'update', 'guideline' => $guideline]);
+            return $this->render('officer_add_guideline', ['subcategories' => $subcategories, 'categories' => $categories, 'mode' => 'update', 'edit_guideline' => $guideline, 'display_guidelines'=> Guideline::getAll()]);
         }
         $guidelines_fetched = Guideline::getAll();
         $guidelines = [];
@@ -69,7 +69,7 @@ class OfficerController extends Controller
                 echo '<script>alert("Fail to save the guideline")</script>';
             }
         }
-        return $this->render('officer_add_guideline', ['subcategories' => $subcategories, 'categories' => $categories]);
+        return $this->render('officer_add_guideline', ['subcategories' => $subcategories, 'categories' => $categories, 'display_guidelines'=> Guideline::getAll()]);
     }
 
     public function categories(Request $request, Response $response)
