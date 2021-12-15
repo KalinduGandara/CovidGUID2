@@ -6,9 +6,10 @@ namespace app\models;
 
 class Guideline extends \app\core\db\DbModel
 {
-    public string $sub_category_id = '';
-    public string $guid_body = '';
     public string $cat_id = '';
+    public string $sub_category_id = '';
+    public string $guid_id = '';
+    public string $guidline = '';
     public string $guid_status = '';
 
     public static function tableName(): string
@@ -20,7 +21,7 @@ class Guideline extends \app\core\db\DbModel
     {
         return [
             'sub_category_id',
-            'guid_body',
+            'guidline',
             'cat_id',
             'guid_status'
         ];
@@ -35,7 +36,7 @@ class Guideline extends \app\core\db\DbModel
     {
         return [
             'sub_category_id' => [self::RULE_REQUIRED],
-            'guid_body' => [self::RULE_REQUIRED],
+            'guidline' => [self::RULE_REQUIRED],
             'cat_id' => [self::RULE_REQUIRED],
             'guid_status' => [self::RULE_REQUIRED],
         ];
@@ -45,7 +46,7 @@ class Guideline extends \app\core\db\DbModel
     {
         return [
             'sub_category_id' => "Select SubCategory",
-            'guid_body' => "Enter description",
+            'guidline' => "Enter description",
             'cat_id' => "Select Category",
             'guid_status' => "Enter the status",
         ];

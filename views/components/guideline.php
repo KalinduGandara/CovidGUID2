@@ -7,7 +7,7 @@ if (\app\core\App::isGuest()) { //guest view
             <h3 class="panel-title"><?php echo $guideline['cat_title'] . ' > ' . $guideline['guid_title'] ?></h3>
         </div>
         <div class="panel-body">
-            <?php echo $guideline['guid_body'] ?>
+            <?php echo $guideline['guidline'] ?>
         </div>
     </div>
 <?php
@@ -17,7 +17,7 @@ if (\app\core\App::isGuest()) { //guest view
         <h5 class="card-header"><?php echo $guideline['cat_title'] ?></h5>
         <div class="card-body">
             <h5 class="card-title"><?php echo $guideline['sub_category_name'] ?></h5>
-            <p class="card-text"><?php echo $guideline['guid_body'] ?></p>
+            <p class="card-text"><?php echo $guideline['guidline'] ?></p>
             <a href="/officer/guidelines?edit_id=<?= $guideline['guid_id'] ?>" class="btn btn-primary">Edit</a>
             <a href="/officer/guidelines?delete_id=<?= $guideline['guid_id'] ?>" class="btn btn-danger">Delete</a>
         </div>

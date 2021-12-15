@@ -55,7 +55,7 @@ foreach ($subcategories as $subcategory) {
             $form = \app\core\form\Form::begin('', 'post');
             echo $form->selectField($model, 'cat_id', $category_options);
             echo $form->selectField($model, 'sub_category_id', $subcategory_options);
-            echo $form->textareaField($model, 'guid_body');
+            echo $form->textareaField($model, 'guidline');
             echo $form->selectField($model, 'guid_status', [0 => 'Active', 1 => 'Drafted']);
             ?>
             <br />
