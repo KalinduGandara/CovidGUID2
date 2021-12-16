@@ -30,7 +30,7 @@ foreach ($categories as $category) {
 
 
                     <?php $form = \app\core\form\Form::begin('', 'post') ?>
-                    <?php echo $form->selectField($model, 'category_id', $category_options); ?>
+                    <?php echo $form->selectField($model, 'cat_id', $category_options); ?>
                     <?php echo $form->field($model, 'sub_category_name') ?>
                     <button type="submit" class="btn btn-primary">Submit</button>
 
@@ -57,7 +57,7 @@ foreach ($categories as $category) {
                             foreach ($subcategories as $row) {
                                 $sub_category_id = $row["sub_category_id"];
                                 $sub_category_name = $row["sub_category_name"];
-                                $cat_id = $row["category_id"];
+                                $cat_id = $row["cat_id"];
 
                                 echo "<tr>
                                             <td>$sub_category_id</td>
