@@ -23,7 +23,7 @@
 
             foreach ($subcategories as $subcategory) {
                 $cat_id = $category->cat_id;
-                if ($subcategory['category_id'] === $cat_id) {
+                if ($subcategory['cat_id'] === $cat_id) {
 
                     $sub_category_name = $subcategory['sub_category_name'];
                     //                    $cat_status = $category['cat_status'];
