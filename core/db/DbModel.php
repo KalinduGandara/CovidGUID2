@@ -124,6 +124,25 @@ abstract class DbModel extends Model
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public static function searchBy($where)
+    {
+        $tableName = static::tableName();
+        $sql = "";
+        foreach ($where as $key=>$value){
+            $sql .= "$key LIKE '%$value%'";
+        }
+
+        $statement = self::prepare("SELECT * FROM $tableName WHERE $sql");
+//        echo '<pre>';
+//        var_dump($statement);
+//        echo '</pre>';
+//        exit();
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+    }
+
     public static function prepare($sql)
     {
         return App::$app->db->pdo->prepare($sql);

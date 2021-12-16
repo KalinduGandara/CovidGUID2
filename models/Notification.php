@@ -9,6 +9,10 @@ use app\core\db\DbModel;
 
 class Notification extends DbModel
 {
+    public const CREATE_NOTIFICATION = 0;
+    public const UPDATE_NOTIFICATION = 1;
+    public const DELETE_NOTIFICATION = 2;
+
     public static function tableName(): string
     {
         return 'notification';
@@ -16,7 +20,7 @@ class Notification extends DbModel
 
     public function attributes(): array
     {
-        return ['cat_id','post_id','date','type'];
+        return ['cat_id','guideline_id','date','type'];
     }
 
     public static function primaryKey(): string
@@ -35,9 +39,13 @@ class Notification extends DbModel
         return [];
     }
 
-    public function getNotifications()
+    public static function getNotifications()
     {
-        $user = App::$app->user;
+        $user = App::$app->user->id;
+        echo '<pre>';
+        var_dump($user);
+        echo '</pre>';
+        exit();
     }
 
 }

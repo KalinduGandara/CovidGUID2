@@ -26,6 +26,8 @@ $app = new App(dirname(__DIR__), $config);
 $app->router->get('/', [SiteController::class, 'home']);
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->post('/contact', [SiteController::class, 'contact']);
+//added for debugging
+$app->router->get('/notification', [SiteController::class, 'notification']);
 
 
 $app->router->get('/post', [SiteController::class, 'post']);

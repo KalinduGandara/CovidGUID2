@@ -19,7 +19,7 @@
                         //                        $query = "SELECT * from `notifications` where `status` = 'unread' order by `date` DESC";
                         if (true) {
                         ?>
-                            <span class="badge badge-light"><?php echo 5; ?></span>
+                            <span class="badge badge-light"><?php echo 10; ?></span>
                         <?php
                         }
                         ?>
@@ -37,7 +37,7 @@
                                     echo "font-weight:bold;";
                                 }
                                 ?>
-                                        " class="dropdown-item" href="view.php?id=<?php echo $i['id'] ?>">
+                                        " class="dropdown-item" href="notification">
                                     <small><i><?php echo date('F j, Y, g:i a', strtotime($i['date'])) ?></i></small><br />
                                     <?php
 
