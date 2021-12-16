@@ -7,8 +7,8 @@
         <div class="col-md-8">
 
             <h1 class="page-header">
-                <?php echo $category->cat_title; ?>
-
+<!--                --><?php //echo $category->cat_title; ?>
+            Search Result of <?php echo $_GET['search']?>
             </h1>
 
             <!-- Display Categories -->
@@ -22,8 +22,8 @@
             //            exit();
 
             foreach ($subcategories as $subcategory) {
-                $cat_id = $category->cat_id;
-                if ($subcategory['cat_id'] === $cat_id) {
+//                $cat_id = $category->cat_id;
+//                if ($subcategory['cat_id'] === $cat_id) {
 
                     $sub_category_name = $subcategory['sub_category_name'];
                     //                    $cat_status = $category['cat_status'];
@@ -36,7 +36,7 @@
                         }
                     }
                     include "components/subcategory.php";
-                }
+//                }
             }
             ?>
 

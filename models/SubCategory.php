@@ -7,7 +7,7 @@ namespace app\models;
 class SubCategory extends \app\core\db\DbModel
 {
     public string $sub_category_name = '';
-    public string $category_id = '';
+    public string $cat_id = '';
 
     public function save()
     {
@@ -34,13 +34,13 @@ class SubCategory extends \app\core\db\DbModel
     {
         return [
             'sub_category_name' => [self::RULE_REQUIRED],
-            'category_id' => [self::RULE_REQUIRED]
+            'cat_id' => [self::RULE_REQUIRED]
         ];
     }
     public function labels(): array
     {
         return [
-            'category_id' => 'Select Category',
+            'cat_id' => 'Select Category',
             'sub_category_name' => 'Subcategory Name'
         ];
     }

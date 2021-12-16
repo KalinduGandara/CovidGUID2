@@ -9,13 +9,8 @@
     </div>
     <div class="panel-body">
         <?php
-        foreach ($sub_category_guidelines as $guideline) {
-            echo "<li>$guideline[guid_body] 
-                    <a href='/officer/guidelines?edit_id=$guideline[guid_id]'><i class=\"ms-3 mt-2 fa fa-pencil\"></i></a>
-                    <a href='/officer/guidelines?delete_id=$guideline[guid_id]'><i class=\"ms-3 mt-2 fa fa-minus-circle\"></i></a>
-                   </li>";
-        }
-
+        $display_guidelines = $sub_category_guidelines;
+        include 'officer_guideline.php'
         ?>
 
     </div>

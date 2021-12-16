@@ -10,6 +10,7 @@ use app\models\Category;
 use app\models\ContactForm;
 use app\models\Guideline;
 use app\models\LoginForm;
+use app\models\Notification;
 use app\models\Post;
 use app\models\SubCategory;
 
@@ -25,6 +26,12 @@ class SiteController extends Controller
             'subcategories' => $subcategories,
             'categories' => $categories,
         ];
+        if (isset($_GET['search'])){
+            $search =  $_GET['search'];
+            $result = SubCategory::searchBy(["sub_category_name"=>$search]);
+            $params = ['subcategories' => $result, 'guidelines' => $guidelines, 'categories' => $categories,];
+            return $this->render('search_sub_category',$params);
+        }
         if (isset($_GET['cat_id'])) {
             $cat_id = $_GET['cat_id'];
             $category = Category::findOne(['cat_id' => $cat_id]);
@@ -62,5 +69,10 @@ class SiteController extends Controller
             'categories' => $categories,
         ];
         return $this->render('guideline', $params);
+    }
+
+    public function notification()
+    {
+        return Notification::getNotifications();
     }
 }

@@ -8,9 +8,9 @@ class m0004_create_guideline
         $db = \app\core\App::$app->db;
         $SQL = "CREATE TABLE IF NOT EXISTS `guidelines` (
                   `guid_id` int(3) NOT NULL AUTO_INCREMENT,
-                  `guid_title` varchar(255) NOT NULL,
-                  `guid_body` text NOT NULL,
                   `cat_id` INT NOT NULL ,
+                  `subcategory_id` int(255) NOT NULL,
+                  `guidline` text NOT NULL,
                   `guid_status` TEXT NOT NULL ,
                   PRIMARY KEY (`guid_id`)
                ) ENGINE = INNODB;";
