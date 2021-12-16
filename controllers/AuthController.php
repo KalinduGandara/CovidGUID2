@@ -23,7 +23,15 @@ class AuthController extends Controller
     public function login(Request $request,Response $response)
     {
         if (!App::isGuest())
+        {
+            var_dump(App::isGuest());
+            var_dump($_POST);
+//            var_dump($request->method());
+//            echo '\n';
+//            var_dump($request->getBody());
+            exit();
             $response->redirect('/');
+        }
         $loginForm = new LoginForm();
 
         if ($request->method() === 'post') {
@@ -63,7 +71,6 @@ class AuthController extends Controller
     {
         App::$app->logout();
         $response->redirect('/');
-
     }
 
     public function profile(Request $request)

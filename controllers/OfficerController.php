@@ -10,6 +10,7 @@ use app\core\Request;
 use app\core\Response;
 use app\models\Category;
 use app\models\Guideline;
+use app\models\LoginForm;
 use app\models\SubCategory;
 
 class OfficerController extends Controller
@@ -76,11 +77,31 @@ class OfficerController extends Controller
     {
         $category = new Category();
         $mode = '';
+
         if (isset($_GET['edit_id'])) {
             $mode = 'update';
             $category = Category::findOne(['cat_id' => $_GET['edit_id']]);
         }
         if ($request->method() == 'post') {
+
+            $formAttributes = $request->getBody();
+            $havePermission = null; //will evaluate to true when officer reentered his correct email-pwd combination
+
+            if(isset($formAttributes['email']) && isset($formAttributes['password']))
+            {
+                $loginForm = new LoginForm();
+                $loginForm->loadData($request->getBody());
+                if ($loginForm->validate() && $loginForm->login())
+                {
+                    $havePermission = true;
+                }
+            }
+
+            if(!$havePermission)
+            {
+                App::$app->response->redirect('/officer/categories');
+                exit();
+            }
             $category->loadData($request->getBody());
             if ($mode == 'update') {
                 $category->update(['cat_id' => $_GET['edit_id']], $request->getBody());
@@ -94,11 +115,32 @@ class OfficerController extends Controller
             }
         }
         if (isset($_GET['delete_id'])) {
+            $formAttributes = $request->getBody();
+
+            var_dump($request->getBody());
+            echo '<script> openForm(); </script>';
+            exit();
+
             $delete_id = $_GET['delete_id'];
             $category->delete(['cat_id' => $delete_id]);
         }
         $mode = '';
 
+
+        $formAttributes = $request->getBody();
+
+        if(isset($formAttributes['email']) && isset($formAttributes['password']))
+        {
+            $loginForm = new LoginForm();
+            $loginForm->loadData($request->getBody());
+            if ($loginForm->validate() && $loginForm->login())
+            {
+                $delete_id = $formAttributes["delete_id"];
+                $category->delete(['cat_id' => $delete_id]);
+                App::$app->response->redirect('/officer/categories');
+                exit();
+            }
+        }
 
         $categories = Category::getAll();
 
