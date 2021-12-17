@@ -25,22 +25,8 @@
             <!-- /.row -->
 
             <style>
-                body {font-family: Arial, Helvetica, sans-serif;}
-                * {box-sizing: border-box;}
-
-                /* Button used to open the contact form - fixed at the bottom of the page */
-                .open-button {
-                    background-color: #555;
-                    color: white;
-                    padding: 16px 20px;
-                    border: none;
-                    cursor: pointer;
-                    opacity: 0.8;
-                    position: fixed;
-                    bottom: 23px;
-                    right: 28px;
-                    width: 280px;
-                }
+                /*body {font-family: Arial, Helvetica, sans-serif;}*/
+                /** {box-sizing: border-box;}*/
 
                 /* The popup form - hidden by default */
                 .form-popup {
@@ -48,19 +34,21 @@
                     position: fixed;
                     bottom: 0;
                     right: 15px;
-                    border: 3px solid #f1f1f1;
-                    z-index: 9;
+                    /*border: 3px solid #f1f1f1;*/
+                    border: 35px solid red;
+                    /*z-index: 9;*/
+                    z-index: 3;
+                    /***/
+                    background-color: black;
                 }
 
-                /* Add styles to the form container */
-                .form-container {
+                div form#popupFormContainer {
                     max-width: 300px;
                     padding: 10px;
                     background-color: white;
                 }
 
-                /* Full-width input fields */
-                .form-container input[type=text], .form-container input[type=password] {
+                div form input#popupTextField, div form input#popupPasswordField {
                     width: 100%;
                     padding: 15px;
                     margin: 5px 0 22px 0;
@@ -68,14 +56,27 @@
                     background: #f1f1f1;
                 }
 
-                /* When the inputs get focus, do something */
-                .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+                b#popupTextFieldLabel, b#popupPasswordFieldLabel {
+                    color: white;
+                }
+
+                div form input#popupTextField:focus, div form input#popupPasswordField:focus {
                     background-color: #ddd;
                     outline: none;
                 }
 
-                /* Set a style for the submit/login button */
-                .form-container .btn {
+                div form button#cancelBtn {
+                    background-color: indianred;
+                    color: white;
+                    padding: 16px 20px;
+                    border: none;
+                    cursor: pointer;
+                    width: 100%;
+                    margin-bottom:10px;
+                    opacity: 0.8;
+                }
+
+                div form button#verifyBtn {
                     background-color: #04AA6D;
                     color: white;
                     padding: 16px 20px;
@@ -86,15 +87,17 @@
                     opacity: 0.8;
                 }
 
-                /* Add a red background color to the cancel button */
-                .form-container .cancel {
-                    background-color: red;
-                }
-
-                /* Add some hover effects to buttons */
-                .form-container .btn:hover, .open-button:hover {
+                div form button#cancelBtn:hover {
                     opacity: 1;
                 }
+                div form button#verifyBtn:hover {
+                    opacity: 1;
+                }
+
+                div h1#popupHeading {
+                    color: white;
+                }
+
             </style>
 
             <div class="container">
@@ -117,19 +120,21 @@
                     <button type="submit" class="btn btn-primary" onclick="openForm()">Submit</button>
 
                     <div class="form-popup" id="myForm">
-                        <form action="" class="form-container">
-                            <h1>Login</h1>
+                        <form action="" class="form-container" id="popupFormContainer">
+                            <h1 id="popupHeading">Verification</h1>
 
-                            <label for="email"><b>Email</b></label>
-                            <input type="text" placeholder="Enter Email" name="email" required>
+                            <label for="email"><b  id="popupTextFieldLabel">Email</b></label>
+                            <input type="text" placeholder="Enter Email" name="email" id="popupTextField" required>
 
-                            <label for="psw"><b>Password</b></label>
-                            <input type="password" placeholder="Enter Password" name="password" required>
+                            <label for="password"><b  id="popupPasswordFieldLabel">Password</b></label>
+                            <input type="password" placeholder="Enter Password" name="password" id="popupPasswordField" required>
 
                             <input type="hidden" id="delete_id" name="delete_id" value="-1">
 
-                            <button type="submit" class="btn">Login</button>
-                            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                            <button type="submit" id="verifyBtn">Verify</button>
+<!--                            class="btn"-->
+                            <button type="button" id="cancelBtn" onclick="closeForm()">Close</button>
+<!--                            class="btn cancel"-->
                         </form>
                     </div>
 
