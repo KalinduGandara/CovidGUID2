@@ -162,6 +162,10 @@ class OfficerController extends Controller
                 exit();
             }
             $subcategory->loadData($request->getBody());
+
+//            var_dump($request->getBody());
+//            exit();
+
             if ($subcategory->save()) {
                 App::$app->response->redirect('/officer/add-subcategory');
                 exit();
@@ -178,6 +182,6 @@ class OfficerController extends Controller
         $subcategories = SubCategory::getAll();
 
 
-        return $this->render('officer_add_subcategory', ['subcategories' => $subcategories, 'categories' => $categories, 'model' => $subcategory,]);
+        return $this->render('officer_add_subcategory', ['subcategories' => $subcategories, 'categories' => $categories, 'model' => $subcategory]);
     }
 }
