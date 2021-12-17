@@ -155,20 +155,39 @@ class OfficerController extends Controller
             $subcategory = SubCategory::findOne(['sub_category_id' => $_GET['edit_id']]);
         }
 
-        if ($request->method() === 'post') {
+        if ($request->method() === 'post')
+        {
+            $formAttributes = $request->getBody();
+            $havePermission = null; //will evaluate to true when officer reentered his correct email-pwd combination
+
+            if(isset($formAttributes['email']) && isset($formAttributes['password']))
+            {
+                $loginForm = new LoginForm();
+                $loginForm->loadData($request->getBody());
+                if ($loginForm->validate() && $loginForm->login())
+                {
+                    $havePermission = true;
+                }
+            }
+
+            if(!$havePermission)
+            {
+                App::$app->response->redirect('/officer/add-subcategory');
+                exit();
+            }
             if ($mode == 'update') {
                 $subcategory->update(['sub_category_id' => $_GET['edit_id']], $request->getBody());
                 App::$app->response->redirect('/officer/add-subcategory');
                 exit();
             }
-            $subcategory->loadData($request->getBody());
+            else
+            {
+                $subcategory->loadData($request->getBody());
 
-//            var_dump($request->getBody());
-//            exit();
-
-            if ($subcategory->save()) {
-                App::$app->response->redirect('/officer/add-subcategory');
-                exit();
+                if ($subcategory->validate() && $subcategory->save()) {
+                    App::$app->response->redirect('/officer/add-subcategory');
+                    exit();
+                }
             }
         }
         if (isset($_GET['delete_id'])) {
@@ -176,7 +195,20 @@ class OfficerController extends Controller
             $subcategory->delete(['sub_category_id' => $delete_id]);
         }
 
+        $formAttributes = $request->getBody();
 
+        if(isset($formAttributes['email']) && isset($formAttributes['password']))
+        {
+            $loginForm = new LoginForm();
+            $loginForm->loadData($request->getBody());
+            if ($loginForm->validate() && $loginForm->login())
+            {
+                $delete_id = $formAttributes["delete_id"];
+                $subcategory->delete(['sub_category_id' => $delete_id]);
+                App::$app->response->redirect('/officer/add-subcategory');
+                exit();
+            }
+        }
 
         $categories = Category::getAll();
         $subcategories = SubCategory::getAll();
