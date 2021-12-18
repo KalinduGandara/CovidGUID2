@@ -51,9 +51,11 @@ class SiteController extends Controller
                 }
             }
             $unseenNotifications = 0;
-            $notifications = Notification::getNotifications();
+            if (!App::isGuest()) {
+                $notifications = Notification::getNotifications();
             foreach ($notifications as $notification) {
                 if ($notification['status'] == 0) $unseenNotifications++;
+            }
             }
 
 
