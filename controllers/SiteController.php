@@ -19,46 +19,25 @@ class SiteController extends Controller
     public function home()
     {
         $loginForm = new LoginForm();
-        $notifications = [];
-        $unseenNotifications = 0;
-        if (!App::isGuest()) {
-            $notifications = Notification::getNotifications();
-            foreach ($notifications as $notification) {
-                if ($notification['status'] == 0) $unseenNotifications++;
-            }
-        }
         $subcategories = SubCategory::getAll();
         $categories = Category::getAll();
         $guidelines = Guideline::getAll();
         $params = [
-            'unseenNotifications' => $unseenNotifications,
-            'notifications' => $notifications,
             'subcategories' => $subcategories,
             'categories' => $categories,
         ];
-        if (isset($_GET['search'])) {
-            $search = $_GET['search'];
-            $result = SubCategory::searchBy(["sub_category_name" => $search]);
-            $params = ['unseenNotifications' => $unseenNotifications, 'notifications' => $notifications, 'subcategories' => $result, 'guidelines' => $guidelines, 'categories' => $categories,];
-            return $this->render('search_sub_category', $params);
+        if (isset($_GET['search'])){
+            $search =  $_GET['search'];
+            $result = SubCategory::searchBy(["sub_category_name"=>$search]);
+            $params = ['subcategories' => $result, 'guidelines' => $guidelines, 'categories' => $categories,];
+            return $this->render('search_sub_category',$params);
         }
         if (isset($_GET['cat_id'])) {
             $cat_id = $_GET['cat_id'];
             $category = Category::findOne(['cat_id' => $cat_id]);
-            if (isset($_GET['read']) && isset($_GET['not_id'])) {
-                if ($_GET['read'] == 0) {
-                    Notification::markAsRead($_GET['not_id']);
-                }
-            }
-            $unseenNotifications = 0;
-            $notifications = Notification::getNotifications();
-            foreach ($notifications as $notification) {
-                if ($notification['status'] == 0) $unseenNotifications++;
-            }
-
 
             $params = [
-                'unseenNotifications' => $unseenNotifications, 'notifications' => $notifications, 'category' => $category, 'subcategories' => $subcategories, 'guidelines' => $guidelines, 'categories' => $categories,
+                'category' => $category, 'subcategories' => $subcategories, 'guidelines' => $guidelines, 'categories' => $categories,
 
             ];
             return $this->render('subcategory', $params);
@@ -66,7 +45,6 @@ class SiteController extends Controller
 
         return $this->render('home2', $params);
     }
-
     public function contact(Request $request, Response $response)
     {
         $contact = new ContactForm();
@@ -81,7 +59,6 @@ class SiteController extends Controller
             'model' => $contact
         ]);
     }
-
     public function post(Request $request, Response $response)
     {
         $guid_id = $_GET["guid_id"];
@@ -96,11 +73,6 @@ class SiteController extends Controller
 
     public function notification()
     {
-        if (!App::isGuest())
-            echo '<pre>';
-        var_dump(Notification::getNotifications());
-        echo '</pre>';
-        exit();
         return Notification::getNotifications();
     }
 }

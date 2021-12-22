@@ -72,6 +72,14 @@ foreach ($subcategories as $subcategory) {
                 include 'components/officer_guideline.php';
                 echo '</div>';
                 echo $form->textareaField($model, 'guideline');
+                echo '<div class = "row">';
+                echo '<div class = "col">';
+                echo $form->field($model, 'activate_date')->dateField();
+                echo '</div>';
+                echo '<div class="col">';
+                echo $form->field($model,'expiry_date')->dateField();
+                echo '</div>';
+                echo '</div>';
                 echo $form->selectField($model, 'guid_status', [0 => 'Active', 1 => 'Drafted'],false,$edit_guideline->guid_status);
             }
             else if(isset($_GET['cat_id'])){
@@ -92,6 +100,14 @@ foreach ($subcategories as $subcategory) {
                     echo '</div>';
 
                     echo $form->textareaField($model, 'guideline');
+                    echo '<div class = "row">';
+                    echo '<div class = "col">';
+                    echo $form->field($model, 'activate_date')->dateField();
+                    echo '</div>';
+                    echo '<div class="col">';
+                    echo $form->field($model,'expiry_date')->dateField();
+                    echo '</div>';
+                    echo '</div>';
                     echo $form->selectField($model, 'guid_status', [0 => 'Active', 1 => 'Drafted']);
                 }
                 else

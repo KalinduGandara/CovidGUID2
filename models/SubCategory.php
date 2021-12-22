@@ -22,8 +22,7 @@ class SubCategory extends \app\core\db\DbModel
 
     public function attributes(): array
     {
-//        return ['sub_category_name', 'category_id'];
-        return ['sub_category_name', 'cat_id'];
+        return ['sub_category_name', 'category_id'];
     }
 
     public static function primaryKey(): string

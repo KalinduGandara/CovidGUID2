@@ -1,5 +1,3 @@
-<?php use app\core\App;
-use app\models\Notification;?>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -15,14 +13,13 @@ use app\models\Notification;?>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <?php if (!App::isGuest()){?>
                 <li class="nav-item dropdown">
-                    <a class="nav-link" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Notifications
+                    <a class="nav-link" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Notifications
                         <?php
                         //                        $query = "SELECT * from `notifications` where `status` = 'unread' order by `date` DESC";
-                        if (count($notifications)>0) {
+                        if (true) {
                         ?>
-                            <span class="badge badge-light"><?php echo $unseenNotifications; ?></span>
+                            <span class="badge badge-light"><?php echo 10; ?></span>
                         <?php
                         }
                         ?>
@@ -30,28 +27,24 @@ use app\models\Notification;?>
                     <div class="dropdown-menu" aria-labelledby="dropdown01">
                         <?php
                         //                        $query = "SELECT * from `notifications` order by `date` DESC";
-//                        $list = [['type' => 'comment', 'date' => '2018-02-09 00:21:21']];
-                        if (count($notifications) > 0) {
-                            foreach ($notifications as $i) {
-                                $id = $i['cat_id'];
-                                $status = $i['status'];
+                        $list = [['type' => 'comment', 'date' => '2018-02-09 00:21:21']];
+                        if (count($list) > 0) {
+                            foreach ($list as $i) {
                         ?>
                                 <a style="
                                 <?php
-                                if ($i['status'] == Notification::UNSEEN_NOTIFICATION) {
+                                if ($i['status'] == 'unread') {
                                     echo "font-weight:bold;";
                                 }
                                 ?>
-                                        " class="dropdown-item" href="?cat_id=<?php echo $id?> & read=<?php echo $status?> & not_id=<?php echo $i['not_id']?>">
+                                        " class="dropdown-item" href="notification">
                                     <small><i><?php echo date('F j, Y, g:i a', strtotime($i['date'])) ?></i></small><br />
                                     <?php
-                                    $title = $i['cat_title'];
-                                    if ($i['type'] == Notification::CREATE_NOTIFICATION) {
-                                        echo "New Guideline in $title";
-                                    } else if ($i['type'] == Notification::UPDATE_NOTIFICATION) {
-                                        echo "Update Guideline in $title";
-                                    }else if ($i['type'] == Notification::DELETE_NOTIFICATION) {
-                                        echo "Delete Guideline in $title";
+
+                                    if ($i['type'] == 'comment') {
+                                        echo "Someone commented on your post.";
+                                    } else if ($i['type'] == 'like') {
+                                        echo ucfirst($i['name']) . " liked your post.";
                                     }
 
                                     ?>
@@ -65,7 +58,6 @@ use app\models\Notification;?>
                         ?>
                     </div>
                 </li>
-                <?php }?>
             </ul>
             <ul class="nav navbar-nav">
 
@@ -79,7 +71,7 @@ use app\models\Notification;?>
                 ?>
 
 
-                <?php if (App::isGuest()) { ?>
+                <?php if (\app\core\App::isGuest()) { ?>
 
                     <li>
                         <a href="/login">Login</a>
@@ -91,12 +83,12 @@ use app\models\Notification;?>
                     <li>
                         <a href="/profile">Profile</a>
                     </li>
-                    <?php if (App::isAdmin()) { ?>
+                    <?php if (\app\core\App::isAdmin()) { ?>
                         <li>
                             <a href="/admin">Admin</a>
                         </li>
                     <?php } ?>
-                    <?php if (App::isOfficer()) { ?>
+                    <?php if (\app\core\App::isOfficer()) { ?>
                         <li>
                             <a href="/officer">Officer</a>
                         </li>

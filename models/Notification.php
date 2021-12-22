@@ -13,14 +13,6 @@ class Notification extends DbModel
     public const UPDATE_NOTIFICATION = 1;
     public const DELETE_NOTIFICATION = 2;
 
-    public const UNSEEN_NOTIFICATION = 0;
-    public const SEEN_NOTIFICATION = 1;
-
-    public string $cat_id = '';
-    public string $guideline_id = '';
-    public string $date = '';
-    public string $type = '';
-
     public static function tableName(): string
     {
         return 'notification';
@@ -50,31 +42,10 @@ class Notification extends DbModel
     public static function getNotifications()
     {
         $user = App::$app->user->id;
-        $SQL = "select n.not_id , c.cat_id,cat_title,guid_id ,status,type,date
-                from notification n
-                join categories c
-                on c.cat_id = n.cat_id
-                join notification_status ns
-                on n.not_id = ns.not_id where c.cat_id in (SELECT cat_id FROM category_subscription where user_id = :user_id order by date DESC)";
-        $statement = self::prepare($SQL);
-        $statement->bindValue(":user_id",$user);
-        $statement->execute();
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    public static function markAsRead($not_id)
-    {
-        $user = App::$app->user->id;
-        $SQL = "update notification_status set status=1 where not_id = :not_id and user_id =:user_id";
-        $statement = self::prepare($SQL);
-        $statement->bindValue(":user_id",$user);
-        $statement->bindValue(":not_id",$not_id);
-        $statement->execute();
-    }
-
-    public static function addNotification()
-    {
-        
+        echo '<pre>';
+        var_dump($user);
+        echo '</pre>';
+        exit();
     }
 
 }
