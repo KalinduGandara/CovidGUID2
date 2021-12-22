@@ -31,12 +31,69 @@ class OfficerController extends Controller
         $guideline = new Guideline();
         $categories = Category::getAll();
         $subcategories = SubCategory::getAll();
+
+        if ($request->method() === "post")
+        {
+            $formAttributes = $request->getBody();
+            $havePermission = null; //will evaluate to true when officer reentered his correct email-pwd combination
+
+
+//            var_dump($request->getBody());
+//            exit();
+
+
+            if(isset($formAttributes['email']) && isset($formAttributes['password']))
+            {
+                $loginForm = new LoginForm();
+                $loginForm->loadData($request->getBody());
+                if ($loginForm->validate() && $loginForm->login())
+                {
+                    $havePermission = true;
+                }
+            }
+
+            if(!$havePermission)
+            {
+                App::$app->response->redirect("/officer/guidelines?edit_id=" . $_GET['edit_id']);
+                exit();
+            }
+            else
+            {
+                $delete_id = $formAttributes['delete_id'];
+                $guideline->delete(['guid_id' => $delete_id]);
+                App::$app->response->redirect('/officer/guidelines');
+                exit();
+            }
+        }
+
+
         if (isset($_GET['delete_id'])) {
-            $guideline->delete(['guid_id' => $_GET['delete_id']]);
+//            $guideline->delete(['guid_id' => $_GET['delete_id']]);
+
             App::$app->response->redirect('/officer/guidelines');
             exit();
         } elseif (isset($_GET['edit_id'])) {
             if ($request->method() === "post") {
+
+                $formAttributes = $request->getBody();
+                $havePermission = null; //will evaluate to true when officer reentered his correct email-pwd combination
+
+                if(isset($formAttributes['email']) && isset($formAttributes['password']))
+                {
+                    $loginForm = new LoginForm();
+                    $loginForm->loadData($request->getBody());
+                    if ($loginForm->validate() && $loginForm->login())
+                    {
+                        $havePermission = true;
+                    }
+                }
+
+                if(!$havePermission)
+                {
+                    App::$app->response->redirect("/officer/guidelines?edit_id=" . $_GET['edit_id']);
+                    exit();
+                }
+
                 $guideline->update(['guid_id' => $_GET['edit_id']], $request->getBody());
                 App::$app->response->redirect('/officer/guidelines');
                 exit();
@@ -53,6 +110,11 @@ class OfficerController extends Controller
             $guideline['sub_category_name'] = $subcategories[$subcategory]['sub_category_name'];
             $guidelines[] = $guideline;
         }
+//        foreach ($guidelines as $subcategory) {
+//            print_r($subcategory);
+//            echo "<br>";
+//        }
+//        exit();
         return $this->render('officer_guidelines', ['subcategories'=> $subcategories,'guidelines' => $guidelines]);
     }
 
@@ -61,10 +123,37 @@ class OfficerController extends Controller
         $categories = Category::getAll();
         $subcategories = SubCategory::getAll();
         if ($request->method() === 'post') {
+
+            $formAttributes = $request->getBody();
+//            var_dump($request->getBody());
+//            exit();
+            $havePermission = null; //will evaluate to true when officer reentered his correct email-pwd combination
+
+            if(isset($formAttributes['email']) && isset($formAttributes['password']))
+            {
+                $loginForm = new LoginForm();
+                $loginForm->loadData($request->getBody());
+                if ($loginForm->validate() && $loginForm->login())
+                {
+                    $havePermission = true;
+                }
+            }
+
+            if(!$havePermission)
+            {
+                App::$app->response->redirect('/officer/add-guideline');
+                exit();
+            }
+
             $guideline = new Guideline();
             $guideline->loadData($request->getBody());
+
+
+//            var_dump($request->getBody());
+//            exit();
             if ($guideline->save()) {
                 App::$app->response->redirect('/officer/guidelines');
+//                App::$app->response->redirect('/officer/add-guideline');
                 exit();
             } else {
                 echo '<script>alert("Fail to save the guideline")</script>';

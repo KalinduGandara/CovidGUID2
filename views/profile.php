@@ -17,5 +17,6 @@ $this->title = "Profile"
     <?php echo $form->field($model, 'password')->passwordField() ?>
     <?php echo $form->field($model, 'confirmPassword')->passwordField() ?>
     <button type="submit" class="btn btn-primary">Update</button>
+    <a href='../' class="btn btn-primary">Cancel</a>
 </div>
 <?php \app\core\form\Form::end(); ?>

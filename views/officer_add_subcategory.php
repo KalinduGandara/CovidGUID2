@@ -104,7 +104,7 @@ foreach ($categories as $category) {
                 <div class="col-xs-6">
 
                     <?php $form = \app\core\form\Form::begin('', 'post') ?>
-                    <?php echo $form->selectField($model, 'cat_id', $category_options); ?>
+                    <?php echo $form->selectField($model, 'cat_id', $category_options, false, $model->cat_id); ?>
                     <?php echo $form->field($model, 'sub_category_name') ?>
                     <button type="submit" class="btn btn-primary" onclick="openForm()">Submit</button>
 

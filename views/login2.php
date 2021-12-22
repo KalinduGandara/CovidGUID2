@@ -7,6 +7,7 @@
 <?php echo $form->field($model,'email') ?>
 <?php echo $form->field($model,'password')->passwordField() ?>
     <button type="submit" class="btn btn-primary">Submit</button>
+    <a href='../' class="btn btn-primary">Cancel</a>
 </div>
 
 <?php $form->end();?>
