@@ -88,7 +88,7 @@ foreach ($display_guidelines as $guideline) {
 <?php $form = \app\core\form\Form::begin('../officer/guidelines', 'post') ?>
     <div class="form-popup" id="myForm">
         <form action="" class="form-container" id="popupFormContainer">
-            <h1 id="popupHeading">Verification</h1>
+            <h1 id="popupHeading">Verificationnnnnnnnnnnnnn</h1>
 
             <label for="email"><b  id="popupTextFieldLabel">Email</b></label>
             <input type="text" placeholder="Enter Email" name="email" id="popupTextField" required>

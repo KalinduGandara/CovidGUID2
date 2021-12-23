@@ -152,10 +152,13 @@ class OfficerController extends Controller
 //            var_dump($request->getBody());
 //            exit();
             if ($guideline->save()) {
+//                var_dump($guideline);
+//                exit();
                 App::$app->response->redirect('/officer/guidelines');
 //                App::$app->response->redirect('/officer/add-guideline');
                 exit();
             } else {
+
                 echo '<script>alert("Fail to save the guideline")</script>';
             }
         }
