@@ -16,7 +16,7 @@ class Active extends State
 
     static function getInstance(): State
     {
-        if( self::$instance === null){
+        if( !isset(self::$instance)){
             self::$instance = new Active();
         }
         return self::$instance;

@@ -22,8 +22,8 @@ class OfficerGuideline extends Guideline
                 <td>'. $this->guideline->getActivateDate().'</td>
                 <td>'.$this->guideline->getExpiryDate().'</td>
                 <td>'.$this->guideline->getLastModifiedDate().'</td>
-                <td><a href="/officer/guidelines?edit_id='.$this->guideline->getGuidId().'" class="btn btn-primary">Edit</a></td>
-                <td><a href="/officer/guidelines?delete_id='.$this->guideline->getGuidId().'" class="btn btn-danger">Delete</a></td>            
+                <td><a href="/officer/guidelines?edit_id='.$this->guideline->getGuidId().'"><i class="ms-3 mt-2 fa fa-pencil"></i></a></td>
+                <td><a href="/officer/guidelines?delete_id='.$this->guideline->getGuidId().'"><i class="ms-3 mt-2 fa fa-minus-circle"></i></a></td>            
             ';
 
         return

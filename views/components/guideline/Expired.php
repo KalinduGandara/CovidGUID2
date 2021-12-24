@@ -11,12 +11,12 @@ class Expired extends State
 
     function setLayout(string $render_string): string
     {
-        return '<tr class="table-secondary">'.$render_string.'</tr>';
+        return '<tr class="table-warning">'.$render_string.'</tr>';
     }
 
     static function getInstance(): State
     {
-        if( self::$instance === null){
+        if( ! isset(self::$instance)){
             self::$instance = new Expired();
         }
         return self::$instance;

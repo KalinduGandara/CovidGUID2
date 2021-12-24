@@ -60,14 +60,14 @@ foreach ($subcategories as $subcategory) {
             <?php
             $form = \app\core\form\Form::begin('', 'post');
             if(isset($_GET['edit_id'])){
-                echo $form->selectField($model, 'cat_id', $category_options,true,$edit_guideline->cat_id );
-                echo $form->selectField($model, 'sub_category_id', $subcategory_options,true,$edit_guideline->sub_category_id );
+                echo $form->selectField(new \app\models\SubCategory(), 'cat_id', $category_options,true, \app\models\SubCategory::findOne(['sub_category_id'=> $edit_guideline->getSubCategoryId()])->cat_id );
+                echo $form->selectField($model, 'sub_category_id', $subcategory_options,true,$edit_guideline->getSubCategoryId() );
 
                 echo '<div class="container mb-3 pb-5" style="background-color: #f4f4f4">';
                 echo '<h5>Available guidelines: </h5>';
 
                 $display_guidelines = array_filter($display_guidelines, function ($guideline) use($edit_guideline){
-                    return $guideline['cat_id'] === $edit_guideline->cat_id && $guideline['sub_category_id'] === $edit_guideline->sub_category_id;
+                    return $guideline->getSubCategoryId() === $edit_guideline->getSubCategoryId();
                 });
                 include 'components/officer_guideline.php';
                 echo '</div>';
@@ -80,10 +80,10 @@ foreach ($subcategories as $subcategory) {
                 echo $form->field($model,'expiry_date')->dateField();
                 echo '</div>';
                 echo '</div>';
-                echo $form->selectField($model, 'guid_status', [0 => 'Active', 1 => 'Drafted'],false,$edit_guideline->guid_status);
+                echo $form->checkbox($model,'guid_status');
             }
             else if(isset($_GET['cat_id'])){
-                echo $form->selectField($model, 'cat_id', $category_options,false, $_GET['cat_id'] );
+                echo $form->selectField(new \app\models\SubCategory(), 'cat_id', $category_options,false, $_GET['cat_id'] );
 
                 if(isset($_GET['sub_category_id'])){
                     echo $form->selectField($model, 'sub_category_id', $subcategory_options,false, $_GET['sub_category_id']);
@@ -92,11 +92,22 @@ foreach ($subcategories as $subcategory) {
                     echo '<h5>Available guidelines: </h5>';
 
                     function filter_guideline($guideline){
-                        return $guideline['cat_id'] === $_GET['cat_id'] && $guideline['sub_category_id'] === $_GET['sub_category_id'];
+                        return $guideline->getSubCategoryId() === $_GET['sub_category_id'];
                     }
 
                     $display_guidelines = array_filter($display_guidelines, "filter_guideline");
-                    include 'components/officer_guideline.php';
+                    echo "<table class='table table-bordered'>";
+                    echo "<thead><tr>
+                            <th> Guideline </th>
+                            <th> valid from </th>
+                            <th> expires on </th>
+                            <th> last modified </th>
+                            </tr></thead>";
+                    foreach($display_guidelines as $guideline){
+                        $guid = new \app\views\components\guideline\OfficerGuideline($guideline);
+                        echo $guid->getRenderString();
+                    }
+                    echo "</table>";
                     echo '</div>';
 
                     echo $form->textareaField($model, 'guideline');
@@ -108,7 +119,7 @@ foreach ($subcategories as $subcategory) {
                     echo $form->field($model,'expiry_date')->dateField();
                     echo '</div>';
                     echo '</div>';
-                    echo $form->selectField($model, 'guid_status', [0 => 'Active', 1 => 'Drafted']);
+                    echo $form->checkbox($model,'guid_status');
                 }
                 else
                     echo $form->selectField($model, 'sub_category_id', $subcategory_options);
@@ -116,7 +127,7 @@ foreach ($subcategories as $subcategory) {
             }
 
             else
-                echo $form->selectField($model, 'cat_id', $category_options);
+                echo $form->selectField(new \app\models\SubCategory(), 'cat_id', $category_options);
 
             ?>
             <br />

@@ -3,6 +3,7 @@
 namespace app\views\components\guideline;
 
 use app\views\components\IComponent;
+use Couchbase\InvalidStateException;
 
 abstract class Guideline implements IComponent
 {
@@ -26,10 +27,15 @@ abstract class Guideline implements IComponent
         switch ($guideline->guid_status){
             case self::ACTIVE:
                 $this->state = Active::getInstance();
+                break;
             case self::DRAFTED:
                 $this->state = Drafted::getInstance();
+                break;
             case self::EXPIRED:
                 $this->state = Expired::getInstance();
+                break;
+            default:
+                throw new InvalidStateException("not a valid state for guideline");
 
         }
     }

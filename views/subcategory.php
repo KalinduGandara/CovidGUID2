@@ -31,7 +31,7 @@
                     $sub_category_id = $subcategory['sub_category_id'];
                     $sub_category_guidelines = [];
                     foreach ($guidelines as $guideline) {
-                        if ($guideline['sub_category_id'] == $sub_category_id) {
+                        if ($guideline->getSubCategoryId() == $sub_category_id) {
                             array_push($sub_category_guidelines, $guideline);
                         }
                     }
