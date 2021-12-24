@@ -18,7 +18,7 @@ class User extends UserModel
     public const PUBLIC_USER = 2;
 
 
-
+    public string $id = '';
     public string $firstname = '';
     public string $lastname = '';
     public string $email = '';
@@ -127,4 +127,54 @@ class User extends UserModel
             throw new \Exception("Something went Wrong", 500);
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstname(): string
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastname(): string
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType(): int
+    {
+        return $this->type;
+    }
+
+
 }

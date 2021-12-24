@@ -2,7 +2,7 @@
 
 $category_options = [];
 foreach ($categories as $category) {
-    $category_options[$category['cat_id']] = $category['cat_title'];
+    $category_options[$category->getCatId()] = $category->getCatTitle();
 }
 
 ?>
@@ -54,10 +54,10 @@ foreach ($categories as $category) {
                         <tbody>
 
                             <?php
-                            foreach ($subcategories as $row) {
-                                $sub_category_id = $row["sub_category_id"];
-                                $sub_category_name = $row["sub_category_name"];
-                                $cat_id = $row["cat_id"];
+                            foreach ($subcategories as $subcategory) {
+                                $sub_category_id = $subcategory->getSubCategoryId();
+                                $sub_category_name = $subcategory->getSubCategoryName();
+                                $cat_id = $subcategory->getCatId();
 
                                 echo "<tr>
                                             <td>$sub_category_id</td>

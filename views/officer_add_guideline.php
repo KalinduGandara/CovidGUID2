@@ -1,16 +1,16 @@
 <?php
 $category_options = [];
 foreach ($categories as $category) {
-    $category_options[$category['cat_id']] = $category['cat_title'];
+    $category_options[$category->getCatId()] = $category->getCatTitle();
 }
 $subcategory_options = [];
 foreach ($subcategories as $subcategory) {
     if(isset($_GET['cat_id'])){
-        if($subcategory['cat_id'] === $_GET['cat_id'])
-            $subcategory_options[$subcategory['sub_category_id']] = $subcategory['sub_category_name'];
+        if($subcategory->getCatId() === $_GET['cat_id'])
+            $subcategory_options[$subcategory->getSubCategoryId()] = $subcategory->getSubCategoryName();
     }
     else{
-        $subcategory_options[$subcategory['sub_category_id']] = $subcategory['sub_category_name'];
+        $subcategory_options[$subcategory->getSubCategoryId()] = $subcategory->getSubCategoryName();
     }
 }
 ?>

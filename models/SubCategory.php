@@ -6,6 +6,7 @@ namespace app\models;
 
 class SubCategory extends \app\core\db\DbModel
 {
+    public string $sub_category_id = '';
     public string $sub_category_name = '';
     public string $cat_id = '';
 
@@ -44,4 +45,30 @@ class SubCategory extends \app\core\db\DbModel
             'sub_category_name' => 'Subcategory Name'
         ];
     }
+
+    /**
+     * @return string
+     */
+    public function getSubCategoryId(): string
+    {
+        return $this->sub_category_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubCategoryName(): string
+    {
+        return $this->sub_category_name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCatId(): string
+    {
+        return $this->cat_id;
+    }
+
+
 }

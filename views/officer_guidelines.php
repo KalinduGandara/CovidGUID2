@@ -61,15 +61,15 @@
                     <div class="panel-heading">
 
 
-                        <h3 class="panel-title"><?php echo '<h3>'.$category['cat_title'] .'</h3>' ?>
+                        <h3 class="panel-title"><?php echo '<h3>'.$category->getCatTitle() .'</h3>' ?>
 
 
 
                     </div>
                     <div class="panel-body">
                     <?php
-                        foreach (\app\models\SubCategory::getAllWhere(['cat_id'=> $category['cat_id']]) as $subcategory){
-                            echo "<h4>".$subcategory['sub_category_name']."</h4>";
+                        foreach (\app\models\SubCategory::getAllWhere(['cat_id'=> $category->getCatId()]) as $subcategory){
+                            echo "<h4>".$subcategory->getSubCategoryName()."</h4>";
                             echo "<table class='table table-bordered table-hover'>";
                             echo "<thead><tr>
                             <th> Guideline </th>
@@ -77,7 +77,7 @@
                             <th> expires on </th>
                             <th> last modified </th>
                             </tr></thead>";
-                            foreach(\app\models\Guideline::getAllWhere(['sub_category_id'=>$subcategory['sub_category_id']]) as $guideline){
+                            foreach(\app\models\Guideline::getAllWhere(['sub_category_id'=>$subcategory->getSubCategoryId()]) as $guideline){
                                 $guid = new \app\views\components\guideline\OfficerGuideline($guideline);
                                 echo $guid->getRenderString();
                             }

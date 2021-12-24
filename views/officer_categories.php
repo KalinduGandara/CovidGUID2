@@ -182,10 +182,10 @@
                             <!--                                -->
                             <?php //get_all_categories();
                             //                                while ($row = mysqli_fetch_assoc($result)) {
-                            foreach ($categories as $row) {
-                                $cat_id = $row["cat_id"];
-                                $cat_title = $row["cat_title"];
-                                $category_description = $row["category_description"];
+                            foreach ($categories as $category) {
+                                $cat_id = $category->getCatId();
+                                $cat_title = $category->getCatTitle();
+                                $category_description = $category->getCategoryDescription();
                                 echo "<tr>
                                             <td>$cat_id</td>
                                             <td>$cat_title</td>

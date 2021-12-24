@@ -116,30 +116,4 @@ class Guideline extends \app\core\db\DbModel
         return $this->expiry_date;
     }
 
-    public static function getAll()
-    {
-        $tableName = static::tableName();
-        $statement = self::prepare("SELECT * FROM $tableName");
-
-        $statement->execute();
-        return $statement->fetchAll(\PDO::FETCH_CLASS,static::class);
-    }
-
-    public static function getAllWhere($where)
-    {
-        $tableName = static::tableName();
-        $attribute = array_keys($where);
-        $sql = implode(" AND ",array_map(fn($attr)=>"$attr = :$attr",$attribute));
-        $SQL = "SELECT * FROM $tableName WHERE $sql";
-
-        $statement = self::prepare($SQL);
-        foreach ($where as $key => $value) {
-            $statement->bindValue(":$key",$value);
-        }
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
-    }
-
-
 }
