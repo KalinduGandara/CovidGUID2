@@ -72,9 +72,27 @@ class Notification extends DbModel
         $statement->execute();
     }
 
-    public static function addNotification()
+    public static function addNotification($cat_id,$guid_id,$type)
     {
-        
+        $SQL = "INSERT INTO notification(cat_id, guid_id, date, type) VALUES (:cat_id,:guid_id,:date,:type)";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":cat_id",$cat_id);
+        $statement->bindValue(":guid_id",$guid_id);
+        $statement->bindValue(":date", date("Y-m-d"));
+        $statement->bindValue(":type",$type);
+        $statement->execute();
+        $not_id = self::lastInsertID();
+
+        $SQL = "SELECT * FROM category_subscription WHERE cat_id=:cat_id";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":cat_id",$cat_id);
+        $statement->execute();
+        $users = $statement->fetchAll(\PDO::FETCH_COLUMN,1);
+        $SQL = "";
+        foreach ($users as $user){
+            $SQL .= "INSERT INTO notification_status(user_id, not_id, status) VALUES ($user,$not_id,);";
+        }
+
     }
 
 }

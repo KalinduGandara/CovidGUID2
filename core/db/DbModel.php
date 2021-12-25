@@ -143,6 +143,11 @@ abstract class DbModel extends Model
 
     }
 
+    public static function lastInsertID()
+    {
+        return App::$app->db->pdo->lastInsertId();
+    }
+
     public static function prepare($sql)
     {
         return App::$app->db->pdo->prepare($sql);
