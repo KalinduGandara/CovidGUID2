@@ -55,25 +55,41 @@
         </form>
         <hr>
         <?php
-//            foreach ($guidelines as $guideline){
-//                include "components/guideline.php";
-//            }
-        foreach ($subcategories as $subcategory){
-            $sub_category_name = $subcategory['sub_category_name'];
-            $category_name = '';
-            //                    $cat_status = $category['cat_status'];
+            foreach(\app\models\Category::getAll() as $category){
+                ?>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
 
-            $sub_category_id = $subcategory['sub_category_id'];
-            $sub_category_guidelines = [];
-            foreach ($guidelines as $guideline) {
-                if ($guideline['sub_category_id'] == $sub_category_id) {
-                    array_push($sub_category_guidelines, $guideline);
-                    //TODO: need to be refactored.
-                    $category_name = $guideline['cat_title'];
-                }
+
+                        <h3 class="panel-title"><?php echo '<h3>'.$category->getCatTitle() .'</h3>' ?>
+
+
+
+                    </div>
+                    <div class="panel-body">
+                    <?php
+                        foreach (\app\models\SubCategory::getAllWhere(['cat_id'=> $category->getCatId()]) as $subcategory){
+                            echo "<h4>".$subcategory->getSubCategoryName()."</h4>";
+                            echo "<table class='table table-bordered table-hover'>";
+                            echo "<thead><tr>
+                            <th> Guideline </th>
+                            <th> valid from </th>
+                            <th> expires on </th>
+                            <th> last modified </th>
+                            </tr></thead>";
+                            foreach(\app\models\Guideline::getAllWhere(['sub_category_id'=>$subcategory->getSubCategoryId()]) as $guideline){
+                                $guid = new \app\views\components\guideline\OfficerGuideline($guideline);
+                                echo $guid->getRenderString();
+                            }
+                            echo "</table>";
+                        }
+                    ?>
+
+                    </div>
+                </div>
+                <?php
             }
-            include "components/officer_subcategory.php";
-        }
+
         ?>
     </div>
 </div>

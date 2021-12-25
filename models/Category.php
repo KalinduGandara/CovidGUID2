@@ -48,4 +48,30 @@ class Category extends \app\core\db\DbModel
 
         ];
     }
+
+    /**
+     * @return string
+     */
+    public function getCatTitle(): string
+    {
+        return $this->cat_title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryDescription(): string
+    {
+        return $this->category_description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCatId(): string
+    {
+        return $this->cat_id;
+    }
+
+
 }

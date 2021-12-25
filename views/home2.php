@@ -18,11 +18,11 @@
 
             foreach ($categories as $category) {
 
-                $cat_id = $category['cat_id'];
-                $cat_title = $category['cat_title'];
+                $cat_id = $category->getCatId();
+                $cat_title = $category->getCatTitle();
                 //                    $cat_status = $category['cat_status'];
 
-                $category_description = $category['category_description'];
+                $category_description = $category->getCategoryDescription();
                 include "components/category.php";
             }
             ?>

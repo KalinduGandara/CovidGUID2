@@ -112,7 +112,7 @@ abstract class DbModel extends Model
         }
         $statement->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
     public static function getAll()
     {
@@ -121,7 +121,7 @@ abstract class DbModel extends Model
 
         $statement->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
 
     public static function searchBy($where)
@@ -139,7 +139,7 @@ abstract class DbModel extends Model
 //        exit();
         $statement->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
 
     }
 

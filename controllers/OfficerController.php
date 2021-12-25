@@ -44,16 +44,8 @@ class OfficerController extends Controller
             $guideline = Guideline::findOne(['guid_id' => $_GET['edit_id']]);
             return $this->render('officer_add_guideline', ['subcategories' => $subcategories, 'categories' => $categories, 'mode' => 'update', 'edit_guideline' => $guideline, 'display_guidelines'=> Guideline::getAll()]);
         }
-        $guidelines_fetched = Guideline::getAll();
-        $guidelines = [];
-        foreach ($guidelines_fetched as $guideline) {
-            $category =  array_search($guideline['cat_id'], array_column($categories, 'cat_id'));
-            $guideline['cat_title'] = $categories[$category]['cat_title'];
-            $subcategory =  array_search($guideline['sub_category_id'], array_column($subcategories, 'sub_category_id'));
-            $guideline['sub_category_name'] = $subcategories[$subcategory]['sub_category_name'];
-            $guidelines[] = $guideline;
-        }
-        return $this->render('officer_guidelines', ['subcategories'=> $subcategories,'guidelines' => $guidelines]);
+
+        return $this->render('officer_guidelines');
     }
 
     public function add_guideline(Request $request, Response $response)
@@ -155,39 +147,16 @@ class OfficerController extends Controller
             $subcategory = SubCategory::findOne(['sub_category_id' => $_GET['edit_id']]);
         }
 
-        if ($request->method() === 'post')
-        {
-            $formAttributes = $request->getBody();
-            $havePermission = null; //will evaluate to true when officer reentered his correct email-pwd combination
-
-            if(isset($formAttributes['email']) && isset($formAttributes['password']))
-            {
-                $loginForm = new LoginForm();
-                $loginForm->loadData($request->getBody());
-                if ($loginForm->validate() && $loginForm->login())
-                {
-                    $havePermission = true;
-                }
-            }
-
-            if(!$havePermission)
-            {
-                App::$app->response->redirect('/officer/add-subcategory');
-                exit();
-            }
+        if ($request->method() === 'post') {
             if ($mode == 'update') {
                 $subcategory->update(['sub_category_id' => $_GET['edit_id']], $request->getBody());
                 App::$app->response->redirect('/officer/add-subcategory');
                 exit();
             }
-            else
-            {
-                $subcategory->loadData($request->getBody());
-
-                if ($subcategory->validate() && $subcategory->save()) {
-                    App::$app->response->redirect('/officer/add-subcategory');
-                    exit();
-                }
+            $subcategory->loadData($request->getBody());
+            if ($subcategory->save()) {
+                App::$app->response->redirect('/officer/add-subcategory');
+                exit();
             }
         }
         if (isset($_GET['delete_id'])) {
@@ -195,25 +164,12 @@ class OfficerController extends Controller
             $subcategory->delete(['sub_category_id' => $delete_id]);
         }
 
-        $formAttributes = $request->getBody();
 
-        if(isset($formAttributes['email']) && isset($formAttributes['password']))
-        {
-            $loginForm = new LoginForm();
-            $loginForm->loadData($request->getBody());
-            if ($loginForm->validate() && $loginForm->login())
-            {
-                $delete_id = $formAttributes["delete_id"];
-                $subcategory->delete(['sub_category_id' => $delete_id]);
-                App::$app->response->redirect('/officer/add-subcategory');
-                exit();
-            }
-        }
 
         $categories = Category::getAll();
         $subcategories = SubCategory::getAll();
 
 
-        return $this->render('officer_add_subcategory', ['subcategories' => $subcategories, 'categories' => $categories, 'model' => $subcategory]);
+        return $this->render('officer_add_subcategory', ['subcategories' => $subcategories, 'categories' => $categories, 'model' => $subcategory,]);
     }
 }
