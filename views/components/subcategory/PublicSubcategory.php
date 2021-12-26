@@ -10,8 +10,7 @@ class PublicSubcategory extends Subcategory
                             <thead><tr>
                             <th> Guideline </th>
                             <th> valid from </th>
-                            <th> expires on </th>
-                            <th> last modified </th>
+                            <th> expires on </th>                            
                             </tr></thead>";
         $end = "</table>";
         return [

@@ -4,6 +4,8 @@ namespace app\views\components\guideline;
 
 class Expired extends State
 {
+    public static string $identifier = '3'; //to identify the state
+
     private static Expired $instance;
     private function  __construct()
     {
@@ -20,5 +22,25 @@ class Expired extends State
             self::$instance = new Expired();
         }
         return self::$instance;
+    }
+
+    function makeDraft()
+    {
+        // TODO: Implement makeDraft() method.
+    }
+
+    function delete()
+    {
+        // TODO: Implement delete() method.
+    }
+
+    function activate()
+    {
+        // TODO: Implement activate() method.
+    }
+
+    function expire()
+    {
+        // TODO: Implement expire() method.
     }
 }

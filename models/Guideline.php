@@ -9,7 +9,7 @@ class Guideline extends \app\core\db\DbModel
     public string $sub_category_id = '';
     public string $guid_id = '';
     public string $guideline = '';
-    public string $guid_status = '';
+    public string $guid_status = '0';   // default value set for CREATED
     public string $last_modified_date = '';
     public string $activate_date = '';
     public string $expiry_date='';

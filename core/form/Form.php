@@ -40,8 +40,8 @@ class Form
         return new TextareaField($model,$attribute);
     }
 
-    public function checkbox(Model $model, $attribute){
-        return new CheckBox($model, $attribute);
+    public function checkbox(Model $model, $attribute, string $value = null, bool $checked = false){
+        return new CheckBox($model, $attribute, $value, $checked);
     }
 
 }

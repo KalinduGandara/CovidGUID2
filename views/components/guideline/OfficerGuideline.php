@@ -10,11 +10,6 @@ class OfficerGuideline extends Guideline
         parent::__construct($guideline);
     }
 
-    function render(): void
-    {
-        // TODO: Implement render() method.
-    }
-
     function getRenderString(): string
     {
         $render =

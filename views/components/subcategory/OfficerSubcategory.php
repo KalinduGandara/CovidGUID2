@@ -14,6 +14,8 @@ class OfficerSubcategory extends Subcategory
                             <th> valid from </th>
                             <th> expires on </th>
                             <th> last modified </th>
+                            <th></th>
+                            <th></th>
                             </tr></thead>";
         $end = "</table>";
         return [

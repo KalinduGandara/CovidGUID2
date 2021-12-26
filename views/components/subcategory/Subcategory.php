@@ -7,6 +7,7 @@ use app\views\components\IComponent;
 abstract class Subcategory implements IComponent
 {
     private \app\models\SubCategory $subCategory;
+    public array $guidelines;
 
     /**
      * @param \app\models\SubCategory $subCategory
@@ -14,6 +15,7 @@ abstract class Subcategory implements IComponent
     public function __construct(\app\models\SubCategory $subCategory)
     {
         $this->subCategory = $subCategory;
+        $this->guidelines = [];
     }
 
 
@@ -28,12 +30,11 @@ abstract class Subcategory implements IComponent
     function render():void{
         $layout = $this->getLayout();
         echo $layout['start'];
-        //TODO: logic to render Guidelines belong to this subcategory
+        foreach ($this->guidelines as $guideline){
+            $guideline->render();
+        }
 
         echo $layout['end'];
-
-
-
     }
 
     function getRenderString(): string

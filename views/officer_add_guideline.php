@@ -80,7 +80,7 @@ foreach ($subcategories as $subcategory) {
                 echo $form->field($model,'expiry_date')->dateField();
                 echo '</div>';
                 echo '</div>';
-                echo $form->checkbox($model,'guid_status');
+                echo $form->checkbox($model,'guid_status', '2');
             }
             else if(isset($_GET['cat_id'])){
                 echo $form->selectField(new \app\models\SubCategory(), 'cat_id', $category_options,false, $_GET['cat_id'] );
@@ -91,23 +91,7 @@ foreach ($subcategories as $subcategory) {
                     echo '<div class="container mb-3 pb-5" style="background-color: #f4f4f4">';
                     echo '<h5>Available guidelines: </h5>';
 
-                    function filter_guideline($guideline){
-                        return $guideline->getSubCategoryId() === $_GET['sub_category_id'];
-                    }
-
-                    $display_guidelines = array_filter($display_guidelines, "filter_guideline");
-                    echo "<table class='table table-bordered'>";
-                    echo "<thead><tr>
-                            <th> Guideline </th>
-                            <th> valid from </th>
-                            <th> expires on </th>
-                            <th> last modified </th>
-                            </tr></thead>";
-                    foreach($display_guidelines as $guideline){
-                        $guid = new \app\views\components\guideline\OfficerGuideline($guideline);
-                        echo $guid->getRenderString();
-                    }
-                    echo "</table>";
+                    \app\views\components\subcategory\SubcategoryBuilder::buildOfficerVeiw($_GET['sub_category_id'])->render();
                     echo '</div>';
 
                     echo $form->textareaField($model, 'guideline');
@@ -119,7 +103,7 @@ foreach ($subcategories as $subcategory) {
                     echo $form->field($model,'expiry_date')->dateField();
                     echo '</div>';
                     echo '</div>';
-                    echo $form->checkbox($model,'guid_status');
+                    echo $form->checkbox($model,'guid_status', '2');
                 }
                 else
                     echo $form->selectField($model, 'sub_category_id', $subcategory_options);
