@@ -26,26 +26,36 @@ class Active extends State
         return self::$instance;
     }
 
-    function makeDraft()
+    function makeDraft(Guideline $guideline)
     {
-        // TODO: Implement makeDraft() method.
+        $guideline->setState(Drafted::getInstance());
     }
 
-    function delete()
+    function delete(Guideline $guideline)
     {
-        // TODO: Implement delete() method.
+        $guideline->setState(Deleted::getInstance());
     }
 
     /**
      * @throws IllegalStateException
      */
-    function activate()
+    function activate(Guideline $guideline)
     {
         throw new IllegalStateException();
     }
 
-    function expire()
+    function expire(Guideline $guideline)
     {
-        // TODO: Implement expire() method.
+
+        $today = new \DateTime();
+        if ( $today > $guideline->getExpiryDate()){
+            $guideline->setState(Expired::getInstance());
+        }
+        else throw new IllegalStateException();
+    }
+
+    public static function getIdentifier(): string
+    {
+        return self::$identifier;
     }
 }

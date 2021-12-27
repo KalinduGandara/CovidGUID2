@@ -31,7 +31,7 @@ class Form
      * @param array $options Associative array ['value' => 'Display']
      * @return SelectField
      */
-    public function selectField(Model $model, string $attribute, array $options,bool $disabled=false, string $selected = '')
+    public function selectField(?Model $model, string $attribute, array $options,bool $disabled=false, string $selected = '')
     {
         return new SelectField($model,$attribute, $options,$disabled, $selected);
     }

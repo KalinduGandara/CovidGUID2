@@ -2,9 +2,12 @@
 
 namespace app\views\components\guideline;
 
+use app\core\exception\IllegalStateException;
+
 abstract class State
 {
     public static string $identifier;  // Need to be initialized in each class inherited
+
     /**
      * return the render string with matching layout for the state.
      * used <tr> layouts
@@ -27,9 +30,16 @@ abstract class State
      */
     abstract static function getInstance():State;
 
-    abstract function makeDraft();
-    abstract function delete();
-    abstract function activate();
-    abstract function expire();
+    abstract function makeDraft(Guideline $guideline);
+    abstract function delete(Guideline $guideline);
+    abstract function activate(Guideline $guideline);
+    abstract function expire(Guideline $guideline);
+
+    /**
+     * @return string
+     */
+    public abstract static function getIdentifier(): string;
+
+
 
 }

@@ -38,21 +38,28 @@
         <!-- /.row -->
 
 
-        <form action="" method="post">
-            <div id="bulkOptionsContainer">
-                <select name="bulkOptions" id="" class="form-control">
-                    <option value="">Select an option</option>
-                    <option value="publish">publish</option>
-                    <option value="draft">draft</option>
-                    <option value="delete">delete</option>
-                </select>
-            </div>
+        <?php
+            $form = \app\core\form\Form::begin('', 'get');
+            $filter =  $form->selectField(null, 'status', [
+               '0' => 'Created',
+               '1' => 'Active',
+               '2' => 'Drafted',
+               '3' => 'Expired',
+                '4'=> 'Deleted'
+            ]);
+            if(isset($_GET['status'])){
+                $filter->select($_GET['status']);
+            }
+            echo $filter;
+        ?>
 
             <div>
-                <button type="submit" name="apply" class="btn btn-success">Apply</button>
+                <button type="submit" class="btn btn-success">Apply</button>
                 <a href="/officer/add-guideline" class="btn btn-primary">Add new guideline</a>
             </div>
-        </form>
+        <?php
+            $form::end();
+        ?>
         <hr>
         <?php
             foreach(\app\models\Category::getAll() as $category){
@@ -70,18 +77,11 @@
                     <?php
                         foreach (\app\models\SubCategory::getAllWhere(['cat_id'=> $category->getCatId()]) as $subcategory){
                             echo "<h4>".$subcategory->getSubCategoryName()."</h4>";
-                            echo "<table class='table table-bordered table-hover'>";
-                            echo "<thead><tr>
-                            <th> Guideline </th>
-                            <th> valid from </th>
-                            <th> expires on </th>
-                            <th> last modified </th>
-                            </tr></thead>";
-                            foreach(\app\models\Guideline::getAllWhere(['sub_category_id'=>$subcategory->getSubCategoryId()]) as $guideline){
-                                $guid = new \app\views\components\guideline\OfficerGuideline($guideline);
-                                echo $guid->getRenderString();
+                            $subcategoryView = \app\views\components\subcategory\SubcategoryBuilder::buildOfficerVeiw($subcategory->getSubCategoryId());
+                            if(isset($_GET['status'])){
+                                $subcategoryView->filterByStatus($_GET['status']);
                             }
-                            echo "</table>";
+                            $subcategoryView->render();
                         }
                     ?>
 

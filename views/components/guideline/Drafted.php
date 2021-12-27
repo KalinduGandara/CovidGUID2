@@ -2,6 +2,8 @@
 
 namespace app\views\components\guideline;
 
+use app\core\exception\IllegalStateException;
+
 class Drafted extends State
 {
     public static string $identifier = '2'; //to identify the state
@@ -25,23 +27,41 @@ class Drafted extends State
     }
 
 
-    function makeDraft()
+    function makeDraft(Guideline $guideline)
     {
-        // TODO: Implement makeDraft() method.
+        throw new IllegalStateException();
     }
 
-    function delete()
+    function delete(Guideline $guideline)
     {
-        // TODO: Implement delete() method.
+        $guideline->setState(Deleted::getInstance());
     }
 
-    function activate()
+    function activate(Guideline $guideline)
     {
-        // TODO: Implement activate() method.
+        $today = new \DateTime();
+        if ($guideline->getActivateDate() < $today && $today < $guideline->getExpiryDate()){
+            $guideline->setState(Active::getInstance());
+        }
+        else throw new IllegalStateException();
     }
 
-    function expire()
+    function expire(Guideline $guideline)
     {
-        // TODO: Implement expire() method.
+        $today = new \DateTime();
+        if ( $today > $guideline->getExpiryDate()){
+            $guideline->setState(Expired::getInstance());
+        }
+        else throw new IllegalStateException();
     }
+
+    /**
+     * @return string
+     */
+    public static function getIdentifier(): string
+    {
+        return self::$identifier;
+    }
+
+
 }

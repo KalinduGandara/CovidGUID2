@@ -28,23 +28,35 @@ class Deleted extends State
         return self::$instance;
     }
 
-    function makeDraft()
+    function makeDraft(Guideline $guideline)
     {
-        // TODO: Implement makeDraft() method.
+        throw new IllegalStateException();
     }
 
-    function delete()
+    function delete(Guideline $guideline)
     {
-        // TODO: Implement delete() method.
+        throw new IllegalStateException();
     }
 
-    function activate()
+    function activate(Guideline $guideline)
     {
-        // TODO: Implement activate() method.
+        throw new IllegalStateException();
     }
 
-    function expire()
+    function expire(Guideline $guideline)
     {
-        // TODO: Implement expire() method.
+        throw new IllegalStateException();
     }
+
+    /**
+     * @return string
+     */
+    public static function getIdentifier(): string
+    {
+        return self::$identifier;
+    }
+
+
+
+
 }

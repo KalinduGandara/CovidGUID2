@@ -28,19 +28,26 @@ abstract class Subcategory implements IComponent
     abstract protected function getLayout():array;
 
     function render():void{
-        $layout = $this->getLayout();
-        echo $layout['start'];
-        foreach ($this->guidelines as $guideline){
-            $guideline->render();
-        }
-
-        echo $layout['end'];
+        echo $this->getRenderString();
     }
 
     function getRenderString(): string
     {
-        // TODO: Implement getRenderString() method.
-        return '';
+        $layout = $this->getLayout();
+        $render = $layout['start'];
+        foreach ($this->guidelines as $guideline){
+            $render .= $guideline->getRenderString();
+        }
+
+        $render .= $layout['end'];
+
+        return $render;
+    }
+
+    public function filterByStatus(string $state):void{
+        $this->guidelines = array_filter($this->guidelines,function ($guid) use($state){
+            return $guid->getState()->getIdentifier() === $state;
+        });
     }
 
 

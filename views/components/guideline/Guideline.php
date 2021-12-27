@@ -52,7 +52,25 @@ abstract class Guideline implements IComponent
      * Check for guideline status changes
      * Update the database status if necessary*/
     private function checkForStateChanges(\app\models\Guideline $guideline){
-        //TODO: implement the logic
+        $today = new \DateTime();
+        $activateDate = new \DateTime($guideline->getActivateDate());
+        $expireDate = new \DateTime($guideline->getExpiryDate());
+
+        switch ($guideline->getGuidStatus()){
+            case self::CREATED:
+            {
+                if ($today > $activateDate && $today < $expireDate)
+                    $this->setState(Active::getInstance());
+
+                else if ($today > $expireDate ) $this->setState(Expired::getInstance());
+                break;
+            }
+            case self::ACTIVE:
+                if ($today > $expireDate ) $this->setState(Expired::getInstance());
+                break;
+            default:
+                break;
+        }
     }
 
     public function render(): void
@@ -62,7 +80,25 @@ abstract class Guideline implements IComponent
 
     public function setState(State $state):void{
         $this->guideline->update(['guid_id' => $this->guideline->getGuidId()], ['guid_status' => $state::$identifier]);
-        $this->$state = $state;
+        $this->state = $state;
     }
+
+    public function getActivateDate():\DateTime{
+        return new \DateTime($this->guideline->activate_date);
+    }
+
+    public function getExpiryDate():\DateTime{
+        return new \DateTime($this->guideline->getExpiryDate());
+    }
+
+    /**
+     * @return State
+     */
+    public function getState(): State
+    {
+        return $this->state;
+    }
+
+
 
 }
