@@ -37,12 +37,27 @@ class OfficerController extends Controller
             exit();
         } elseif (isset($_GET['edit_id'])) {
             if ($request->method() === "post") {
-                $guideline->update(['guid_id' => $_GET['edit_id']], $request->getBody());
+                $data = $request->getBody();
+                if(! isset($data['guid_status'])){
+                    $data['guid_status'] = '0';
+                }
+                $guideline->update(['guid_id' => $_GET['edit_id']], $data );
                 App::$app->response->redirect('/officer/guidelines');
                 exit();
             }
             $guideline = Guideline::findOne(['guid_id' => $_GET['edit_id']]);
             return $this->render('officer_add_guideline', ['subcategories' => $subcategories, 'categories' => $categories, 'mode' => 'update', 'edit_guideline' => $guideline, 'display_guidelines'=> Guideline::getAll()]);
+        }
+        elseif (isset($_GET['draft_id'])){
+            $guideline = Guideline::findOne(['guid_id'=>$_GET['draft_id']]);
+            if($guideline->getGuidStatus() === '2'){
+                $guideline->update(['guid_id' => $_GET['draft_id']], ['guid_status' => '0']);
+            }
+            else{
+                $guideline->update(['guid_id' => $_GET['draft_id']], ['guid_status' => '2']);
+            }
+            App::$app->response->redirect('/officer/guidelines');
+            exit();
         }
 
         return $this->render('officer_guidelines');

@@ -16,6 +16,7 @@ class OfficerSubcategory extends Subcategory
                             <th> last modified </th>
                             <th></th>
                             <th></th>
+                            <th></th>
                             </tr></thead>";
         $end = "</table>";
         return [

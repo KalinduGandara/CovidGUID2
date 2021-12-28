@@ -50,7 +50,8 @@ abstract class Guideline implements IComponent
     }
     /*
      * Check for guideline status changes
-     * Update the database status if necessary*/
+     * Update the database status if necessary
+     * */
     private function checkForStateChanges(\app\models\Guideline $guideline){
         $today = new \DateTime();
         $activateDate = new \DateTime($guideline->getActivateDate());
@@ -60,13 +61,13 @@ abstract class Guideline implements IComponent
             case self::CREATED:
             {
                 if ($today > $activateDate && $today < $expireDate)
-                    $this->setState(Active::getInstance());
+                    $this->state->activate($this);
 
-                else if ($today > $expireDate ) $this->setState(Expired::getInstance());
+                else if ($today > $expireDate ) $this->state->expire($this);
                 break;
             }
             case self::ACTIVE:
-                if ($today > $expireDate ) $this->setState(Expired::getInstance());
+                if ($today > $expireDate ) $this->state->expire($this);
                 break;
             default:
                 break;

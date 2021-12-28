@@ -116,4 +116,14 @@ class Guideline extends \app\core\db\DbModel
         return $this->expiry_date;
     }
 
+    /**
+     * @param string $guid_status
+     */
+    public function setGuidStatus(string $guid_status): void
+    {
+        $this->guid_status = $guid_status;
+    }
+
+
+
 }
