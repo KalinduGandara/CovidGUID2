@@ -32,6 +32,12 @@ class OfficerController extends Controller
         $categories = Category::getAll();
         $subcategories = SubCategory::getAll();
 
+
+//        var_dump($request->getBody());
+//        var_dump($request->method());
+//        exit();
+
+
         if ($request->method() === "post")
         {
             $formAttributes = $request->getBody();
@@ -59,7 +65,17 @@ class OfficerController extends Controller
             }
             else
             {
-                $delete_id = $formAttributes['delete_id'];
+                if(isset($_GET['edit_id']))
+                {
+//                    var_dump($formAttributes);
+//                    exit();
+                    $guideline = Guideline::findOne(['guid_id' => $_GET['edit_id']]);
+                    $guideline->update(['guid_id' => $_GET['edit_id']], $request->getBody());
+                    App::$app->response->redirect('/officer/guidelines');
+                    exit();
+                }
+
+                $delete_id = $formAttributes['delete_id1'];
                 $guideline->delete(['guid_id' => $delete_id]);
                 App::$app->response->redirect('/officer/guidelines');
                 exit();
@@ -72,7 +88,13 @@ class OfficerController extends Controller
 
             App::$app->response->redirect('/officer/guidelines');
             exit();
-        } elseif (isset($_GET['edit_id'])) {
+        }
+        elseif (isset($_GET['edit_id'])) {
+
+//            var_dump($request->getBody());
+//            var_dump($request->method());
+//            exit();
+
             if ($request->method() === "post") {
 
                 $formAttributes = $request->getBody();
@@ -122,6 +144,11 @@ class OfficerController extends Controller
     {
         $categories = Category::getAll();
         $subcategories = SubCategory::getAll();
+
+//        var_dump($request->getBody()); //comes to this add_guideline method but get request!!!
+//        echo $request->method();
+//        exit();
+
         if ($request->method() === 'post') {
 
             $formAttributes = $request->getBody();
@@ -153,6 +180,7 @@ class OfficerController extends Controller
 //            exit();
             if ($guideline->save()) {
 //                var_dump($guideline);
+//                echo "saved!!!!!";
 //                exit();
                 App::$app->response->redirect('/officer/guidelines');
 //                App::$app->response->redirect('/officer/add-guideline');
@@ -163,6 +191,26 @@ class OfficerController extends Controller
             }
         }
         return $this->render('officer_add_guideline', ['subcategories' => $subcategories, 'categories' => $categories, 'display_guidelines'=> Guideline::getAll()]);
+    }
+
+    public function show_guidelines(Request $request, Response $response)
+    {
+        $categories = Category::getAll();
+        $subcategories = SubCategory::getAll();
+
+        if(isset($_GET['guid_id']))
+        {
+            $guideline = Guideline::findOne(['guid_id' => $_GET['guid_id']]);
+            return $this->render('officer_show_guidelines', ['subcategories' => $subcategories, 'categories' => $categories, 'guideline' => $guideline, 'display_guidelines'=> Guideline::getAll()]);
+        }
+
+        else //cat_id and sub_category_id is set in this case
+        {
+            $category = Category::findOne(['cat_id' => $_GET['cat_id']]);
+            $subcategory = SubCategory::findOne(['sub_category_id' => $_GET['sub_category_id']]);
+
+            return $this->render('officer_show_guidelines', ['subcategories' => $subcategories, 'categories' => $categories, 'category' => $category, 'subcategory' => $subcategory,'display_guidelines'=> Guideline::getAll()]);
+        }
     }
 
     public function categories(Request $request, Response $response)
