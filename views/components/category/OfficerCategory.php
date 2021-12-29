@@ -2,11 +2,12 @@
 
 namespace app\views\components\category;
 
+use app\models\proxy\CategoryProxy;
+
 class OfficerCategory extends Category
 {
-    private static array $categories = [];
 
-    private function __construct(\app\models\Category $category)
+    public function __construct(CategoryProxy $category)
     {
         parent::__construct($category);
     }
@@ -22,10 +23,4 @@ class OfficerCategory extends Category
         return '';
     }
 
-    public static function getInstance(\app\models\Category $category):OfficerCategory{
-        if (! isset($categories[$category->getCatId()] )){
-            $categories[$category->getCatId()] = new OfficerCategory($category);
-        }
-        return $categories[$category->getCatId()];
-    }
 }

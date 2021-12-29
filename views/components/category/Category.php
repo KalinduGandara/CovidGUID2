@@ -2,11 +2,16 @@
 
 namespace app\views\components\category;
 
+use app\models\proxy\CategoryProxy;
+use app\views\components\subcategory\Subcategory;
+
 abstract class Category implements \app\views\components\IComponent
 {
-    protected \app\models\Category $category;
-    protected function __construct(\app\models\Category $category)
+    public array $subcategories;
+    protected CategoryProxy $category;
+    public function __construct(CategoryProxy $category)
     {
         $this->category = $category;
+        $this->subcategories = [];
     }
 }

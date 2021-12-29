@@ -2,22 +2,34 @@
 
 namespace app\views\components\category;
 
+use app\models\proxy\CategoryProxy;
+
 class PublicCategory extends Category
 {
 
-    private function __construct(\app\models\Category $category)
+    public function __construct(CategoryProxy $category)
     {
         parent::__construct($category);
     }
 
     function render(): void
     {
-        // TODO: Implement render() method.
+        echo self::getRenderString();
     }
 
     function getRenderString(): string
     {
-        // TODO: Implement getRenderString() method.
-        return '';
+        return
+            '<div class="panel panel-default">
+                <div class="panel-heading">                
+                        <a href="?cat_id='.$this->category->getCatId().'" >
+                            <h3 class="panel-title">'.$this->category->getCatTitle().'</h3>
+                        </a>           
+                </div>
+                <div class="panel-body">'.
+                    $this->category->getCategoryDescription()
+                    .'
+                </div>
+            </div>';
     }
 }

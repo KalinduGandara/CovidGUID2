@@ -42,6 +42,7 @@ abstract class Guideline implements IComponent
                 break;
             case self::DELETED:
                 $this->state = Deleted::getInstance();
+                break;
             default:
                 throw new IllegalStateException();
 

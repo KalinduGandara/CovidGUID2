@@ -1,6 +1,6 @@
 
 <?php
-
+    new \app\views\components\category\CategoryBuilder(new \app\models\Category());
 ?>
 
 <div id="wrapper">
@@ -54,7 +54,12 @@
         ?>
 
             <div>
+                <?php if(!isset($_GET['status'])){?>
                 <button type="submit" class="btn btn-success">Apply</button>
+                <?php }
+                else {?>
+                <a href="/officer/guidelines" class="btn btn-secondary">Clear filters</a>
+                <?php }?>
                 <a href="/officer/add-guideline" class="btn btn-primary">Add new guideline</a>
             </div>
         <?php
@@ -76,12 +81,14 @@
                     <div class="panel-body">
                     <?php
                         foreach (\app\models\SubCategory::getAllWhere(['cat_id'=> $category->getCatId()]) as $subcategory){
-                            echo "<h4>".$subcategory->getSubCategoryName()."</h4>";
                             $subcategoryView = \app\views\components\subcategory\SubcategoryBuilder::buildOfficerVeiw($subcategory->getSubCategoryId());
                             if(isset($_GET['status'])){
                                 $subcategoryView->filterByStatus($_GET['status']);
                             }
-                            $subcategoryView->render();
+                            else{
+                                $subcategoryView->filterOutDeleted();
+                            }
+                            $subcategoryView->includeTitle()->render();
                         }
                     ?>
 

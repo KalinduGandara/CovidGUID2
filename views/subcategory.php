@@ -6,38 +6,21 @@
         <!-- Blog Entries Column -->
         <div class="col-md-8">
 
-            <h1 class="page-header">
-                <?php echo $category->getCatTitle(); ?>
-
-            </h1>
-
-            <!-- Display Categories -->
-
             <?php
-            //            echo '<pre>';
-            //            var_dump($categories);
-            //            var_dump($guidelines);
-            //
-            //            echo '</pre>';
-            //            exit();
+            if(isset($_GET['cat_id'])){
+                $categoryProxy = \app\models\proxy\CategoryProxy::getById($_GET['cat_id']);
 
-            foreach ($subcategories as $subcategory) {
-                $cat_id = $category->getCatId();
-                if ($subcategory->getCatId() === $cat_id) {
+                echo '<h1 class="page-header">
+                '.$categoryProxy->getCatTitle().'
 
-                    $sub_category_name = $subcategory->getSubCategoryName();
-                    //                    $cat_status = $category['cat_status'];
+                    </h1>';
 
-                    $sub_category_id = $subcategory->getSubCategoryId();
-                    $sub_category_guidelines = [];
-                    foreach ($guidelines as $guideline) {
-                        if ($guideline->getSubCategoryId() == $sub_category_id) {
-                            array_push($sub_category_guidelines, $guideline);
-                        }
-                    }
-                    include "components/subcategory.php";
+                foreach (\app\models\proxy\SubCategoryProxy::getAllWhere(['cat_id'=> $categoryProxy->getCatId()]) as $subcategory){
+                    $subcategoryView = \app\views\components\subcategory\SubcategoryBuilder::buildPublicVeiw($subcategory->getSubCategoryId());
+                    $subcategoryView->includeTitle()->render();
                 }
             }
+
             ?>
 
         </div>

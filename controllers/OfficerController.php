@@ -32,7 +32,7 @@ class OfficerController extends Controller
         $categories = Category::getAll();
         $subcategories = SubCategory::getAll();
         if (isset($_GET['delete_id'])) {
-            $guideline->delete(['guid_id' => $_GET['delete_id']]);
+            $guideline->update(['guid_id' => $_GET['delete_id']], ['guid_status'=> '4']);
             App::$app->response->redirect('/officer/guidelines');
             exit();
         } elseif (isset($_GET['edit_id'])) {

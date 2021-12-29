@@ -48,9 +48,13 @@ class App
         try {
             echo $this->router->resolve();
         }catch(\Exception $e) {
+            $error_code = $e->getCode();
+            if(gettype($error_code) === 'string') {
+                $error_code = 500;
+            }
             $this->response->setStatusCode($e->getCode());
             echo $this->view->renderView('_error',[
-                'exception'=> $e
+                'exception'=> new \Exception($e->getMessage(), $error_code)
             ]);
         }
     }
