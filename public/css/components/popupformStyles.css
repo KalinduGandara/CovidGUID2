@@ -1,8 +1,4 @@
-/*<style>*/
-    /*body {font-family: Arial, Helvetica, sans-serif;}*/
-    /** {box-sizing: border-box;}*/
-
-    /* The popup form - hidden by default */
+/* The popup form - hidden by default */
 .form-popup {
     display: none;
     position: fixed;
@@ -71,5 +67,3 @@ div form button#verifyBtn:hover {
 div h1#popupHeading {
     color: white;  /* !!!!!!! */
 }
-
-/*</style>*/

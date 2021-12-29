@@ -82,14 +82,11 @@ foreach ($display_guidelines as $guideline) {
     div h1#popupHeading1 {
         color: white;
     }
-
 </style>
 
 <?php
 if(!(isset($_GET['cat_id']) || isset($_GET['edit_id'])))
 {
-//    echo "AAAAAAAAAAAAA";
-//    exit();
     $form1 = \app\core\form\Form::begin('../officer/guidelines', 'post') ?>
     <div class="form-popup" id="myForm1">
         <form action="" class="form-container" id="popupFormContainer1">
@@ -108,21 +105,23 @@ if(!(isset($_GET['cat_id']) || isset($_GET['edit_id'])))
         </form>
     </div>
 
+    <script>
+        function openForm1(delete_id = null) {
+            document.getElementById("myForm1").style.display = "block";
+            if(delete_id !== null)
+            {
+                document.getElementById("delete_id1").value = delete_id;
+            }
+        }
+
+        function closeForm1() {
+            document.getElementById("myForm1").style.display = "none";
+        }
+    </script>
+
 <?php
 }
 \app\core\form\Form::end(); ?>
 
 
-<script>
-    function openForm1(delete_id = null) {
-        document.getElementById("myForm1").style.display = "block";
-        if(delete_id !== null)
-        {
-            document.getElementById("delete_id1").value = delete_id;
-        }
-    }
 
-    function closeForm1() {
-        document.getElementById("myForm1").style.display = "none";
-    }
-</script>
