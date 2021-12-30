@@ -1,10 +1,10 @@
 <?php
 $category_options = [];
-foreach ($categories as $category) {
+foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
     $category_options[$category->getCatId()] = $category->getCatTitle();
 }
 $subcategory_options = [];
-foreach ($subcategories as $subcategory) {
+foreach (\app\models\proxy\SubcategoryProxy::getAll() as $subcategory) {
     if(isset($_GET['cat_id'])){
         if($subcategory->getCatId() === $_GET['cat_id'])
             $subcategory_options[$subcategory->getSubCategoryId()] = $subcategory->getSubCategoryName();
@@ -65,11 +65,7 @@ foreach ($subcategories as $subcategory) {
 
                 echo '<div class="container mb-3 pb-5" style="background-color: #f4f4f4">';
                 echo '<h5>Available guidelines: </h5>';
-
-                $display_guidelines = array_filter($display_guidelines, function ($guideline) use($edit_guideline){
-                    return $guideline->getSubCategoryId() === $edit_guideline->getSubCategoryId();
-                });
-                include 'components/officer_guideline.php';
+                    \app\views\components\subcategory\SubcategoryBuilder::buildOfficerVeiw($model->getSubCategoryId())->render();
                 echo '</div>';
                 echo $form->textareaField($model, 'guideline');
                 echo '<div class = "row">';

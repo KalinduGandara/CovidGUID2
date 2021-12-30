@@ -1,40 +1,26 @@
 
-<?php
-    new \app\views\components\category\CategoryBuilder(new \app\models\Category());
-?>
-
 <div id="wrapper">
 
     <!-- Navigation -->
     <?php include "includes/officer_navigation.php" ?>
 
-
-    <?php
-    //                    if (isset($_GET['source'])) {
-    //                        $source = $_GET['source'];
-    //                    }
-    //                    else $source = '';
-    //
-    //                    switch ($source) {
-    //                        case 'add_post':
-    //                            include "includes/add_post.php";
-    //                            break;
-    //
-    //                        case 'edit_post':
-    //                            include "includes/edit_post.php";
-    //                            break;
-    //
-    //                        default:
-    //                            include "includes/view_all_posts.php";
-    //                            break;
-    //                    }
-
-    ?>
-    <div id="page-wrapper" class="container">
+    <div id="page-wrapper" class="container" style="border-radius: 5px">
         <!-- Page Heading -->
         <h1 class="page-header">
             All Guidelines
         </h1>
+        <div class="container">
+            <h5>Guideline status are indicated with following colors</h5>
+            <table class="table">
+                <tr>
+                    <td >Created</td>
+                    <td class="table-secondary">Active</td>
+                    <td class="table-info">Drafted</td>
+                    <td class="table-warning">Expired</td>
+                </tr>
+            </table>
+        </div>
+        </div>
         <!-- /.row -->
 
 
