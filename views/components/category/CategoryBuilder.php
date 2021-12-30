@@ -9,6 +9,10 @@ use app\views\components\subcategory\OfficerSubcategory;
 class CategoryBuilder
 {
 
+    /**
+     * @param CategoryProxy $categoryProxy
+     * @return Category
+     */
     public static function buildOfficerCategory(CategoryProxy $categoryProxy):Category{
         $category = new OfficerCategory($categoryProxy);
         foreach (SubcategoryProxy::getAllWhere(['cat_id'=> $categoryProxy->getCatId()]) as $subcategory){
@@ -17,6 +21,10 @@ class CategoryBuilder
         return $category;
     }
 
+    /**
+     * @param CategoryProxy $categoryProxy
+     * @return Category
+     */
     public static function buildPublicCategory(CategoryProxy $categoryProxy):Category{
         $category = new PublicCategory($categoryProxy);
         foreach (SubcategoryProxy::getAllWhere(['cat_id'=> $categoryProxy->getCatId()]) as $subcategory){
