@@ -53,8 +53,8 @@ class App
                 $error_code = 500;
             }
             $this->response->setStatusCode($e->getCode());
-            echo $this->view->renderView('_error',[
-                'exception'=> new \Exception($e->getMessage(), $error_code)
+            echo $this->view->renderErrorPage([
+                'exception'=> new \Exception($e->getMessage(), $error_code),
             ]);
         }
     }

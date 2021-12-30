@@ -9,37 +9,32 @@ use app\core\Response;
 use app\models\Category;
 use app\models\ContactForm;
 use app\models\Guideline;
-use app\models\LoginForm;
 use app\models\Notification;
-use app\models\Post;
 use app\models\SubCategory;
 
 class SiteController extends Controller
 {
     public function home()
     {
-        $loginForm = new LoginForm();
-        $notifications = [];
         $unseenNotifications = 0;
-        if (!App::isGuest()) {
-            $notifications = Notification::getNotifications();
-            foreach ($notifications as $notification) {
-                if ($notification['status'] == 0) $unseenNotifications++;
-            }
+        $notifications = Notification::getNotifications();
+        foreach ($notifications as $notification) {
+            if ($notification->status == 0) $unseenNotifications++;
         }
-        $subcategories = SubCategory::getAll();
-        $categories = Category::getAll();
+
         $guidelines = Guideline::getAll();
         $params = [
             'unseenNotifications' => $unseenNotifications,
             'notifications' => $notifications,
-            'subcategories' => $subcategories,
-            'categories' => $categories,
         ];
         if (isset($_GET['search'])) {
             $search = $_GET['search'];
             $result = SubCategory::searchBy(["sub_category_name" => $search]);
-            $params = ['unseenNotifications' => $unseenNotifications, 'notifications' => $notifications, 'subcategories' => $result, 'guidelines' => $guidelines, 'categories' => $categories,];
+            $params = ['unseenNotifications' => $unseenNotifications,
+                'notifications' => $notifications,
+                'subcategories' => $result,
+                'guidelines' => $guidelines,
+            ];
             return $this->render('search_sub_category', $params);
         }
         if (isset($_GET['cat_id'])) {
@@ -51,17 +46,13 @@ class SiteController extends Controller
                 }
             }
             $unseenNotifications = 0;
-            if (!App::isGuest()) {
-                $notifications = Notification::getNotifications();
+            $notifications = Notification::getNotifications();
             foreach ($notifications as $notification) {
-                if ($notification['status'] == 0) $unseenNotifications++;
+                if ($notification->status == 0) $unseenNotifications++;
             }
-            }
-
 
             $params = [
-                'unseenNotifications' => $unseenNotifications, 'notifications' => $notifications, 'category' => $category, 'subcategories' => $subcategories, 'guidelines' => $guidelines, 'categories' => $categories,
-
+                'unseenNotifications' => $unseenNotifications, 'notifications' => $notifications
             ];
             return $this->render('subcategory', $params);
         }

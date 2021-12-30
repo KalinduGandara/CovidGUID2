@@ -23,10 +23,9 @@
 
                     <?php
 
-                    foreach ($categories as $category) {
-                        $cat_id = $category->getCatId();
-                        $cat_title = $category->getCatTitle();
-                        echo "<li><a href='\?cat_id=$cat_id'>$cat_title</a></li>";
+                    foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
+                        echo "<li><a href='\?cat_id=".$category->getCatId()."'>".$category->getCatTitle()."</a></li>";
+
                     }
                     ?>
 

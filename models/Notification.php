@@ -16,10 +16,15 @@ class Notification extends DbModel
     public const UNSEEN_NOTIFICATION = 0;
     public const SEEN_NOTIFICATION = 1;
 
+    public const GUIDELINE = 0;
+    public const SUB_CATEGORY = 1;
+
     public string $cat_id = '';
-    public string $guideline_id = '';
+    public string $cat_title = '';
     public string $date = '';
     public string $type = '';
+    public string $status = '';
+    public string $class = '';
 
     public static function tableName(): string
     {
@@ -28,7 +33,7 @@ class Notification extends DbModel
 
     public function attributes(): array
     {
-        return ['cat_id','guideline_id','date','type'];
+        return ['cat_id', 'cat_title', 'date', 'type', 'status'];
     }
 
     public static function primaryKey(): string
@@ -49,17 +54,20 @@ class Notification extends DbModel
 
     public static function getNotifications()
     {
+        if (App::isGuest()){
+            return [];
+        }
         $user = App::$app->user->id;
-        $SQL = "select n.not_id , c.cat_id,cat_title,guid_id ,status,type,date
-                from notification n
-                join categories c
-                on c.cat_id = n.cat_id
-                join notification_status ns
-                on n.not_id = ns.not_id where c.cat_id in (SELECT cat_id FROM category_subscription where user_id = :user_id order by date DESC)";
+        $SQL = "select n.not_id , c.cat_id, c.cat_title, ns.status, n.type, n.date , n.class from notification_status ns
+                    join notification n
+                    on ns.not_id = n.not_id
+                    join categories c
+                    on c.cat_id = n.cat_id
+                    where user_id = :user_id  order by n.not_id DESC";
         $statement = self::prepare($SQL);
-        $statement->bindValue(":user_id",$user);
+        $statement->bindValue(":user_id", $user);
         $statement->execute();
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
 
     public static function markAsRead($not_id)
@@ -67,32 +75,56 @@ class Notification extends DbModel
         $user = App::$app->user->id;
         $SQL = "update notification_status set status=1 where not_id = :not_id and user_id =:user_id";
         $statement = self::prepare($SQL);
-        $statement->bindValue(":user_id",$user);
-        $statement->bindValue(":not_id",$not_id);
+        $statement->bindValue(":user_id", $user);
+        $statement->bindValue(":not_id", $not_id);
         $statement->execute();
     }
 
-    public static function addNotification($cat_id,$guid_id,$type)
+    public static function addNotification($cat_id, $type, $class)
     {
-        $SQL = "INSERT INTO notification(cat_id, guid_id, date, type) VALUES (:cat_id,:guid_id,:date,:type)";
+        $SQL = "INSERT INTO notification(cat_id, date, type,class) VALUES (:cat_id,:date,:type,:class)";
         $statement = self::prepare($SQL);
-        $statement->bindValue(":cat_id",$cat_id);
-        $statement->bindValue(":guid_id",$guid_id);
+        $statement->bindValue(":cat_id", $cat_id);
         $statement->bindValue(":date", date("Y-m-d"));
-        $statement->bindValue(":type",$type);
+        $statement->bindValue(":type", $type);
+        $statement->bindValue(":class", $class);
         $statement->execute();
         $not_id = self::lastInsertID();
 
         $SQL = "SELECT * FROM category_subscription WHERE cat_id=:cat_id";
         $statement = self::prepare($SQL);
-        $statement->bindValue(":cat_id",$cat_id);
+        $statement->bindValue(":cat_id", $cat_id);
         $statement->execute();
-        $users = $statement->fetchAll(\PDO::FETCH_COLUMN,1);
+        $users = $statement->fetchAll(\PDO::FETCH_COLUMN, 1);
         $SQL = "";
-        foreach ($users as $user){
-            $SQL .= "INSERT INTO notification_status(user_id, not_id, status) VALUES ($user,$not_id,);";
+        if (count($users) > 0) {
+            foreach ($users as $user) {
+                $SQL .= "INSERT INTO notification_status(user_id, not_id, status) VALUES ($user,$not_id,0);";
+            }
+            $statement = self::prepare($SQL);
+            $statement->execute();
         }
 
+    }
+
+    public static function subscribe($cat_id)
+    {
+        $user = App::$app->user->id;
+        $SQL = "INSERT INTO category_subscription(cat_id,user_id) VALUES (:cat_id,:user_id)";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":cat_id", $cat_id);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
+    }
+
+    public static function unsubscribe($cat_id)
+    {
+        $user = App::$app->user->id;
+        $SQL = "DELETE FROM category_subscription WHERE cat_id=:cat_id AND user_id=:user_id";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":cat_id", $cat_id);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
     }
 
 }

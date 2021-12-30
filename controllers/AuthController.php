@@ -102,4 +102,9 @@ class AuthController extends Controller
         $this->setLayout('auth2');
         return $this->render('profile', ['model' => $user,'unseenNotifications' => $unseenNotifications, 'notifications' => $notifications]);
     }
+
+    public function subscribe(Request $request,Response $response)
+    {
+        echo 'asd';
+    }
 }

@@ -15,7 +15,7 @@ use app\models\Notification;?>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <?php if (!App::isGuest()){?>
+                <?php if (isset($notifications) && !App::isGuest()){?>
                 <li class="nav-item dropdown">
                     <a class="nav-link" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Notifications
                         <?php
@@ -32,26 +32,31 @@ use app\models\Notification;?>
                         //                        $query = "SELECT * from `notifications` order by `date` DESC";
 //                        $list = [['type' => 'comment', 'date' => '2018-02-09 00:21:21']];
                         if (count($notifications) > 0) {
-                            foreach ($notifications as $i) {
-                                $id = $i['cat_id'];
-                                $status = $i['status'];
+                            foreach ($notifications as $notification) {
+                                $id = $notification->cat_id;
+                                $status = $notification->status;
                         ?>
                                 <a style="
                                 <?php
-                                if ($i['status'] == Notification::UNSEEN_NOTIFICATION) {
+                                if ($notification->status == Notification::UNSEEN_NOTIFICATION) {
                                     echo "font-weight:bold;";
                                 }
                                 ?>
-                                        " class="dropdown-item" href="?cat_id=<?php echo $id?> & read=<?php echo $status?> & not_id=<?php echo $i['not_id']?>">
-                                    <small><i><?php echo date('F j, Y, g:i a', strtotime($i['date'])) ?></i></small><br />
+                                        " class="dropdown-item" href="?cat_id=<?php echo $id?> & read=<?php echo $status?> & not_id=<?php echo $notification->not_id?>">
+                                    <small><i><?php echo date('F j, Y', strtotime($notification->date)) ?></i></small><br />
                                     <?php
-                                    $title = $i['cat_title'];
-                                    if ($i['type'] == Notification::CREATE_NOTIFICATION) {
-                                        echo "New Guideline in $title";
-                                    } else if ($i['type'] == Notification::UPDATE_NOTIFICATION) {
-                                        echo "Update Guideline in $title";
-                                    }else if ($i['type'] == Notification::DELETE_NOTIFICATION) {
-                                        echo "Delete Guideline in $title";
+                                    $title = $notification->cat_title;
+                                    $class = match ($notification->class) {
+                                        '0' => "Guideline",
+                                        '1' => "Sub Category",
+                                        default => "",
+                                    };
+                                    if ($notification->type == Notification::CREATE_NOTIFICATION) {
+                                        echo "New $class in $title";
+                                    } else if ($notification->type == Notification::UPDATE_NOTIFICATION) {
+                                        echo "Update $class in $title";
+                                    }else if ($notification->type == Notification::DELETE_NOTIFICATION) {
+                                        echo "Delete $class in $title";
                                     }
 
                                     ?>

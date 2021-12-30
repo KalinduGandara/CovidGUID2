@@ -57,4 +57,7 @@ $app->router->get('/logout', [AuthController::class, 'logout']);
 
 $app->router->get('/profile', [AuthController::class, 'profile']);
 $app->router->post('/profile', [AuthController::class, 'profile']);
+
+
+$app->router->post('/subscribe', [AuthController::class, 'subscribe']);
 $app->run();

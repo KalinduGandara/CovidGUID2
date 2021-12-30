@@ -25,13 +25,13 @@
 //                $cat_id = $category->cat_id;
 //                if ($subcategory['cat_id'] === $cat_id) {
 
-                    $sub_category_name = $subcategory['sub_category_name'];
+                    $sub_category_name = $subcategory->sub_category_name;
                     //                    $cat_status = $category['cat_status'];
 
-                    $sub_category_id = $subcategory['sub_category_id'];
+                    $sub_category_id = $subcategory->sub_category_id;
                     $sub_category_guidelines = [];
                     foreach ($guidelines as $guideline) {
-                        if ($guideline['sub_category_id'] == $sub_category_id) {
+                        if ($guideline->sub_category_id == $sub_category_id) {
                             array_push($sub_category_guidelines, $guideline);
                         }
                     }
