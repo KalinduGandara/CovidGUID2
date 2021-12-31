@@ -53,7 +53,7 @@ class App
             if(gettype($error_code) === 'string') {
                 $error_code = 500;
             }
-            $this->response->setStatusCode($e->getCode());
+            $this->response->setStatusCode($error_code);
             echo $this->view->renderErrorPage([
                 'exception'=> new \Exception($e->getMessage(), $error_code),
             ]);

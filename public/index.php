@@ -23,7 +23,8 @@ $config = [
 
 $app = new App(dirname(__DIR__), $config);
 
-$app->router->get('/', [SiteController::class, 'home']);
+$app->router->get('/', [SiteController::class, 'index']);
+$app->router->get('/home', [SiteController::class, 'home']);
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->post('/contact', [SiteController::class, 'contact']);
 //added for debugging

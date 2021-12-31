@@ -25,13 +25,7 @@ class AuthController extends Controller
     {
         if (!App::isGuest())
         {
-            var_dump(App::isGuest());
-            var_dump($_POST);
-//            var_dump($request->method());
-//            echo '\n';
-//            var_dump($request->getBody());
-            exit();
-            $response->redirect('/');
+            $response->redirect('/home');
         }
         $loginForm = new LoginForm();
 
@@ -39,7 +33,7 @@ class AuthController extends Controller
             $loginForm->loadData($request->getBody());
 
             if ($loginForm->validate() && $loginForm->login()) {
-                $response->redirect('/');
+                $response->redirect('/home');
                 exit;
             }
             $this->setLayout('auth2');
@@ -51,6 +45,9 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        if(!App::isGuest()){
+            App::$app->response->redirect('/home');
+        }
         $user = new User();
 
         if ($request->method() === 'post') {
@@ -58,7 +55,7 @@ class AuthController extends Controller
 
             if ($user->validate() && $user->save()) {
                 App::$app->session->setFlash('success','Thanks for Registering');
-                App::$app->response->redirect('/');
+                App::$app->response->redirect('/home');
                 exit;
             }
             $this->setLayout('auth2');
@@ -93,7 +90,7 @@ class AuthController extends Controller
 
             if ($user->validate('unique')  && $user->update(['id' => $user->id], $request->getBody())) {
                 App::$app->session->setFlash('success', 'Thanks for Registering');
-                App::$app->response->redirect('/');
+                App::$app->response->redirect('/home');
                 exit;
             }
             $this->setLayout('auth2');

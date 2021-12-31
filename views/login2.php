@@ -1,12 +1,22 @@
-
-<?php /** @var $model \app\models\LoginForm */?>
+<?php /** @var $model \app\models\LoginForm */ ?>
 
 <div class="container">
     <h1>Log in</h1>
-<?php $form = \app\core\form\Form::begin('','post') ?>
-<?php echo $form->field($model,'email') ?>
-<?php echo $form->field($model,'password')->passwordField() ?>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</div>
+    <div class="container" style="margin-top: 40px">
+        <?php $form = \app\core\form\Form::begin('', 'post') ?>
+        <div style="margin: 15px">
+            <?php echo $form->field($model, 'email') ?>
+        </div>
+        <div style="margin: 15px">
+            <?php echo $form->field($model, 'password')->passwordField() ?>
 
-<?php $form->end();?>
+        </div>
+
+        <div style="margin: 15px">
+            <button type="submit" class="btn btn-primary">Submit</button>
+
+        </div>
+
+    </div>
+
+    <?php $form->end(); ?>
