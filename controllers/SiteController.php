@@ -96,4 +96,9 @@ class SiteController extends Controller
         exit();
         return Notification::getNotifications();
     }
+
+    public function index(){
+        $this->setLayout('main');
+        return $this->render('landing');
+    }
 }
