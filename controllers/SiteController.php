@@ -11,6 +11,7 @@ use app\models\ContactForm;
 use app\models\Guideline;
 use app\models\Notification;
 use app\models\SubCategory;
+use app\models\User;
 
 class SiteController extends Controller
 {
@@ -89,6 +90,7 @@ class SiteController extends Controller
 
     public function notification()
     {
+        App::$app->user->getSubscribeList();
         if (!App::isGuest())
             echo '<pre>';
         var_dump(Notification::getNotifications());

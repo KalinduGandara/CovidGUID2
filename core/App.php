@@ -4,6 +4,7 @@ namespace app\core;
 
 use app\core\db\Database;
 use app\core\db\DbModel;
+use app\models\Notification;
 
 class App
 {
@@ -83,6 +84,7 @@ class App
         $primaryValue = $user->{$primaryKey};
 
         $this->session->set('user',$primaryValue);
+//      TODO  $this->user->notifications = Notification::getNotifications();
 
         return true;
     }

@@ -12,6 +12,7 @@
     <title>COVIDGuide</title>
 
     <!-- Bootstrap Core CSS -->
+<!--    <link href="/bootstrap-5.1.3-dist/css/bootstrap.min.css" rel="stylesheet">-->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->

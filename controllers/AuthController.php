@@ -105,6 +105,13 @@ class AuthController extends Controller
 
     public function subscribe(Request $request,Response $response)
     {
-        echo 'asd';
+        User::subscribe($_GET['cat_id']);
+        $response->redirect('/');
     }
+    public function unsubscribe(Request $request,Response $response)
+    {
+        User::unsubscribe($_GET['cat_id']);
+        $response->redirect('/');
+    }
+
 }

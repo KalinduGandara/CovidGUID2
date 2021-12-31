@@ -35,7 +35,7 @@ class OfficerController extends Controller
         $subcategories = SubCategory::getAll();
         if (isset($_GET['delete_id'])) {
             $guideline->update(['guid_id' => $_GET['delete_id']], ['guid_status'=> '4']);
-            Notification::addNotification(Guideline::getCategoryID($_GET['delete_id']),Notification::DELETE_NOTIFICATION);
+            Notification::addNotification(Guideline::getCategoryID($_GET['delete_id']),Notification::DELETE_NOTIFICATION,Notification::GUIDELINE);
             App::$app->response->redirect('/officer/guidelines');
             exit();
         } elseif (isset($_GET['edit_id'])) {
@@ -45,7 +45,7 @@ class OfficerController extends Controller
                     $data['guid_status'] = '0';
                 }
                 $guideline->update(['guid_id' => $_GET['edit_id']], $data );
-                Notification::addNotification(Guideline::getCategoryID($_GET['edit_id']),Notification::UPDATE_NOTIFICATION);
+                Notification::addNotification(Guideline::getCategoryID($_GET['edit_id']),Notification::UPDATE_NOTIFICATION,Notification::GUIDELINE);
                 App::$app->response->redirect('/officer/guidelines');
                 exit();
             }
@@ -75,7 +75,7 @@ class OfficerController extends Controller
             $guideline = new Guideline();
             $guideline->loadData($request->getBody());
             if ($guideline->save()) {
-                Notification::addNotification(Guideline::getCategoryID(DbModel::lastInsertID()),Notification::CREATE_NOTIFICATION);
+                Notification::addNotification(Guideline::getCategoryID(DbModel::lastInsertID()),Notification::CREATE_NOTIFICATION,Notification::GUIDELINE);
                 App::$app->response->redirect('/officer/guidelines');
                 exit();
             } else {
@@ -170,13 +170,13 @@ class OfficerController extends Controller
         if ($request->method() === 'post') {
             if ($mode == 'update') {
                 $subcategory->update(['sub_category_id' => $_GET['edit_id']], $request->getBody());
-                Notification::addNotification(SubCategory::getCategoryID($_GET['edit_id']),Notification::UPDATE_NOTIFICATION);
+                Notification::addNotification(SubCategory::getCategoryID($_GET['edit_id']),Notification::UPDATE_NOTIFICATION,Notification::SUB_CATEGORY);
                 App::$app->response->redirect('/officer/add-subcategory');
                 exit();
             }
             $subcategory->loadData($request->getBody());
             if ($subcategory->save()) {
-                Notification::addNotification(SubCategory::getCategoryID(DbModel::lastInsertID()),Notification::CREATE_NOTIFICATION);
+                Notification::addNotification(SubCategory::getCategoryID(DbModel::lastInsertID()),Notification::CREATE_NOTIFICATION,Notification::SUB_CATEGORY);
                 App::$app->response->redirect('/officer/add-subcategory');
                 exit();
             }
@@ -184,7 +184,7 @@ class OfficerController extends Controller
         if (isset($_GET['delete_id'])) {
             $delete_id = $_GET['delete_id'];
             $subcategory->delete(['sub_category_id' => $delete_id]);
-            Notification::addNotification(SubCategory::getCategoryID($_GET['delete_id']),Notification::DELETE_NOTIFICATION);
+            Notification::addNotification(SubCategory::getCategoryID($_GET['delete_id']),Notification::DELETE_NOTIFICATION,Notification::SUB_CATEGORY);
         }
 
 

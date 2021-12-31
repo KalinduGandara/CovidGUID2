@@ -14,9 +14,17 @@
 
             <?php
 
-            foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
-                $categoryVeiw = new \app\views\components\category\PublicCategory($category);
-                $categoryVeiw->render();
+            use app\models\proxy\CategoryProxy;
+            use app\models\User;
+            use app\views\components\category\PublicCategory;
+
+            $subscribeList = User::getSubscribeList();
+            foreach (CategoryProxy::getAll() as $category) {
+                $categoryView = new PublicCategory($category);
+                if (in_array($category->getCatId() , $subscribeList)) {
+                    $categoryView->setIsSubscribed(true);
+                }
+                $categoryView->render();
             }
             ?>
 

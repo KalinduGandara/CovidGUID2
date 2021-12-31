@@ -106,25 +106,4 @@ class Notification extends DbModel
         }
 
     }
-
-    public static function subscribe($cat_id)
-    {
-        $user = App::$app->user->id;
-        $SQL = "INSERT INTO category_subscription(cat_id,user_id) VALUES (:cat_id,:user_id)";
-        $statement = self::prepare($SQL);
-        $statement->bindValue(":cat_id", $cat_id);
-        $statement->bindValue(":user_id", $user);
-        $statement->execute();
-    }
-
-    public static function unsubscribe($cat_id)
-    {
-        $user = App::$app->user->id;
-        $SQL = "DELETE FROM category_subscription WHERE cat_id=:cat_id AND user_id=:user_id";
-        $statement = self::prepare($SQL);
-        $statement->bindValue(":cat_id", $cat_id);
-        $statement->bindValue(":user_id", $user);
-        $statement->execute();
-    }
-
 }

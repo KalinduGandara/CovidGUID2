@@ -59,5 +59,6 @@ $app->router->get('/profile', [AuthController::class, 'profile']);
 $app->router->post('/profile', [AuthController::class, 'profile']);
 
 
-$app->router->post('/subscribe', [AuthController::class, 'subscribe']);
+$app->router->get('/subscribe', [AuthController::class, 'subscribe']);
+$app->router->get('/unsubscribe', [AuthController::class, 'unsubscribe']);
 $app->run();

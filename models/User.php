@@ -4,6 +4,7 @@
 namespace app\models;
 
 
+use app\core\App;
 use app\core\db\DbModel;
 use app\core\UserModel;
 
@@ -26,8 +27,30 @@ class User extends UserModel
     public int $type = self::PUBLIC_USER;
     public string $password = '';
     public string $confirmPassword = '';
+    //TODO
+//    public int $unseenNotifications = 0;
+//    public array $notifications = [];
+//    private array $subscribeList = [];
 
+    public static function subscribe($cat_id)
+    {
+        $user = App::$app->user->id;
+        $SQL = "INSERT INTO category_subscription(cat_id,user_id) VALUES (:cat_id,:user_id)";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":cat_id", $cat_id);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
+    }
 
+    public static function unsubscribe($cat_id)
+    {
+        $user = App::$app->user->id;
+        $SQL = "DELETE FROM category_subscription WHERE cat_id=:cat_id AND user_id=:user_id";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":cat_id", $cat_id);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
+    }
     public function save()
     {
         $this->status = $this->status != self::STATUS_INACTIVE ? $this->status : self::STATUS_INACTIVE;
@@ -174,6 +197,21 @@ class User extends UserModel
     public function getType(): int
     {
         return $this->type;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSubscribeList(): array
+    {
+        if (App::isGuest()) return [];
+        $user = App::$app->user->id;
+        $SQL = "SELECT * FROM category_subscription WHERE user_id = :user_id";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_COLUMN, 0);
     }
 
 
