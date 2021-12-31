@@ -21,7 +21,7 @@ class PublicCategory extends Category
     {
 //        return '<div href="asd" class="btn btn-danger pull-right">Subscribe</div>';
         if ($this->isSubscribed)
-        return '<a style="margin-top: -26px" class="btn btn-secondary pull-right" href="unsubscribe?cat_id='.$this->category->getCatId().'">UnSubscribe</a>';
+        return '<a style="margin-top: -26px" class="btn btn-warning pull-right" href="unsubscribe?cat_id='.$this->category->getCatId().'">UnSubscribe</a>';
         return '<a style="margin-top: -26px" class="btn btn-danger pull-right" href="subscribe?cat_id='.$this->category->getCatId().'">Subscribe</a>';
 
     }

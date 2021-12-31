@@ -74,16 +74,6 @@ use app\models\Notification;?>
             </ul>
             <ul class="nav navbar-nav">
 
-                <?php
-                //                echo "asd";
-
-                //                foreach ($categories as $category) {
-                //                    $cat_title = $category['cat_title'];
-                //                    echo "<li><a href='#'>$cat_title</a></li>";
-                //                }
-                ?>
-
-
                 <?php if (App::isGuest()) { ?>
 
                     <li>
