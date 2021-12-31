@@ -1,4 +1,4 @@
-# CovidGUID2
+# COVIDGuide
 
 # team Contour
 
