@@ -14,12 +14,11 @@ class OfficerCategory extends Category
 
     function render(): void
     {
-        // TODO: Implement render() method.
+        return;
     }
 
     function getRenderString(): string
     {
-        // TODO: Implement getRenderString() method.
         return '';
     }
 

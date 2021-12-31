@@ -30,16 +30,7 @@
 <?php require pathinfo(__DIR__)["dirname"]."/includes/navigation.php" ?>
 
 {{content}}
-
-<footer>
-    <div class="row">
-        <div class="col-lg-12">
-            <p>Copyright &copy; Your Website 2014</p>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <!-- /.row -->
-</footer>
+<?php include_once 'footer.php';?>
 
 </div>
 <!-- /.container -->
