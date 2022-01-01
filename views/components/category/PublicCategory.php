@@ -21,22 +21,22 @@ class PublicCategory extends Category
     {
 //        return '<div href="asd" class="btn btn-danger pull-right">Subscribe</div>';
         if ($this->isSubscribed)
-        return '<a style="margin-top: -26px" class="btn btn-secondary pull-right" href="unsubscribe?cat_id='.$this->category->getCatId().'">UnSubscribe</a>';
-        return '<a style="margin-top: -26px" class="btn btn-danger pull-right" href="subscribe?cat_id='.$this->category->getCatId().'">Subscribe</a>';
+        return '<a style="margin-top: -40px" class="btn btn-warning float-end" href="unsubscribe?cat_id='.$this->category->getCatId().'">UnSubscribe</a>';
+        return '<a style="margin-top: -40px" class="btn btn-danger float-end" href="subscribe?cat_id='.$this->category->getCatId().'">Subscribe</a>';
 
     }
 
     function getRenderString(): string
     {
         return
-            '<div class="panel panel-default">
-                <div class="panel-heading" style="padding: 20px">                
+            '<div class="card mb-2">
+                <div class="card-header">                
                         <a href="?cat_id='.$this->category->getCatId().'" >
-                            <h3 class="panel-title">'.$this->category->getCatTitle().'</h3>
+                            <h3 class="card-title">'.$this->category->getCatTitle().'</h3>
                         </a>     
                           '.self::renderSubscribeButton().'
                 </div>
-                <div class="panel-body">'.
+                <div class="card-body">'.
                     $this->category->getCategoryDescription()
                     .'
                 </div>

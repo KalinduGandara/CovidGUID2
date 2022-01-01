@@ -81,7 +81,7 @@ class AuthController extends Controller
         if (!App::isGuest()) {
             $notifications = Notification::getNotifications();
             foreach ($notifications as $notification) {
-                if ($notification['status'] == 0) $unseenNotifications++;
+                if ($notification->status == 0) $unseenNotifications++;
             }
         }
 
@@ -102,13 +102,21 @@ class AuthController extends Controller
 
     public function subscribe(Request $request,Response $response)
     {
+        if(App::isGuest()){
+            $response->redirect("/login");
+            exit();
+        }
         User::subscribe($_GET['cat_id']);
-        $response->redirect('/');
+        $response->redirect('/home');
     }
     public function unsubscribe(Request $request,Response $response)
     {
+        if(App::isGuest()){
+            $response->redirect("/login");
+            exit();
+        }
         User::unsubscribe($_GET['cat_id']);
-        $response->redirect('/');
+        $response->redirect('/home');
     }
 
 }

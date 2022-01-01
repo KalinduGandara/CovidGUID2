@@ -20,10 +20,12 @@
     <title><?php echo $exception->getMessage()?></title>
 </head>
 <body style="height: 100%">
-<div class="container">
-    <h1>
-        <?php echo $exception->getCode().'  |  '.$exception->getMessage() ?>
-    </h1>
+<div class="bg-black">
+
+    <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center">
+        <h1 class="text-white"><?php echo $exception->getCode().'  |  '.$exception->getMessage() ?></h1>
+        <button class="btn btn-primary" onclick="history.back()">Go Back!</button>
+    </div>
 </div>
 
 

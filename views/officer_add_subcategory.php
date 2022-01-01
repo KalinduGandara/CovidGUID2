@@ -7,59 +7,57 @@ foreach ($categories as $category) {
 
 ?>
 
-<div id="wrapper">
+<div class="container-fluid">
+        <div class="row flex-nowrap">
+            <?php include "includes/officer_navigation.php" ?>
+            <div class="col py-3 bg-white" style="margin-left: 250px">
+                <div class="container-fluid">
 
-    <?php include "includes/officer_navigation.php" ?>
-
-    <div id="page-wrapper">
-
-        <div class="container-fluid">
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">
-                        Add a Subcategory
-                    </h1>
-                </div>
-            </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header">
+                                Add a Subcategory
+                            </h1>
+                        </div>
+                    </div>
 
 
-            <div class="container">
-                <div class="col-xs-6">
+                    <div class="container">
+                        <div class="col-xs-6">
 
 
 
-                    <?php $form = \app\core\form\Form::begin('', 'post') ?>
-                    <?php echo $form->selectField($model, 'cat_id', $category_options); ?>
-                    <?php echo $form->field($model, 'sub_category_name') ?>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                            <?php $form = \app\core\form\Form::begin('', 'post') ?>
+                            <?php echo $form->selectField($model, 'cat_id', $category_options); ?>
+                            <?php echo $form->field($model, 'sub_category_name') ?>
+                            <button type="submit" class="btn btn-primary">Submit</button>
 
-                    <?php \app\core\form\Form::end(); ?>
-
-
-                </div>
-
-                <div class="col-xs-6">
+                            <?php \app\core\form\Form::end(); ?>
 
 
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Subcategory name</th>
-                                <th>Category</th>
+                        </div>
 
-                            </tr>
-                        </thead>
-                        <tbody>
+                        <div class="col-xs-6">
 
-                            <?php
-                            foreach ($subcategories as $subcategory) {
-                                $sub_category_id = $subcategory->getSubCategoryId();
-                                $sub_category_name = $subcategory->getSubCategoryName();
-                                $cat_id = $subcategory->getCatId();
 
-                                echo "<tr>
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Subcategory name</th>
+                                    <th>Category</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <?php
+                                foreach ($subcategories as $subcategory) {
+                                    $sub_category_id = $subcategory->getSubCategoryId();
+                                    $sub_category_name = $subcategory->getSubCategoryName();
+                                    $cat_id = $subcategory->getCatId();
+
+                                    echo "<tr>
                                             <td>$sub_category_id</td>
                                             <td>$sub_category_name</td>
                                             <td>$category_options[$cat_id]</td>
@@ -67,17 +65,17 @@ foreach ($categories as $category) {
                                             <td><a href='add-subcategory?delete_id=$sub_category_id'>Delete</a></td>
                                             <td><a href='add-subcategory?edit_id=$sub_category_id'>Edit</a></td>
                                             </tr>";
-                            }
+                                }
 
 
-                            ?>
+                                ?>
 
-                        </tbody>
-                    </table>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-
         </div>
-
-
     </div>

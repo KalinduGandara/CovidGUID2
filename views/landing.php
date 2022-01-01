@@ -8,7 +8,7 @@
         </div>
     </div>
 </nav>
-<section class="heading-section text-and-image overlay-white">
+<section class="heading-section text-and-image overlay-white mw-100 mh-100">
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-md-5 col-6 col-sm-8 order-md-last text-center">
@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-7 col-sm-12 page-title-wrapper"><h1 class="title text-white"> Guidelines for Saftey <br><strong>COVIDGuide</strong></h1>
+            <div class="col-md-7 col-sm-12 page-title-wrapper"><h1 class="title text-white"> Guidelines are for your Safety <br><strong>COVIDGuide</strong></h1>
                 <div class="subtitle text-primary">Find New Normal Guidelines in One Click!</div>
                 <a href="/home" class="btn btn-primary rounded-pill pt-3 pb-3 ps-5 pe-5 " style="margin-left: 20px; margin-top: 40px"><h4>Go to Website <i class="fa fa-arrow-right"></i></h4></a>
             </div>
