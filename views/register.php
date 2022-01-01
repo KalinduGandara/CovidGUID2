@@ -1,6 +1,6 @@
 <?php /** @var $model \app\models\User */?>
 
-<div class="container">
+<div class="container" style="margin-top: 40px">
     <h1>Register</h1>
 
     <?php $form = \app\core\form\Form::begin('','post') ?>

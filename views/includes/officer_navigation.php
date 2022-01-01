@@ -1,8 +1,8 @@
 <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-black" style="position: fixed; height: 100vh;">
     <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
         <div class="m-3"></div>
-        <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <span class="fs-5 d-none d-sm-inline"><img src="/images/face-mask.png" height="75px" width="75px"></span>
+        <a href="/home" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <span class="fs-5 d-none d-sm-inline ms-5"><img src="/images/face-mask.png" height="75px" width="75px"></span>
         </a>
         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
             <li class="nav-item m-2">
@@ -15,10 +15,10 @@
                     <i class="fa fa-fw fa-arrows-v"></i> Guidelines <i class="fa fa-fw fa-caret-down"></i> </a>
                 <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                     <li class="w-100">
-                        <a href="/officer/guidelines" class="nav-link px-0"> <span class="d-none d-sm-inline">View all Guidelines</span> </a>
+                        <a href="/officer/guidelines" class="nav-link px-0 ms-4"> <span class="d-none d-sm-inline">View all Guidelines</span> </a>
                     </li>
                     <li>
-                        <a href="/officer/add-guideline" class="nav-link px-0"> <span class="d-none d-sm-inline">Add a Guideline</span></a>
+                        <a href="/officer/add-guideline" class="nav-link px-0 ms-4"> <span class="d-none d-sm-inline">Add a Guideline</span></a>
                     </li>
                 </ul>
             </li>
@@ -27,10 +27,10 @@
                     <i class="fa fa-fw fa-arrows-v"></i> Categories <i class="fa fa-fw fa-caret-down"></i></a>
                 <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
                     <li class="w-100">
-                        <a href="/officer/categories" class="nav-link px-0"> <span class="d-none d-sm-inline">Create a Category</span></a>
+                        <a href="/officer/categories" class="nav-link px-0 ms-4"> <span class="d-none d-sm-inline">Create a Category</span></a>
                     </li>
                     <li>
-                        <a href="/officer/add-subcategory" class="nav-link px-0"> <span class="d-none d-sm-inline">Add a Subcategory</span></a>
+                        <a href="/officer/add-subcategory" class="nav-link px-0 ms-4"> <span class="d-none d-sm-inline">Add a Subcategory</span></a>
                     </li>
                 </ul>
             </li>

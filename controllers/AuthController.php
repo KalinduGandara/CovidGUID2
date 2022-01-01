@@ -81,7 +81,7 @@ class AuthController extends Controller
         if (!App::isGuest()) {
             $notifications = Notification::getNotifications();
             foreach ($notifications as $notification) {
-                if ($notification['status'] == 0) $unseenNotifications++;
+                if ($notification->status == 0) $unseenNotifications++;
             }
         }
 

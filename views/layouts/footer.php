@@ -4,7 +4,7 @@
         <a>
             <img src="/images/face-mask.png" height="30px" alt="logo">
         </a>
-        <span class="text-muted">© 2021 COVIDGuide </span>
+        <span class="text-muted">© 2021 TeamContour </span>
     </div>
 </footer>
 

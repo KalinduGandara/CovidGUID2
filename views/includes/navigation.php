@@ -1,41 +1,35 @@
 <?php use app\core\App;
 use app\models\Notification;?>
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">COVID Guide</a>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
+
+
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-black">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/"><img src="/images/face-mask.png" height="32px" width="32px" class="me-2">COVIDGuide</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <span class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
                 <?php if (isset($notifications) && !App::isGuest()){?>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Notifications
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Notifications
                         <?php
-                        //                        $query = "SELECT * from `notifications` where `status` = 'unread' order by `date` DESC";
                         if (count($notifications)>0) {
-                        ?>
+                            ?>
                             <span class="badge badge-light"><?php echo $unseenNotifications; ?></span>
-                        <?php
+                            <?php
                         }
                         ?>
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown01">
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <?php
-                        //                        $query = "SELECT * from `notifications` order by `date` DESC";
-//                        $list = [['type' => 'comment', 'date' => '2018-02-09 00:21:21']];
                         if (count($notifications) > 0) {
                             foreach ($notifications as $notification) {
                                 $id = $notification->cat_id;
                                 $status = $notification->status;
-                        ?>
+                                ?>
                                 <a style="
                                 <?php
                                 if ($notification->status == Notification::UNSEEN_NOTIFICATION) {
@@ -62,54 +56,43 @@ use app\models\Notification;?>
                                     ?>
                                 </a>
                                 <div class="dropdown-divider"></div>
-                        <?php
+                                <?php
                             }
                         } else {
                             echo "No Records yet.";
                         }
                         ?>
-                    </div>
+                    </ul>
                 </li>
                 <?php }?>
-            </ul>
-            <ul class="nav navbar-nav">
+                <?php if (! \app\core\App::isGuest()){ ?>
 
-                <?php if (App::isGuest()) { ?>
-
-                    <li>
-                        <a href="/login">Login</a>
-                    </li>
-                    <li>
-                        <a href="/register">Register</a>
-                    </li>
-                <?php } else { ?>
-                    <li>
-                        <a href="/profile">Profile</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">Profile</a>
                     </li>
                     <?php if (App::isAdmin()) { ?>
-                        <li>
-                            <a href="/admin">Admin</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin">Admin</a>
                         </li>
                     <?php } ?>
                     <?php if (App::isOfficer()) { ?>
-                        <li>
-                            <a href="/officer">Officer</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/officer">Officer</a>
                         </li>
                     <?php } ?>
-                    <li>
-                        <a href="/logout">Logout</a>
-                    </li>
                 <?php } ?>
-                <?php
-                if (isset($_GET['post_id'])) {
-                    $edit_post_id = $_GET['post_id'];
-                    echo "<li><a href='admin/posts?source=edit_post&edit_id=$edit_post_id'>Edit</a></li>";
-                }
-                ?>
-
             </ul>
-        </div>
-        <!-- /.navbar-collapse -->
+        </span>
+        <?php if(App::isGuest()){?>
+            <span class="navbar-text" style="margin-right: 40px">
+                        <a href="/login" class="btn btn-warning rounded-pill text-white" style="margin: 0 5px"><b>Login</b></a>
+                        <a href="/register" class="btn btn-danger rounded-pill text-white" style="margin: 0 5px"><b>Register</b></a>
+                </span>
+        <?php }else{ ?>
+            <span class="navbar-text" style="margin-right: 40px">
+                        <a href="/logout" class="btn btn-warning rounded-pill text-white" style="margin: 0 5px"><b>Logout</b></a>
+                </span>
+        <?php }?>
     </div>
-    <!-- /.container -->
+    </div>
 </nav>

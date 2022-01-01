@@ -1,6 +1,6 @@
 <?php /** @var $model \app\models\LoginForm */ ?>
 
-<div class="container">
+<div class="container" style="margin-top: 40px">
     <h1>Log in</h1>
     <div class="container" style="margin-top: 40px">
         <?php $form = \app\core\form\Form::begin('', 'post') ?>

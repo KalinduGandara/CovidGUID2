@@ -29,6 +29,7 @@ foreach (\app\models\proxy\SubcategoryProxy::getAll() as $subcategory) {
                 }
                 ?>
             </h1>
+            <hr>
             <!-- /.row -->
             <div class="container">
                 <?php
@@ -85,25 +86,27 @@ foreach (\app\models\proxy\SubcategoryProxy::getAll() as $subcategory) {
 
                 ?>
                 <br />
-                <button type="submit" onclick="return validate()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>
+                <button type="submit" onclick="return validate()" class="btn btn-primary" >Submit</button>
                 <?php $form->end(); ?>
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                <!-- Modal To Show Errors -->
+                <div id="popup" class="modal fade" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <h5 class="modal-title">Error !</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
-                                ...
+                                <p id="guideline-error">...</p>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </div>
                     </div>
                 </div>
+
 
             </div>
 
@@ -120,24 +123,25 @@ foreach (\app\models\proxy\SubcategoryProxy::getAll() as $subcategory) {
                 });
 
                 function validate(){
+                    if ($('[name="guid_status"]').is(":checked")){
+                        return true;    //no check for draft
+                    }
+
                     const guideline = $('[name="guideline"]').val();
                     const activate_date = $('[name="activate_date"]').val();
                     const expiry_date = $('[name="expiry_date"]').val();
-                    const guid_status = $('[name="guid_status"]').val();
 
                     //validation logic
                     let error;
                     if(guideline === '') error =  "Guideline field is empty";
                     else if(activate_date === '') error = "Activation date not given";
+                    else if(expiry_date === '') error = "Expiry date not given";
+                    else if(new Date(activate_date) > new Date(expiry_date)) error= "Invalid date range"
+                    else return true;
 
-                    console.log(error);
+                    $("#guideline-error").text(error);
+                    $("#popup").modal("show");
                     return false;
-                }
-
-                function popUpAlert(msg){
-                    $('body').append(
-                        ``
-                    );
                 }
 
             </script>

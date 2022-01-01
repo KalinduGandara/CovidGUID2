@@ -5,7 +5,7 @@
 $this->title = "Profile"
 ?>
 
-<div class="container">
+<div class="container" style="margin-top: 40px">
     <?php echo "<h1>$model->firstname $model->lastname</h1>" ?>
     <?php $form = \app\core\form\Form::begin('', 'post') ?>
 

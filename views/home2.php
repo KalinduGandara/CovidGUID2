@@ -9,6 +9,7 @@
             <h1 class="page-header">
                 New Normal Guidelines
             </h1>
+            <hr>
 
             <!-- Display Categories -->
 
