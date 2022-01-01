@@ -28,7 +28,7 @@
 
 </head>
 
-<body style="width: 100vw; min-height: 100vh">
+<body class="bg-black" style="width: 100vw; min-height: 100vh">
 <?php require pathinfo(__DIR__)["dirname"]."/includes/navigation.php" ?>
 
 {{content}}
