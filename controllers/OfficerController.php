@@ -88,8 +88,8 @@ class OfficerController extends Controller
     public function add_guideline(Request $request, Response $response)
     {
         if(App::$app->session->get('VERIFIED') === 'TRUE'){
-            App::$app->session->unset_key('VERIFIED');
             if ($request->method() === 'post') {
+                App::$app->session->unset_key('VERIFIED');
                 $guideline = new Guideline();
                 $guideline->loadData($request->getBody());
                 if ($guideline->save()) {
