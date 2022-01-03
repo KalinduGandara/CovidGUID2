@@ -8,6 +8,7 @@
                 <h1 class="page-header">
                     All Guidelines
                 </h1>
+                <hr>
                 <div class="container">
                     <h5>Guideline status are indicated with following colors</h5>
                     <table class="table">

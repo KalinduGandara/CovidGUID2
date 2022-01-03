@@ -57,6 +57,10 @@ class App
             echo $this->view->renderErrorPage([
                 'exception'=> new \Exception($e->getMessage(), $error_code),
             ]);
+        }catch (\Error $error){
+            echo $this->view->renderErrorPage([
+                'exception'=> new \Exception($error->getMessage(), $error->getCode()),
+            ]);
         }
     }
 

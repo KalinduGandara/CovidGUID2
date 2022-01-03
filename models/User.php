@@ -215,4 +215,8 @@ class User extends UserModel
     }
 
 
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
 }

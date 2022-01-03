@@ -39,7 +39,7 @@
 <script src="js/jquery.js"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/bootstrap-5.1.3-dist/js/bootstrap.min.js"></script>
+<script src="/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
