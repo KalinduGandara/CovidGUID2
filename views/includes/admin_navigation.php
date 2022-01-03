@@ -12,7 +12,7 @@
             </li>
             <li class="m-2">
                 <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                    <i class="fa fa-fw fa-arrows-v"></i> Guidelines <i class="fa fa-fw fa-caret-down"></i> </a>
+                    <i class="fa fa-fw fa-arrows-v"></i> Users <i class="fa fa-fw fa-caret-down"></i> </a>
                 <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                     <li class="w-100">
                         <a href="/admin/users" class="nav-link px-0 ms-4"> <span class="d-none d-sm-inline">View all users</span> </a>

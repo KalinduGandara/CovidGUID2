@@ -5,7 +5,6 @@ namespace app\controllers;
 use app\core\App;
 use app\core\Controller;
 use app\core\db\DbModel;
-use app\core\middlewares\AdminMiddleware;
 use app\core\middlewares\OfficerMiddleware;
 use app\core\Request;
 use app\core\Response;
@@ -34,34 +33,53 @@ class OfficerController extends Controller
         $categories = Category::getAll();
         $subcategories = SubCategory::getAll();
         if (isset($_GET['delete_id'])) {
-            $guideline->update(['guid_id' => $_GET['delete_id']], ['guid_status'=> '4']);
-            Notification::addNotification(Guideline::getCategoryID($_GET['delete_id']),Notification::DELETE_NOTIFICATION,Notification::GUIDELINE);
-            App::$app->response->redirect('/officer/guidelines');
-            exit();
-        } elseif (isset($_GET['edit_id'])) {
-            if ($request->method() === "post") {
-                $data = $request->getBody();
-                if(! isset($data['guid_status'])){
-                    $data['guid_status'] = '0';
+            if(App::$app->session->get('VERIFIED') === 'TRUE') {
+                App::$app->session->unset_key('VERIFIED');
+
+                $guideline->update(['guid_id' => $_GET['delete_id']], ['guid_status' => '4']);
+                Notification::addNotification(Guideline::getCategoryID($_GET['delete_id']), Notification::DELETE_NOTIFICATION, Notification::GUIDELINE);
+                App::$app->response->redirect('/officer/guidelines');
+                exit();
+
+            }
+            return $this->requireVerifivation();
+        }
+        elseif (isset($_GET['edit_id'])) {
+            if(App::$app->session->get('VERIFIED') === 'TRUE'){
+                if ($request->method() === "post") {
+                    $data = $request->getBody();
+                    if(! isset($data['guid_status'])){
+                        $data['guid_status'] = '0';
+                    }
+                    $guideline->update(['guid_id' => $_GET['edit_id']], $data );
+                    Notification::addNotification(Guideline::getCategoryID($_GET['edit_id']),Notification::UPDATE_NOTIFICATION,Notification::GUIDELINE);
+                    App::$app->session->unset_key('VERIFIED');
+                    App::$app->response->redirect('/officer/guidelines');
+                    exit();
                 }
-                $guideline->update(['guid_id' => $_GET['edit_id']], $data );
-                Notification::addNotification(Guideline::getCategoryID($_GET['edit_id']),Notification::UPDATE_NOTIFICATION,Notification::GUIDELINE);
+
+                return $this->render('officer_add_guideline');
+            }
+            return $this->requireVerifivation();
+
+        }
+        elseif (isset($_GET['draft_id'])){
+            if(App::$app->session->get('VERIFIED') === 'TRUE'){
+                App::$app->session->unset_key('VERIFIED');
+
+                $guideline = Guideline::findOne(['guid_id'=>$_GET['draft_id']]);
+                if($guideline->getGuidStatus() === '2'){
+                    $guideline->update(['guid_id' => $_GET['draft_id']], ['guid_status' => '0']);
+                }
+                else{
+                    $guideline->update(['guid_id' => $_GET['draft_id']], ['guid_status' => '2']);
+                }
                 App::$app->response->redirect('/officer/guidelines');
                 exit();
             }
-            $guideline = Guideline::findOne(['guid_id' => $_GET['edit_id']]);
-            return $this->render('officer_add_guideline', ['subcategories' => $subcategories, 'categories' => $categories, 'mode' => 'update', 'edit_guideline' => $guideline, 'display_guidelines'=> Guideline::getAll()]);
-        }
-        elseif (isset($_GET['draft_id'])){
-            $guideline = Guideline::findOne(['guid_id'=>$_GET['draft_id']]);
-            if($guideline->getGuidStatus() === '2'){
-                $guideline->update(['guid_id' => $_GET['draft_id']], ['guid_status' => '0']);
-            }
-            else{
-                $guideline->update(['guid_id' => $_GET['draft_id']], ['guid_status' => '2']);
-            }
-            App::$app->response->redirect('/officer/guidelines');
-            exit();
+
+            return $this->requireVerifivation();
+
         }
 
         return $this->render('officer_guidelines');
@@ -69,20 +87,23 @@ class OfficerController extends Controller
 
     public function add_guideline(Request $request, Response $response)
     {
-        $categories = Category::getAll();
-        $subcategories = SubCategory::getAll();
-        if ($request->method() === 'post') {
-            $guideline = new Guideline();
-            $guideline->loadData($request->getBody());
-            if ($guideline->save()) {
-                Notification::addNotification(Guideline::getCategoryID(DbModel::lastInsertID()),Notification::CREATE_NOTIFICATION,Notification::GUIDELINE);
-                App::$app->response->redirect('/officer/guidelines');
-                exit();
-            } else {
-                echo '<script>alert("Fail to save the guideline")</script>';
+        if(App::$app->session->get('VERIFIED') === 'TRUE'){
+            App::$app->session->unset_key('VERIFIED');
+            if ($request->method() === 'post') {
+                $guideline = new Guideline();
+                $guideline->loadData($request->getBody());
+                if ($guideline->save()) {
+                    Notification::addNotification(Guideline::getCategoryID(DbModel::lastInsertID()),Notification::CREATE_NOTIFICATION,Notification::GUIDELINE);
+                    App::$app->response->redirect('/officer/guidelines');
+                    exit();
+                } else {
+                    echo '<script>alert("Fail to save the guideline")</script>';
+                }
             }
+            return $this->render('officer_add_guideline');
         }
-        return $this->render('officer_add_guideline', ['subcategories' => $subcategories, 'categories' => $categories, 'display_guidelines'=> Guideline::getAll()]);
+        return $this->requireVerifivation();
+
     }
 
     public function categories(Request $request, Response $response)
@@ -194,5 +215,29 @@ class OfficerController extends Controller
 
 
         return $this->render('officer_add_subcategory', ['subcategories' => $subcategories, 'categories' => $categories, 'model' => $subcategory,]);
+    }
+
+    public function verify(Request $request, Response $response){
+        var_dump(App::$app->user->getPassword());
+        if(password_verify($_POST['verify'],App::$app->user->getPassword()) ){
+            App::$app->session->set('VERIFIED','TRUE');
+            $request = App::$app->session->get('REQUEST');
+            App::$app->session->unset_key('REQUEST');
+            $response->redirect($request);
+            exit();
+        }
+        throw new \Error("Unauthorized Access", 403);
+
+    }
+
+    /**
+     * @param $callback
+     * @param $failed
+     * @return
+     */
+    private function requireVerifivation(){
+        App::$app->session->set('REQUEST', App::$app->request->getRequest());
+        $this->setLayout('main');
+        return $this->render('officer_verify');
     }
 }

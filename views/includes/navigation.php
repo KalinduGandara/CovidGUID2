@@ -23,9 +23,11 @@ use app\models\Notification;?>
                         }
                         ?>
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="width: 36rem">
+                        <div>
                         <?php
                         if (count($notifications) > 0) {
+                            $count = 0;
                             foreach ($notifications as $notification) {
                                 $id = $notification->cat_id;
                                 $status = $notification->status;
@@ -57,11 +59,23 @@ use app\models\Notification;?>
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <?php
-                            }
-                        } else {
+                                if ($count >=5) break;
+                                $count++;
+                            }?>
+                            </div>
+                            <div class="container">
+                                <a class="float-start" style="text-decoration: none; cursor: pointer">View All</a>
+                                <a class="float-end" style="text-decoration: none;cursor: pointer">Mark all as read</a>
+                            </div>
+                            <?php
+                        }
+
+                        else {
                             echo "No Records yet.";
                         }
                         ?>
+
+
                     </ul>
                 </li>
                 <?php }?>

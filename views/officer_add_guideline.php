@@ -20,9 +20,9 @@ foreach (\app\models\proxy\SubcategoryProxy::getAll() as $subcategory) {
         <div class="col py-3 bg-white" style="margin-left: 250px">
             <h1 class="page-header">
                 <?php
-                if (isset($mode) && $mode === 'update') {
+                if (isset($_GET['edit_id'])) {
                     echo 'Edit Guideline';
-                    $model = $edit_guideline;
+                    $model = \app\models\Guideline::findOne(['guid_id'=>$_GET['edit_id']]);
                 } else {
                     echo 'Add a Guideline';
                     $model = new \app\models\Guideline();
@@ -35,8 +35,8 @@ foreach (\app\models\proxy\SubcategoryProxy::getAll() as $subcategory) {
                 <?php
                 $form = \app\core\form\Form::begin('', 'post');
                 if(isset($_GET['edit_id'])){
-                    echo $form->selectField(new \app\models\SubCategory(), 'cat_id', $category_options,true, \app\models\SubCategory::findOne(['sub_category_id'=> $edit_guideline->getSubCategoryId()])->cat_id );
-                    echo $form->selectField($model, 'sub_category_id', $subcategory_options,true,$edit_guideline->getSubCategoryId() );
+                    echo $form->selectField(new \app\models\SubCategory(), 'cat_id', $category_options,true, \app\models\SubCategory::findOne(['sub_category_id'=> $model->getSubCategoryId()])->cat_id );
+                    echo $form->selectField($model, 'sub_category_id', $subcategory_options,true,$model->getSubCategoryId() );
 
                     echo '<div class="container mb-3 pb-5" style="background-color: #f4f4f4">';
                     echo '<h5>Available guidelines: </h5>';

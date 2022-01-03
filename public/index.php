@@ -47,7 +47,7 @@ $app->router->get('/officer/categories', [OfficerController::class, 'categories'
 $app->router->post('/officer/categories', [OfficerController::class, 'categories']);
 $app->router->get('/officer/add-subcategory', [OfficerController::class, 'add_subcategory']);
 $app->router->post('/officer/add-subcategory', [OfficerController::class, 'add_subcategory']);
-
+$app->router->post('/officer/verify', [OfficerController::class, 'verify']);
 
 $app->router->get('/login', [AuthController::class, 'login']);
 $app->router->post('/login', [AuthController::class, 'login']);
