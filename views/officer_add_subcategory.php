@@ -1,7 +1,7 @@
 <?php
 
 $category_options = [];
-foreach ($categories as $category) {
+foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
     $category_options[$category->getCatId()] = $category->getCatTitle();
 }
 
@@ -15,9 +15,25 @@ foreach ($categories as $category) {
 
                     <div class="row">
                         <div class="col-lg-12">
-                            <h1 class="page-header">
-                                Add a Subcategory
-                            </h1>
+                            <?php
+                                if(isset($_GET['edit_id'])){
+                                    $model = \app\models\SubCategory::findOne(['sub_category_id'=>$_GET['edit_id']]);
+                            ?>
+                                <h1 class="page-header">
+                                    Add a Subcategory
+                                </h1>
+                            <?php } else
+                                {
+                                    $model = new \app\models\SubCategory();
+                                    ?>
+                                    <h1 class="page-header">
+                                        Edit a Subcategory
+                                    </h1>
+
+                                    <?php
+                                }
+                                ?>
+
                         </div>
                     </div>
 
@@ -28,7 +44,7 @@ foreach ($categories as $category) {
 
 
                             <?php $form = \app\core\form\Form::begin('', 'post') ?>
-                            <?php echo $form->selectField($model, 'cat_id', $category_options); ?>
+                            <?php echo $form->selectField($model, 'cat_id', $category_options, !($model->getCatId() === ''), $model->getCatId() ); ?>
                             <?php echo $form->field($model, 'sub_category_name') ?>
                             <button type="submit" class="btn btn-primary">Submit</button>
 
@@ -52,7 +68,7 @@ foreach ($categories as $category) {
                                 <tbody>
 
                                 <?php
-                                foreach ($subcategories as $subcategory) {
+                                foreach (\app\models\proxy\SubcategoryProxy::getAll() as $subcategory) {
                                     $sub_category_id = $subcategory->getSubCategoryId();
                                     $sub_category_name = $subcategory->getSubCategoryName();
                                     $cat_id = $subcategory->getCatId();

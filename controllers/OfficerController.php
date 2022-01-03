@@ -204,8 +204,9 @@ class OfficerController extends Controller
         }
         if (isset($_GET['delete_id'])) {
             $delete_id = $_GET['delete_id'];
+            $cat_id = SubCategory::getCategoryID($_GET['delete_id']);
             $subcategory->delete(['sub_category_id' => $delete_id]);
-            Notification::addNotification(SubCategory::getCategoryID($_GET['delete_id']),Notification::DELETE_NOTIFICATION,Notification::SUB_CATEGORY);
+            Notification::addNotification($cat_id,Notification::DELETE_NOTIFICATION,Notification::SUB_CATEGORY);
         }
 
 
