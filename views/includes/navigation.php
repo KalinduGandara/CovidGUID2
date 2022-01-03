@@ -38,7 +38,7 @@ use app\models\Notification;?>
                                     echo "font-weight:bold;";
                                 }
                                 ?>
-                                        " class="dropdown-item" href="?cat_id=<?php echo $id?> & read=<?php echo $status?> & not_id=<?php echo $notification->not_id?>">
+                                        " class="dropdown-item" href="notification?not_id=<?php echo $notification->not_id?>&cat_id=<?php echo $id?>">
                                     <small><i><?php echo date('F j, Y', strtotime($notification->date)) ?></i></small><br />
                                     <?php
                                     $title = $notification->cat_title;
@@ -47,13 +47,14 @@ use app\models\Notification;?>
                                         '1' => "Sub Category",
                                         default => "",
                                     };
-                                    if ($notification->type == Notification::CREATE_NOTIFICATION) {
-                                        echo "New $class in $title";
-                                    } else if ($notification->type == Notification::UPDATE_NOTIFICATION) {
-                                        echo "Update $class in $title";
-                                    }else if ($notification->type == Notification::DELETE_NOTIFICATION) {
-                                        echo "Delete $class in $title";
-                                    }
+                                    $type = match ($notification->type){
+                                        Notification::CREATE_NOTIFICATION => "New",
+                                        Notification::UPDATE_NOTIFICATION => "Update",
+                                        Notification::DELETE_NOTIFICATION => "Delete",
+                                        default => "",
+                                    };
+                                    echo "$type $class in $title";
+
 
                                     ?>
                                 </a>
@@ -64,8 +65,8 @@ use app\models\Notification;?>
                             }?>
                             </div>
                             <div class="container">
-                                <a class="float-start" style="text-decoration: none; cursor: pointer">View All</a>
-                                <a class="float-end" style="text-decoration: none;cursor: pointer">Mark all as read</a>
+                                <a class="float-start" href="/notification" style="text-decoration: none; cursor: pointer">View All</a>
+                                <a class="float-end" href="/notification?not_id=all" style="text-decoration: none;cursor: pointer">Mark all as read</a>
                             </div>
                             <?php
                         }

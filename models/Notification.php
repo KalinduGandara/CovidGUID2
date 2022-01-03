@@ -9,15 +9,15 @@ use app\core\db\DbModel;
 
 class Notification extends DbModel
 {
-    public const CREATE_NOTIFICATION = 0;
-    public const UPDATE_NOTIFICATION = 1;
-    public const DELETE_NOTIFICATION = 2;
+    public const CREATE_NOTIFICATION = '0';
+    public const UPDATE_NOTIFICATION = '1';
+    public const DELETE_NOTIFICATION = '2';
 
-    public const UNSEEN_NOTIFICATION = 0;
-    public const SEEN_NOTIFICATION = 1;
+    public const UNSEEN_NOTIFICATION = '0';
+    public const SEEN_NOTIFICATION = '1';
 
-    public const GUIDELINE = 0;
-    public const SUB_CATEGORY = 1;
+    public const GUIDELINE = '0';
+    public const SUB_CATEGORY = '1';
 
     public string $cat_id = '';
     public string $cat_title = '';
@@ -52,7 +52,7 @@ class Notification extends DbModel
         return [];
     }
 
-    public static function getNotifications()
+    public static function getNotifications(): array
     {
         if (App::isGuest()){
             return [];
@@ -79,6 +79,16 @@ class Notification extends DbModel
         $statement->bindValue(":not_id", $not_id);
         $statement->execute();
     }
+     public static function markAllAsRead()
+    {
+        $user = App::$app->user->id;
+        $SQL = "update notification_status set status=1 where user_id =:user_id";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
+    }
+
+
 
     public static function addNotification($cat_id, $type, $class)
     {

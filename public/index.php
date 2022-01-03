@@ -27,11 +27,9 @@ $app->router->get('/', [SiteController::class, 'index']);
 $app->router->get('/home', [SiteController::class, 'home']);
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->post('/contact', [SiteController::class, 'contact']);
-//added for debugging
+
 $app->router->get('/notification', [SiteController::class, 'notification']);
 
-
-$app->router->get('/post', [SiteController::class, 'post']);
 
 $app->router->get('/admin', [AdminController::class, 'index']);
 $app->router->get('/admin/users', [AdminController::class, 'users']);
