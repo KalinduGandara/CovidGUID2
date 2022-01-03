@@ -106,8 +106,12 @@ class AuthController extends Controller
             $response->redirect("/login");
             exit();
         }
-        User::subscribe($_GET['cat_id']);
+        if (isset($_GET['cat_id']))
+            User::subscribe($_GET['cat_id']);
+        else
+            User::subscribeAll();
         $response->redirect('/home');
+
     }
     public function unsubscribe(Request $request,Response $response)
     {
@@ -115,7 +119,10 @@ class AuthController extends Controller
             $response->redirect("/login");
             exit();
         }
-        User::unsubscribe($_GET['cat_id']);
+        if (isset($_GET['cat_id']))
+            User::unsubscribe($_GET['cat_id']);
+        else
+            User::unsubscribeAll();
         $response->redirect('/home');
     }
 

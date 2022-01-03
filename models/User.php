@@ -51,6 +51,35 @@ class User extends UserModel
         $statement->bindValue(":user_id", $user);
         $statement->execute();
     }
+    public static function subscribeAll()
+    {
+        $user = App::$app->user->id;
+        $SQL = "DELETE FROM category_subscription WHERE user_id = :user_id;
+                INSERT INTO category_subscription(cat_id, user_id) SELECT cat_id , :user_id FROM categories";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
+    }
+
+    public static function unsubscribeAll()
+    {
+        $user = App::$app->user->id;
+        $SQL = "DELETE FROM category_subscription WHERE user_id = :user_id;";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
+    }
+
+    public static function isSubscribed(): bool
+    {
+        $user = App::$app->user->id;
+        $SQL = "SELECT COUNT(cat_id) FROM category_subscription WHERE user_id = :user_id";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
+        return $statement->fetchAll(\PDO::FETCH_COLUMN,0)[0]>0;
+    }
+
     public function save()
     {
         $this->status = $this->status != self::STATUS_INACTIVE ? $this->status : self::STATUS_INACTIVE;

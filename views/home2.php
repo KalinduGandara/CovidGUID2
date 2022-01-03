@@ -9,16 +9,22 @@
             <h1 class="page-header">
                 New Normal Guidelines
             </h1>
+            <?php
+            use app\models\proxy\CategoryProxy;
+            use app\models\User;
+            use app\views\components\category\PublicCategory;
+            if (User::isSubscribed())
+                echo '<a style="margin-top: -40px" class="btn btn-warning float-end" href="unsubscribe">UnSubscribe All</a>';
+            else
+                echo '<a style="margin-top: -40px" class="btn btn-danger float-end" href="subscribe">Subscribe All</a>';
+
+            ?>
             <hr>
 
             <!-- Display Categories -->
 
+
             <?php
-
-            use app\models\proxy\CategoryProxy;
-            use app\models\User;
-            use app\views\components\category\PublicCategory;
-
             $subscribeList = User::getSubscribeList();
             foreach (CategoryProxy::getAll() as $category) {
                 $categoryView = new PublicCategory($category);
