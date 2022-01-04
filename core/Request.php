@@ -6,11 +6,41 @@ namespace app\core;
 
 class Request
 {
-    public function getRequest(){
-        return $_SERVER['REQUEST_URI'];
-    }
-    public function getPath()
+    private string $request_uri;
+    private string $path;
+    private string $method;
+    private array $body;
+
+    public function __construct()
     {
+        $this->request_uri = $_SERVER['REQUEST_URI'];
+        $this->path = $this->fetchPath();
+        $this->method = strtolower($_SERVER['REQUEST_METHOD']);
+        $this->body = $this->fetchBody();
+    }
+
+
+    public function getRequestURI():string
+    {
+        return $this->request_uri;
+    }
+
+    public function getPath():string
+    {
+        return $this->path;
+    }
+
+    public function method():string
+    {
+        return $this->method;
+    }
+
+    public function getBody():array
+    {
+        return $this->body;
+    }
+
+    private function fetchPath():string{
         $path = $_SERVER['REQUEST_URI'] ?? '/';
         $position = strpos($path,'?');
         if ($position === false){
@@ -19,13 +49,7 @@ class Request
         return substr($path,0,$position);
     }
 
-    public function method()
-    {
-        return strtolower($_SERVER['REQUEST_METHOD']);
-    }
-
-    public function getBody()
-    {
+    private function fetchBody():array{
         $body = [];
         if ($this->method()==='get'){
             foreach ($_GET as $key => $value) {
