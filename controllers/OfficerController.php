@@ -47,7 +47,7 @@ class OfficerController extends Controller
                 exit();
 
             }
-            return $this->requireVerifivation($request);
+            return $this->requireVerification($request);
         } elseif (isset($_GET['edit_id'])) {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
                 if ($request->method() === "post") {
@@ -64,7 +64,7 @@ class OfficerController extends Controller
 
                 return $this->render('officer_add_guideline');
             }
-            return $this->requireVerifivation($request);
+            return $this->requireVerification($request);
 
         } elseif (isset($_GET['draft_id'])) {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
@@ -80,7 +80,7 @@ class OfficerController extends Controller
                 exit();
             }
 
-            return $this->requireVerifivation($request);
+            return $this->requireVerification($request);
 
         }
 
@@ -103,7 +103,7 @@ class OfficerController extends Controller
                     echo '<script>alert("Fail to save the guideline")</script>';
                 }
             }
-            return $this->requireVerifivation($request);
+            return $this->requireVerification($request);
         }
         return $this->render('officer_add_guideline');
 
@@ -115,51 +115,48 @@ class OfficerController extends Controller
         $category = new Category();
         $mode = '';
 
-        if (isset($_GET['edit_id'])) {
-            $mode = 'update';
-            $category = Category::findOne(['cat_id' => $_GET['edit_id']]);
-        }
+
         if ($request->method() == 'post') {
 
-            $formAttributes = $request->getBody();
-            $havePermission = null; //will evaluate to true when officer reentered his correct email-pwd combination
+            if (App::$app->session->get('VERIFIED') === 'TRUE') {
+                App::$app->session->unset_key('VERIFIED');
 
-            if (isset($formAttributes['email']) && isset($formAttributes['password'])) {
-                $loginForm = new LoginForm();
-                $loginForm->loadData($request->getBody());
-                if ($loginForm->validate() && $loginForm->login()) {
-                    $havePermission = true;
+                $query = mb_split("&", parse_url($_SERVER['HTTP_REFERER'], PHP_URL_QUERY));
+                if (!empty($query)) foreach ($query as $qr) {
+                    $vars = mb_split('=', $qr);
+                    $_GET[$vars[0]] = $vars[1];
                 }
-            }
 
-            if (!$havePermission) {
-                App::$app->response->redirect('/officer/categories');
-                exit();
-            }
-            $category->loadData($request->getBody());
-            if ($mode == 'update') {
-                $category->update(['cat_id' => $_GET['edit_id']], $request->getBody());
-                App::$app->response->redirect('/officer/categories');
-                exit();
-            } else {
-                if ($category->validate() && $category->save()) {
+                if (isset($_GET['edit_id'])) {
+                    $mode = 'update';
+                    $category = Category::findOne(['cat_id' => $_GET['edit_id']]);
+                }
+
+                $category->loadData($request->getBody());
+                if ($mode == 'update') {
+                    $category->update(['cat_id' => $_GET['edit_id']], $request->getBody());
                     App::$app->response->redirect('/officer/categories');
                     exit();
+                } else {
+                    if ($category->validate() && $category->save()) {
+                        App::$app->response->redirect('/officer/categories');
+                        exit();
+                    }
                 }
             }
+            return $this->requireVerification($request);
         }
         if (isset($_GET['delete_id'])) {
-            $formAttributes = $request->getBody();
+            if (App::$app->session->get('VERIFIED') === 'TRUE') {
+                App::$app->session->unset_key('VERIFIED');
 
-            var_dump($request->getBody());
-            echo '<script> openForm(); </script>';
-            exit();
-
-            $delete_id = $_GET['delete_id'];
-            $category->delete(['cat_id' => $delete_id]);
+                $delete_id = $_GET['delete_id'];
+                $category->delete(['cat_id' => $delete_id]);
+                App::$app->response->redirect('/officer/categories');
+                exit();
+            }
+            return $this->requireVerification($request);
         }
-        $mode = '';
-
 
         $formAttributes = $request->getBody();
 
@@ -216,7 +213,7 @@ class OfficerController extends Controller
                     exit();
                 }
             }
-            return $this->requireVerifivation($request);
+            return $this->requireVerification($request);
 
         }
         if (isset($_GET['delete_id'])) {
@@ -227,7 +224,7 @@ class OfficerController extends Controller
                 $subcategory->delete(['sub_category_id' => $delete_id]);
                 Notification::addNotification($cat_id, Notification::DELETE_NOTIFICATION, Notification::SUB_CATEGORY);
             }
-            return $this->requireVerifivation($request);
+            return $this->requireVerification($request);
         }
 
 
@@ -257,7 +254,7 @@ class OfficerController extends Controller
     }
 
     private
-    function requireVerifivation(Request $request)
+    function requireVerification(Request $request)
     {
         App::$app->session->set('REQUEST', serialize($request));
         $this->setLayout('main');
