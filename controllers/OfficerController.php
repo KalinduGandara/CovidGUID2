@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\core\App;
 use app\core\Controller;
 use app\core\db\DbModel;
+use app\core\middlewares\ActiveMiddleware;
 use app\core\middlewares\OfficerMiddleware;
 use app\core\Request;
 use app\core\Response;
@@ -20,6 +21,8 @@ class OfficerController extends Controller
     public function __construct()
     {
         $this->registerMiddleware(new OfficerMiddleware());
+        $this->registerMiddleware(new ActiveMiddleware());
+
     }
 
     public function index()

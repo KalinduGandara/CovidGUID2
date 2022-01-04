@@ -6,6 +6,7 @@ namespace app\controllers;
 
 use app\core\App;
 use app\core\Controller;
+use app\core\middlewares\ActiveMiddleware;
 use app\core\middlewares\AuthMiddleware;
 use app\core\Request;
 use app\core\Response;
@@ -18,7 +19,8 @@ class AuthController extends Controller
 
     public function __construct()
     {
-        $this->registerMiddleware(new AuthMiddleware(['profile']));
+        $this->registerMiddleware(new AuthMiddleware(['profile','subscribe']));
+        $this->registerMiddleware(new ActiveMiddleware(['profile','subscribe']));
     }
 
     public function login(Request $request,Response $response)
@@ -73,8 +75,8 @@ class AuthController extends Controller
 
     public function profile(Request $request)
     {
-        $currentuser = APP::$app->user;
-        $user = User::findOne(['id' => $currentuser->id]);
+        $currentUser = APP::$app->user;
+        $user = User::findOne(['id' => $currentUser->id]);
         $user->password = '';
         $notifications = [];
         $unseenNotifications = 0;
@@ -107,9 +109,9 @@ class AuthController extends Controller
             exit();
         }
         if (isset($_GET['cat_id']))
-            User::subscribe($_GET['cat_id']);
+            App::$app->getUser()->subscribe($_GET['cat_id']);
         else
-            User::subscribeAll();
+            App::$app->getUser()->subscribeAll();
         $response->redirect('/home');
 
     }
@@ -120,9 +122,9 @@ class AuthController extends Controller
             exit();
         }
         if (isset($_GET['cat_id']))
-            User::unsubscribe($_GET['cat_id']);
+            App::$app->getUser()->unsubscribe($_GET['cat_id']);
         else
-            User::unsubscribeAll();
+            App::$app->getUser()->unsubscribeAll();
         $response->redirect('/home');
     }
 

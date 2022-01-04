@@ -6,6 +6,7 @@ namespace app\controllers;
 
 use app\core\App;
 use app\core\Controller;
+use app\core\middlewares\ActiveMiddleware;
 use app\core\middlewares\AdminMiddleware;
 use app\core\middlewares\AuthMiddleware;
 use app\core\Request;
@@ -21,6 +22,7 @@ class AdminController extends Controller
     public function __construct()
     {
         $this->registerMiddleware(new AdminMiddleware());
+        $this->registerMiddleware(new ActiveMiddleware());
     }
 
     public function index()

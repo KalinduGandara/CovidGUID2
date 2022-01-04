@@ -5,6 +5,7 @@ namespace app\core;
 use app\core\db\Database;
 use app\core\db\DbModel;
 use app\models\Notification;
+use app\models\User;
 
 class App
 {
@@ -111,6 +112,14 @@ class App
         }
         return self::$app->user->type == 0;
     }
+    public static function isActive():bool
+    {
+        if (self::isGuest()){
+            return true;
+        }
+        return self::$app->user->status == User::STATUS_ACTIVE;
+    }
+
     public static function isOfficer():bool
     {
         if (self::isGuest()){
@@ -118,5 +127,23 @@ class App
         }
         return self::isAdmin() || self::$app->user->type == 1;
     }
+
+    /**
+     * @return UserModel|null
+     */
+    public function getUser(): ?UserModel
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param UserModel|null $user
+     */
+    public function setUser(?UserModel $user): void
+    {
+        $this->user = $user;
+    }
+
+
 
 }
