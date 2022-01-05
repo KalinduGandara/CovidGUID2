@@ -27,7 +27,7 @@
 
 
             <?php
-            $subscribeList = App::isGuest() ? []: App::$app->getUser()->getSubscribeList();
+            $subscribeList = App::$app->getUser()->getSubscribeList();
             foreach (CategoryProxy::getAll() as $category) {
                 $categoryView = new PublicCategory($category);
                 if (in_array($category->getCatId() , $subscribeList)) {
