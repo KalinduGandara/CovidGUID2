@@ -32,11 +32,10 @@ class AdminController extends Controller
 
     public function users(Request $request, Response $response)
     {
-        //TODO add delete and dropdown list to status
-        $users = User::getAll();
         $mode = 'show';
         $user = new User();
         if (isset($_GET['source'])) {
+            $this->verifyUser($request,$response);
             if ($_GET['source'] == 'add_user') {
                 $mode = 'create';
                 if ($request->method() == 'post') {
@@ -72,6 +71,40 @@ class AdminController extends Controller
         }
 
 
-        return $this->render('admin_users', ['users' => $users, 'mode' => $mode, 'model' => $user]);
+        return $this->render('admin_users', ['mode' => $mode, 'model' => $user]);
+    }
+    public function verify(Request $request, Response $response){
+        var_dump(App::$app->user->getPassword());
+        if(password_verify($_POST['verify'],App::$app->user->getPassword()) ){
+            App::$app->session->set('VERIFIED','TRUE');
+            $request = App::$app->session->get('REQUEST');
+            App::$app->session->unset_key('REQUEST');
+            $response->redirect($request);
+            exit();
+        }
+        throw new \Error("Unauthorized Access", 403);
+
+    }
+
+    private function verifyUser(Request $request, Response $response)
+    {
+        if ($request->method() == 'post') return ;
+        if(App::$app->session->get('VERIFIED') === 'TRUE') {
+            App::$app->session->unset_key('VERIFIED');
+            return true;
+        }
+        else {
+            echo $this->requireVerifivation();
+            exit();
+        }
+    }
+
+    /**
+     * @return array|false|string|string[]
+     */
+    private function requireVerifivation(){
+        App::$app->session->set('REQUEST', App::$app->request->getRequest());
+        $this->setLayout('main');
+        return $this->render('officer_verify');
     }
 }

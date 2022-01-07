@@ -34,6 +34,8 @@ $app->router->get('/notification', [SiteController::class, 'notification']);
 $app->router->get('/admin', [AdminController::class, 'index']);
 $app->router->get('/admin/users', [AdminController::class, 'users']);
 $app->router->post('/admin/users', [AdminController::class, 'users']);
+$app->router->post('/admin/verify', [AdminController::class, 'verify']);
+
 
 //officer routes
 $app->router->get('/officer', [OfficerController::class, 'index']);

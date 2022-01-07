@@ -3,11 +3,11 @@
         <?php include "includes/admin_navigation.php" ?>
         <div class="col py-3 bg-white" style="margin-left: 250px">
             <?php if ($mode == 'show'){ ?>
+
             <div class="container-fluid">
                 <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th>Id</th>
                         <th>First name</th>
                         <th>Last name</th>
                         <th>Email</th>
@@ -18,45 +18,12 @@
                     <tbody>
 
                     <?php
-                    foreach ($users as $user) {
-                        $user_id = $user->getId();
-                        $user_firstname = $user->getFirstname();
-                        $user_lastname = $user->getLastname();
-                        $user_email = $user->getEmail();
-                        $user_status = $user->getStatus();
-                        $user_role = $user->getType();
+                    foreach (\app\models\User::getAll() as $user) {
+                        $user_view = new \app\views\components\user\User($user);
+                        $user_view->render();
+                    }
                         ?>
 
-                        <tr>
-                            <td><?php echo $user_id ?></td>
-                            <td><?php echo $user_firstname ?></td>
-                            <td><?php echo $user_lastname ?></td>
-                            <td><?php echo $user_email ?></td>
-                            <td><?php if ($user_role == 2)
-                                    echo 'Public User';
-                                elseif ($user_role == 0)
-                                    echo "Admin";
-                                elseif ($user_role == 1)
-                                    echo "Officer" ?></td>
-                            <td><?php if ($user_status == 0)
-                                    echo "Inactive";
-                                elseif ($user_status == 1)
-                                    echo "Active";
-                                elseif ($user_status == 2)
-                                    echo "Deleted" ?></td>
-                            <td>
-                                <a href="users?source=change_status&user_id=<?php echo $user_id ?>"><?php if ($user_status == 0)
-                                        echo 'Active';
-                                    elseif ($user_status == 1)
-                                        echo 'Inactive'; ?></a></td>
-                            <td><a href="users?source=edit_user&edit_user_id=<?php echo $user_id ?>">Edit</a></td>
-                            <?php if ($user_status != 2) { ?>
-                                <td><a href="users?del_id=<?php echo $user_id ?>"
-                                       onclick="return confirm('Are you sure you want to delete?');">Delete</a></td>
-                            <?php } ?>
-                        </tr>
-
-                    <?php } ?>
                     </tbody>
                 </table>
                 <?php } elseif ($mode == 'create') { ?>
