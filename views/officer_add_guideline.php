@@ -40,7 +40,9 @@ foreach (\app\models\proxy\SubcategoryProxy::getAll() as $subcategory) {
 
                     echo '<div class="container mb-3 pb-5" style="background-color: #f4f4f4">';
                     echo '<h5>Available guidelines: </h5>';
-                    \app\views\components\subcategory\SubcategoryBuilder::buildOfficerVeiw($model->getSubCategoryId())->render();
+                    $guidelines = \app\views\components\subcategory\SubcategoryBuilder::buildOfficerVeiw($model->getSubCategoryId());
+                    $guidelines->filterOutDeleted();
+                    $guidelines->render();
                     echo '</div>';
                     echo $form->textareaField($model, 'guideline');
                     echo '<div class = "row">';
@@ -62,7 +64,10 @@ foreach (\app\models\proxy\SubcategoryProxy::getAll() as $subcategory) {
                         echo '<div class="container mb-3 pb-5" style="background-color: #f4f4f4">';
                         echo '<h5>Available guidelines: </h5>';
 
-                        \app\views\components\subcategory\SubcategoryBuilder::buildOfficerVeiw($_GET['sub_category_id'])->render();
+                        $guidelines = \app\views\components\subcategory\SubcategoryBuilder::buildOfficerVeiw($_GET['sub_category_id']);
+                        $guidelines->filterOutDeleted();
+                        $guidelines->render();
+
                         echo '</div>';
 
                         echo $form->textareaField($model, 'guideline');

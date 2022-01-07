@@ -35,8 +35,14 @@ class OfficerController extends Controller
     public function guidelines(Request $request, Response $response)
     {
         $guideline = new Guideline();
-        $categories = Category::getAll();
-        $subcategories = SubCategory::getAll();
+
+        $query = mb_split("&", parse_url($request->getRequestURI(), PHP_URL_QUERY));
+        if (!empty($query)) foreach ($query as $qr) {
+            $vars = mb_split('=', $qr);
+            if ($vars[0] != null)
+                $_GET[$vars[0]] = $vars[1];
+        }
+
         if (isset($_GET['delete_id'])) {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
                 App::$app->session->unset_key('VERIFIED');
@@ -49,22 +55,14 @@ class OfficerController extends Controller
             }
             return $this->requireVerification($request);
         } elseif (isset($_GET['edit_id'])) {
-            if (App::$app->session->get('VERIFIED') === 'TRUE') {
-                if ($request->method() === "post") {
-                    $data = $request->getBody();
-                    if (!isset($data['guid_status'])) {
-                        $data['guid_status'] = '0';
-                    }
-                    $guideline->update(['guid_id' => $_GET['edit_id']], $data);
-                    Notification::addNotification(Guideline::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::GUIDELINE);
-                    App::$app->session->unset_key('VERIFIED');
-                    App::$app->response->redirect('/officer/guidelines');
-                    exit();
-                }
-
-                return $this->render('officer_add_guideline');
+            if ($request->method() === "post") {
+                $request->setRequestUri("/officer/add-guideline?edit_id=" . $_GET['edit_id']);
+                $request->setPath("/officer/add-guideline");
+                App::$app->run();
+                exit();
             }
-            return $this->requireVerification($request);
+
+            return $this->render('officer_add_guideline');
 
         } elseif (isset($_GET['draft_id'])) {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
@@ -93,7 +91,27 @@ class OfficerController extends Controller
         if ($request->method() === 'post') {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
                 App::$app->session->unset_key('VERIFIED');
+
                 $guideline = new Guideline();
+
+                $query = mb_split("&", parse_url($request->getRequestURI(), PHP_URL_QUERY));
+                if (!empty($query)) foreach ($query as $qr) {
+                    $vars = mb_split('=', $qr);
+                    if ($vars[0] != null)
+                        $_GET[$vars[0]] = $vars[1];
+                }
+
+                if (isset($_GET["edit_id"])) {
+                    $data = $request->getBody();
+                    if (!isset($data['guid_status'])) {
+                        $data['guid_status'] = '0';
+                    }
+                    $guideline->update(['guid_id' => $_GET['edit_id']], $data);
+                    Notification::addNotification(Guideline::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::GUIDELINE);
+                    App::$app->response->redirect('/officer/guidelines');
+                    exit();
+                }
+
                 $guideline->loadData($request->getBody());
                 if ($guideline->save()) {
                     Notification::addNotification(Guideline::getCategoryID(DbModel::lastInsertID()), Notification::CREATE_NOTIFICATION, Notification::GUIDELINE);
@@ -115,17 +133,18 @@ class OfficerController extends Controller
         $category = new Category();
         $mode = '';
 
+            $query = mb_split("&", parse_url($request->getRequestURI(), PHP_URL_QUERY));
+            if (!empty($query)) foreach ($query as $qr) {
+                $vars = mb_split('=', $qr);
+                if ($vars[0] != null)
+                    $_GET[$vars[0]] = $vars[1];
+            }
+
 
         if ($request->method() == 'post') {
 
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
                 App::$app->session->unset_key('VERIFIED');
-
-                $query = mb_split("&", parse_url($_SERVER['HTTP_REFERER'], PHP_URL_QUERY));
-                if (!empty($query)) foreach ($query as $qr) {
-                    $vars = mb_split('=', $qr);
-                    $_GET[$vars[0]] = $vars[1];
-                }
 
                 if (isset($_GET['edit_id'])) {
                     $mode = 'update';
@@ -151,6 +170,14 @@ class OfficerController extends Controller
                 App::$app->session->unset_key('VERIFIED');
 
                 $delete_id = $_GET['delete_id'];
+
+                // delete all subcategories and guidelines under that category
+                foreach (SubCategory::getAllWhere(['cat_id' => $delete_id]) as $subcategory) {
+                    foreach (Guideline::getAllWhere(['subcategory_id' => $subcategory->getSubCategoryId()]) as $guideline) {
+                        $guideline->update(['guid_id' => $guideline->getGuidId()], ['guid_status' => '4']);
+                    }
+                    $subcategory->delete(['subcategory_id' => $subcategory->getSubCategoryId()]);
+                }
                 $category->delete(['cat_id' => $delete_id]);
                 App::$app->response->redirect('/officer/categories');
                 exit();
@@ -189,7 +216,7 @@ class OfficerController extends Controller
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
                 App::$app->session->unset_key('VERIFIED');
 
-                $query = mb_split("&", parse_url($_SERVER['HTTP_REFERER'], PHP_URL_QUERY));
+                $query = mb_split("&", parse_url($request->getRequestURI(), PHP_URL_QUERY));
                 if (!empty($query)) foreach ($query as $qr) {
                     $vars = mb_split('=', $qr);
                     $_GET[$vars[0]] = $vars[1];
@@ -221,6 +248,12 @@ class OfficerController extends Controller
                 App::$app->session->unset_key('VERIFIED');
                 $delete_id = $_GET['delete_id'];
                 $cat_id = SubCategory::getCategoryID($_GET['delete_id']);
+
+                //delete all the guideline under that subcategory
+                foreach (Guideline::getAllWhere(['subcategory_id' => $subcategory->getSubCategoryId()]) as $guideline) {
+                    $guideline->update(['guid_id' => $guideline->getGuidId()], ['guid_status' => '4']);
+                }
+
                 $subcategory->delete(['sub_category_id' => $delete_id]);
                 Notification::addNotification($cat_id, Notification::DELETE_NOTIFICATION, Notification::SUB_CATEGORY);
             }
@@ -240,11 +273,11 @@ class OfficerController extends Controller
     {
         if (password_verify($_POST['verify'], App::$app->user->getPassword())) {
             App::$app->session->set('VERIFIED', 'TRUE');
-            $request = unserialize(App::$app->session->get('REQUEST'));
+            $request_prev = unserialize(App::$app->session->get('REQUEST'));
             App::$app->session->unset_key('REQUEST');
 
             //setting the previous request and resolving it
-            App::$app->router->request = $request;
+            App::$app->router->request = $request_prev;
             App::$app->run();
 
             exit();
