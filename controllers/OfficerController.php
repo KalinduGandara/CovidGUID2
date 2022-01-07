@@ -109,120 +109,79 @@ class OfficerController extends Controller
 
     }
 
-    public function categories(Request $request, Response $response)
+    public function category(Request $request, Response $response)
     {
         $category = new Category();
-        $mode = '';
 
+        if ($request->method() == 'post') {
+            $category->loadData($request->getBody());
+            $category->update(['cat_id' => $_GET['edit_id']], $request->getBody());
+            App::$app->response->redirect('/officer/categories');
+            exit();
+        }
         if (isset($_GET['edit_id'])) {
-            $mode = 'update';
+            $this->verifyUser($request,$response);
             $category = Category::findOne(['cat_id' => $_GET['edit_id']]);
         }
-        if ($request->method() == 'post') {
-
-            $formAttributes = $request->getBody();
-            $havePermission = null; //will evaluate to true when officer reentered his correct email-pwd combination
-
-            if(isset($formAttributes['email']) && isset($formAttributes['password']))
-            {
-                $loginForm = new LoginForm();
-                $loginForm->loadData($request->getBody());
-                if ($loginForm->validate() && $loginForm->login())
-                {
-                    $havePermission = true;
-                }
-            }
-
-            if(!$havePermission)
-            {
-                App::$app->response->redirect('/officer/categories');
-                exit();
-            }
-            $category->loadData($request->getBody());
-            if ($mode == 'update') {
-                $category->update(['cat_id' => $_GET['edit_id']], $request->getBody());
-                App::$app->response->redirect('/officer/categories');
-                exit();
-            } else {
-                if ($category->validate() && $category->save()) {
-                    App::$app->response->redirect('/officer/categories');
-                    exit();
-                }
-            }
-        }
         if (isset($_GET['delete_id'])) {
-            $formAttributes = $request->getBody();
-
-            var_dump($request->getBody());
-            echo '<script> openForm(); </script>';
-            exit();
-
+            $this->verifyUser($request,$response);
             $delete_id = $_GET['delete_id'];
             $category->delete(['cat_id' => $delete_id]);
         }
-        $mode = '';
-
-
-        $formAttributes = $request->getBody();
-
-        if(isset($formAttributes['email']) && isset($formAttributes['password']))
-        {
-            $loginForm = new LoginForm();
-            $loginForm->loadData($request->getBody());
-            if ($loginForm->validate() && $loginForm->login())
-            {
-                $delete_id = $formAttributes["delete_id"];
-                $category->delete(['cat_id' => $delete_id]);
+        return $this->render('officer_categories', [ 'model' => $category]);
+    }
+    public function add_category(Request $request, Response $response)
+    {
+        $category = new Category();
+        if ($request->method() == 'post') {
+            $category->loadData($request->getBody());
+            if ($category->validate() && $category->save()) {
                 App::$app->response->redirect('/officer/categories');
                 exit();
             }
         }
-
-        $categories = Category::getAll();
-
-        return $this->render('officer_categories', ['categories' => $categories, 'model' => $category, 'mode' => $mode]);
+        $this->verifyUser($request,$response);
+        return $this->render('officer_add_category', ['model' => $category]);
     }
-    public function add_subcategory(Request $request, Response $response)
+    public function subcategory(Request $request, Response $response)
     {
-        $mode = "";
         $subcategory = new SubCategory();
-        if (isset($_GET['edit_id'])) {
-            $mode = 'update';
-            $subcategory = SubCategory::findOne(['sub_category_id' => $_GET['edit_id']]);
-        }
-
         if ($request->method() === 'post') {
-            if ($mode == 'update') {
-                $subcategory->update(['sub_category_id' => $_GET['edit_id']], $request->getBody());
-                Notification::addNotification(SubCategory::getCategoryID($_GET['edit_id']),Notification::UPDATE_NOTIFICATION,Notification::SUB_CATEGORY);
-                App::$app->response->redirect('/officer/add-subcategory');
-                exit();
-            }
-            $subcategory->loadData($request->getBody());
-            if ($subcategory->save()) {
-                Notification::addNotification(SubCategory::getCategoryID(DbModel::lastInsertID()),Notification::CREATE_NOTIFICATION,Notification::SUB_CATEGORY);
-                App::$app->response->redirect('/officer/add-subcategory');
-                exit();
-            }
+            $subcategory->update(['sub_category_id' => $_GET['edit_id']], $request->getBody());
+            Notification::addNotification(SubCategory::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::SUB_CATEGORY);
+            App::$app->response->redirect('/officer/subcategories');
+            exit();
         }
         if (isset($_GET['delete_id'])) {
+            $this->verifyUser($request,$response);
             $delete_id = $_GET['delete_id'];
             $cat_id = SubCategory::getCategoryID($_GET['delete_id']);
             $subcategory->delete(['sub_category_id' => $delete_id]);
             Notification::addNotification($cat_id,Notification::DELETE_NOTIFICATION,Notification::SUB_CATEGORY);
         }
+        if (isset($_GET['edit_id'])) {
+            $subcategory = SubCategory::findOne(['sub_category_id' => $_GET['edit_id']]);
+            $this->verifyUser($request,$response);
+        }
+        return $this->render('officer_subcategory', ['model' => $subcategory]);
+    }
+    public function add_subcategory(Request $request, Response $response)
+    {
+        $subcategory = new SubCategory();
+        $subcategory->loadData($request->getBody());
+        if ($request->method() === 'post') {
+            if ($subcategory->validate() && $subcategory->save()) {
+                Notification::addNotification(SubCategory::getCategoryID(DbModel::lastInsertID()), Notification::CREATE_NOTIFICATION, Notification::SUB_CATEGORY);
+                App::$app->response->redirect('/officer/subcategories');
+                exit();
+            }
+        }
+        $this->verifyUser($request,$response);
+        return $this->render('officer_add_subcategory', ['model' => $subcategory,]);
 
-
-
-        $categories = Category::getAll();
-        $subcategories = SubCategory::getAll();
-
-
-        return $this->render('officer_add_subcategory', ['subcategories' => $subcategories, 'categories' => $categories, 'model' => $subcategory,]);
     }
 
     public function verify(Request $request, Response $response){
-        var_dump(App::$app->user->getPassword());
         if(password_verify($_POST['verify'],App::$app->user->getPassword()) ){
             App::$app->session->set('VERIFIED','TRUE');
             $request = App::$app->session->get('REQUEST');
@@ -232,6 +191,18 @@ class OfficerController extends Controller
         }
         throw new \Error("Unauthorized Access", 403);
 
+    }
+    private function verifyUser(Request $request, Response $response)
+    {
+        if ($request->method() == 'post') return ;
+        if(App::$app->session->get('VERIFIED') === 'TRUE') {
+            App::$app->session->unset_key('VERIFIED');
+            return true;
+        }
+        else {
+            echo $this->requireVerifivation();
+            exit();
+        }
     }
 
     /**
