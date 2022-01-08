@@ -14,6 +14,8 @@ use app\models\Category;
 use app\models\Guideline;
 use app\models\LoginForm;
 use app\models\Notification;
+use app\models\proxy\CategoryProxy;
+use app\models\proxy\SubcategoryProxy;
 use app\models\SubCategory;
 
 class OfficerController extends Controller
@@ -35,8 +37,14 @@ class OfficerController extends Controller
     public function guidelines(Request $request, Response $response)
     {
         $guideline = new Guideline();
-        $categories = Category::getAll();
-        $subcategories = SubCategory::getAll();
+
+        $query = mb_split("&", parse_url($request->getRequestURI(), PHP_URL_QUERY));
+        if (!empty($query)) foreach ($query as $qr) {
+            $vars = mb_split('=', $qr);
+            if ($vars[0] != null)
+                $_GET[$vars[0]] = $vars[1];
+        }
+
         if (isset($_GET['delete_id'])) {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
                 App::$app->session->unset_key('VERIFIED');
@@ -49,22 +57,14 @@ class OfficerController extends Controller
             }
             return $this->requireVerification($request);
         } elseif (isset($_GET['edit_id'])) {
-            if (App::$app->session->get('VERIFIED') === 'TRUE') {
-                if ($request->method() === "post") {
-                    $data = $request->getBody();
-                    if (!isset($data['guid_status'])) {
-                        $data['guid_status'] = '0';
-                    }
-                    $guideline->update(['guid_id' => $_GET['edit_id']], $data);
-                    Notification::addNotification(Guideline::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::GUIDELINE);
-                    App::$app->session->unset_key('VERIFIED');
-                    App::$app->response->redirect('/officer/guidelines');
-                    exit();
-                }
-
-                return $this->render('officer_add_guideline');
+            if ($request->method() === "post") {
+                $request->setRequestUri("/officer/add-guideline?edit_id=" . $_GET['edit_id']);
+                $request->setPath("/officer/add-guideline");
+                App::$app->run();
+                exit();
             }
-            return $this->requireVerification($request);
+
+            return $this->render('officer_add_guideline');
 
         } elseif (isset($_GET['draft_id'])) {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
@@ -93,7 +93,27 @@ class OfficerController extends Controller
         if ($request->method() === 'post') {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
                 App::$app->session->unset_key('VERIFIED');
+
                 $guideline = new Guideline();
+
+                $query = mb_split("&", parse_url($request->getRequestURI(), PHP_URL_QUERY));
+                if (!empty($query)) foreach ($query as $qr) {
+                    $vars = mb_split('=', $qr);
+                    if ($vars[0] != null)
+                        $_GET[$vars[0]] = $vars[1];
+                }
+
+                if (isset($_GET["edit_id"])) {
+                    $data = $request->getBody();
+                    if (!isset($data['guid_status'])) {
+                        $data['guid_status'] = '0';
+                    }
+                    $guideline->update(['guid_id' => $_GET['edit_id']], $data);
+                    Notification::addNotification(Guideline::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::GUIDELINE);
+                    App::$app->response->redirect('/officer/guidelines');
+                    exit();
+                }
+
                 $guideline->loadData($request->getBody());
                 if ($guideline->save()) {
                     Notification::addNotification(Guideline::getCategoryID(DbModel::lastInsertID()), Notification::CREATE_NOTIFICATION, Notification::GUIDELINE);
@@ -110,146 +130,158 @@ class OfficerController extends Controller
 
     }
 
-    public function categories(Request $request, Response $response)
+    public function category(Request $request, Response $response)
     {
         $category = new Category();
-        $mode = '';
 
-
-        if ($request->method() == 'post') {
-
-            if (App::$app->session->get('VERIFIED') === 'TRUE') {
-                App::$app->session->unset_key('VERIFIED');
-
-                $query = mb_split("&", parse_url($_SERVER['HTTP_REFERER'], PHP_URL_QUERY));
-                if (!empty($query)) foreach ($query as $qr) {
-                    $vars = mb_split('=', $qr);
-                    $_GET[$vars[0]] = $vars[1];
-                }
-
-                if (isset($_GET['edit_id'])) {
-                    $mode = 'update';
-                    $category = Category::findOne(['cat_id' => $_GET['edit_id']]);
-                }
-
-                $category->loadData($request->getBody());
-                if ($mode == 'update') {
-                    $category->update(['cat_id' => $_GET['edit_id']], $request->getBody());
-                    App::$app->response->redirect('/officer/categories');
-                    exit();
-                } else {
-                    if ($category->validate() && $category->save()) {
-                        App::$app->response->redirect('/officer/categories');
-                        exit();
-                    }
-                }
-            }
-            return $this->requireVerification($request);
+        $query = mb_split("&", parse_url($request->getRequestURI(), PHP_URL_QUERY));
+        if (!empty($query)) foreach ($query as $qr) {
+            $vars = mb_split('=', $qr);
+            if ($vars[0] != null)
+                $_GET[$vars[0]] = $vars[1];
         }
+
+        if (isset($_GET['edit_id'])) {
+            if ($request->method() === "post") {
+                $request->setRequestUri("/officer/add-category?edit_id=" . $_GET['edit_id']);
+                $request->setPath("/officer/add-category");
+                App::$app->run();
+                exit();
+            }
+
+            return $this->render('officer_add_category', ['model' => CategoryProxy::getById($_GET['edit_id'])->getCategoryObject()]);
+        }
+
         if (isset($_GET['delete_id'])) {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
                 App::$app->session->unset_key('VERIFIED');
 
-                $delete_id = $_GET['delete_id'];
-                $category->delete(['cat_id' => $delete_id]);
+                $category->update(['cat_id' => $_GET['delete_id']], ['cat_status' => '1']);
                 App::$app->response->redirect('/officer/categories');
                 exit();
+
             }
             return $this->requireVerification($request);
         }
-
-        $formAttributes = $request->getBody();
-
-        if (isset($formAttributes['email']) && isset($formAttributes['password'])) {
-            $loginForm = new LoginForm();
-            $loginForm->loadData($request->getBody());
-            if ($loginForm->validate() && $loginForm->login()) {
-                $delete_id = $formAttributes["delete_id"];
-                $category->delete(['cat_id' => $delete_id]);
-                App::$app->response->redirect('/officer/categories');
-                exit();
-            }
-        }
-
-        $categories = Category::getAll();
-
-        return $this->render('officer_categories', ['categories' => $categories, 'model' => $category, 'mode' => $mode]);
+        return $this->render('officer_categories', ['model' => $category]);
     }
 
-    public function add_subcategory(Request $request, Response $response)
+    public function add_category(Request $request, Response $response)
     {
-        $mode = "";
-        $subcategory = new SubCategory();
-        if (isset($_GET['edit_id'])) {
-            $mode = 'update';
-            $subcategory = SubCategory::findOne(['sub_category_id' => $_GET['edit_id']]);
-        }
+        $category = new Category();
 
         if ($request->method() === 'post') {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
                 App::$app->session->unset_key('VERIFIED');
-
-                $query = mb_split("&", parse_url($_SERVER['HTTP_REFERER'], PHP_URL_QUERY));
+                $query = mb_split("&", parse_url($request->getRequestURI(), PHP_URL_QUERY));
                 if (!empty($query)) foreach ($query as $qr) {
                     $vars = mb_split('=', $qr);
-                    $_GET[$vars[0]] = $vars[1];
+                    if ($vars[0] != null)
+                        $_GET[$vars[0]] = $vars[1];
                 }
 
-                if (isset($_GET['edit_id'])) {
-                    $mode = 'update';
-                    $subcategory = SubCategory::findOne(['sub_category_id' => $_GET['edit_id']]);
+                if (isset($_GET["edit_id"])) {
+                    $data = $request->getBody();
+                    $category->update(['cat_id' => $_GET['edit_id']], $data);
+                    App::$app->response->redirect('/officer/categories');
+                    exit();
                 }
 
-                if ($mode === 'update') {
-                    $subcategory->update(['sub_category_id' => $_GET['edit_id']], $request->getBody());
-                    Notification::addNotification(SubCategory::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::SUB_CATEGORY);
-                    App::$app->response->redirect('/officer/add-subcategory');
+                $category->loadData($request->getBody());
+                if ($category->save()) {
+                    App::$app->response->redirect('/officer/categories');
                     exit();
-                }
-                $subcategory->loadData($request->getBody());
-                if ($subcategory->save()) {
-                    Notification::addNotification(SubCategory::getCategoryID(DbModel::lastInsertID()), Notification::CREATE_NOTIFICATION, Notification::SUB_CATEGORY);
-                    App::$app->response->redirect('/officer/add-subcategory');
-                    exit();
+                } else {
+                    echo '<script>alert("Fail to save the category")</script>';
                 }
             }
             return $this->requireVerification($request);
-
         }
+        return $this->render('officer_add_category', ['model' => $category]);
+
+    }
+
+    public function subcategory(Request $request, Response $response)
+    {
+        $subcategory = new SubCategory();
+
+        if (isset($_GET['edit_id'])) {
+            if ($request->method() === "post") {
+                $request->setRequestUri("/officer/add-subcategory?edit_id=" . $_GET['edit_id']);
+                $request->setPath("/officer/add-subcategory");
+                App::$app->run();
+                exit();
+            }
+
+            return $this->render('officer_add_subcategory', ['model' => SubcategoryProxy::getById($_GET['edit_id'])->getSubcategoryObject()]);
+        }
+
         if (isset($_GET['delete_id'])) {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
                 App::$app->session->unset_key('VERIFIED');
-                $delete_id = $_GET['delete_id'];
-                $cat_id = SubCategory::getCategoryID($_GET['delete_id']);
-                $subcategory->delete(['sub_category_id' => $delete_id]);
+
+                $subcategory->update(['sub_category_id' => $_GET['delete_id']], ['sub_category_status' => '1']);
                 Notification::addNotification($cat_id, Notification::DELETE_NOTIFICATION, Notification::SUB_CATEGORY);
+                App::$app->response->redirect('/officer/subcategories');
+                exit();
+
             }
             return $this->requireVerification($request);
         }
 
-
-        $categories = Category::getAll();
-        $subcategories = SubCategory::getAll();
-
-
-        return $this->render('officer_add_subcategory', ['subcategories' => $subcategories, 'categories' => $categories, 'model' => $subcategory,]);
+        return $this->render('officer_subcategory', ['model' => $subcategory]);
     }
 
-    public
-    function verify(Request $request, Response $response)
+    public function add_subcategory(Request $request, Response $response)
+    {
+        $subcategory = new SubCategory();
+        $subcategory->loadData($request->getBody());
+        if ($request->method() === 'post') {
+            if (App::$app->session->get('VERIFIED') === 'TRUE') {
+                App::$app->session->unset_key('VERIFIED');
+                $query = mb_split("&", parse_url($request->getRequestURI(), PHP_URL_QUERY));
+                if (!empty($query)) foreach ($query as $qr) {
+                    $vars = mb_split('=', $qr);
+                    if ($vars[0] != null)
+                        $_GET[$vars[0]] = $vars[1];
+                }
+
+                if (isset($_GET["edit_id"])) {
+                    $subcategory->update(['sub_category_id' => $_GET['edit_id']], $request->getBody());
+                    Notification::addNotification(SubCategory::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::SUB_CATEGORY);
+                    App::$app->response->redirect('/officer/subcategories');
+                    exit();
+                }
+
+                $subcategory->loadData($request->getBody());
+                if ($subcategory->validate() && $subcategory->save()) {
+                    Notification::addNotification(SubCategory::getCategoryID(DbModel::lastInsertID()), Notification::CREATE_NOTIFICATION, Notification::SUB_CATEGORY);
+                    App::$app->response->redirect('/officer/subcategories');
+                    exit();
+                } else {
+                    echo '<script>alert("Fail to save the subcategory")</script>';
+                }
+            }
+            return $this->requireVerification($request);
+        }
+        return $this->render('officer_add_subcategory', ['model' => $subcategory,]);
+
+    }
+
+    public function verify(Request $request, Response $response)
     {
         if (password_verify($_POST['verify'], App::$app->user->getPassword())) {
             App::$app->session->set('VERIFIED', 'TRUE');
-            $request = unserialize(App::$app->session->get('REQUEST'));
+            $request_prev = unserialize(App::$app->session->get('REQUEST'));
             App::$app->session->unset_key('REQUEST');
 
             //setting the previous request and resolving it
-            App::$app->router->request = $request;
+            App::$app->router->request = $request_prev;
             App::$app->run();
 
             exit();
         }
-        throw new \Error("Unauthorized Access", 403);
+        throw new \Error("Invalid Password", 403);
 
     }
 

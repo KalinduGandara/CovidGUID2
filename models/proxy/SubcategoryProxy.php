@@ -75,4 +75,19 @@ class SubcategoryProxy
 
         return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
+
+    /**
+     * @param $id string
+     * @return SubcategoryProxy
+     */
+    public static function getById(string $id)
+    {
+        $tableName = 'sub_categories';
+        $SQL = "SELECT * FROM $tableName WHERE sub_category_id=$id";
+
+        $statement = App::$app->db->pdo->prepare($SQL);
+        $statement->execute();
+
+        return $statement->fetchObject( static::class);
+    }
 }

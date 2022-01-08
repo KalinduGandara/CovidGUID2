@@ -40,6 +40,25 @@ class Request
         return $this->body;
     }
 
+    /**
+     * @param string $path
+     */
+    public function setPath(string $path): void
+    {
+        $this->path = $path;
+    }
+
+    /**
+     * @param mixed|string $request_uri
+     */
+    public function setRequestUri(mixed $request_uri): void
+    {
+        $this->request_uri = $request_uri;
+    }
+
+
+
+
     private function fetchPath():string{
         $path = $_SERVER['REQUEST_URI'] ?? '/';
         $position = strpos($path,'?');

@@ -6,7 +6,7 @@ class PublicSubcategory extends Subcategory
 {
     protected function getLayout(): array
     {
-        $start = "<table class='table table-bordered'>
+        $start = "<table class='table table-bordered table-hover'>
                             <thead><tr>
                             <th> Guideline </th>
                             <th> valid from </th>
