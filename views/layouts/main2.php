@@ -12,7 +12,7 @@
     <title>COVIDGuide</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bootstrap-5.1.3-dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="css/blog-home.css" rel="stylesheet">
@@ -24,32 +24,24 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
 </head>
 
 <body>
 <?php require pathinfo(__DIR__)["dirname"]."/includes/navigation.php" ?>
-
-{{content}}
-
-<footer>
-    <div class="row">
-        <div class="col-lg-12">
-            <p>Copyright &copy; Your Website 2014</p>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <!-- /.row -->
-</footer>
-
+<div class="mt-5">
+    {{content}}
+    <?php include_once 'footer.php';?>
 </div>
-<!-- /.container -->
 
-<!-- jQuery -->
-<script src="js/jquery.js"></script>
+
+
+
 
 <!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script>
-
+<script src="/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

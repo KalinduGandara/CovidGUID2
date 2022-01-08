@@ -9,11 +9,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>CovidGUIDE</title>
+    <title>COVIDGuide</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="/bootstrap-5.1.3-dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="/css/sb-admin.css" rel="stylesheet">
@@ -33,7 +32,7 @@
 
 </head>
 
-<body>
+<body class="bg-black" style="margin-top: 0">
 
 {{content}}
 
@@ -44,10 +43,8 @@
 <script src="/js/jquery.js"></script>
 
 <script src="/js/scripts.js"></script>
-
 <!-- Bootstrap Core JavaScript -->
-<script src="/bootstrap-5.1.3-dist/js/bootstrap.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
+<script src="/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

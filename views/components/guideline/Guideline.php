@@ -7,11 +7,11 @@ use app\views\components\IComponent;
 
 abstract class Guideline implements IComponent
 {
-    private const CREATED = '0';
-    private const ACTIVE = '1';
-    private const DRAFTED = '2';
-    private const EXPIRED = '3';
-    private const DELETED = '4';
+    protected const CREATED = '0';
+    protected const ACTIVE = '1';
+    protected const DRAFTED = '2';
+    protected const EXPIRED = '3';
+    protected const DELETED = '4';
 
     protected State $state;
     protected \app\models\Guideline $guideline;

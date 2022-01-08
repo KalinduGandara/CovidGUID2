@@ -8,6 +8,7 @@ class SubCategory extends \app\core\db\DbModel
 {
     public string $sub_category_id = '';
     public string $sub_category_name = '';
+    public string $sub_category_status = '';
     public string $cat_id = '';
 
     public function save()
@@ -23,7 +24,7 @@ class SubCategory extends \app\core\db\DbModel
 
     public function attributes(): array
     {
-        return ['sub_category_name', 'category_id'];
+        return ['sub_category_name', 'cat_id','sub_category_status'];
     }
 
     public static function primaryKey(): string
@@ -44,6 +45,14 @@ class SubCategory extends \app\core\db\DbModel
             'cat_id' => 'Select Category',
             'sub_category_name' => 'Subcategory Name'
         ];
+    }
+    public static function getCategoryID($sub_cat_id)
+    {
+        $SQL = "SELECT cat_id FROM sub_categories WHERE sub_category_id = :sub_cat_id";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":sub_cat_id",$sub_cat_id);
+        $statement->execute();
+        return $statement->fetch()[0];
     }
 
     /**

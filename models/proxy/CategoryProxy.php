@@ -13,6 +13,7 @@ class CategoryProxy
     private string $cat_id;
     private string $cat_title;
     private string $category_description;
+    private string $cat_status;
 
 
     /**
@@ -22,6 +23,16 @@ class CategoryProxy
     {
         $tableName = 'categories';
         $statement = App::$app->db->pdo->prepare("SELECT * FROM $tableName");
+
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
+    }
+
+    public static function filterDeleted()
+    {
+        $tableName = 'categories';
+        $statement = App::$app->db->pdo->prepare("SELECT * FROM $tableName WHERE cat_status = 0");
 
         $statement->execute();
 
@@ -58,6 +69,16 @@ class CategoryProxy
     {
         return $this->cat_title;
     }
+
+    /**
+     * @return string
+     */
+    public function getCatStatus(): string
+    {
+        return $this->cat_status;
+    }
+
+
 
     /**
      * @return string

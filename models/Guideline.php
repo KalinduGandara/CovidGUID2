@@ -60,6 +60,15 @@ class Guideline extends \app\core\db\DbModel
         ];
     }
 
+    public static function getCategoryID($guid_id)
+    {
+        $SQL = "SELECT cat_id FROM sub_categories WHERE sub_category_id = (SELECT sub_category_id FROM guidelines WHERE guid_id = :guid_id)";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":guid_id",$guid_id);
+        $statement->execute();
+        return $statement->fetch()[0];
+    }
+
     /**
      * @return string
      */

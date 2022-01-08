@@ -4,6 +4,7 @@
 namespace app\models;
 
 
+use app\core\App;
 use app\core\db\DbModel;
 use app\core\UserModel;
 
@@ -26,7 +27,58 @@ class User extends UserModel
     public int $type = self::PUBLIC_USER;
     public string $password = '';
     public string $confirmPassword = '';
+    //TODO
+//    public int $unseenNotifications = 0;
+//    public array $notifications = [];
+//    private array $subscribeList = [];
 
+    public function subscribe($cat_id)
+    {
+        $user = $this->id;
+        $SQL = "INSERT INTO category_subscription(cat_id,user_id) VALUES (:cat_id,:user_id)";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":cat_id", $cat_id);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
+    }
+
+    public function unsubscribe($cat_id)
+    {
+        $user = $this->id;
+        $SQL = "DELETE FROM category_subscription WHERE cat_id=:cat_id AND user_id=:user_id";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":cat_id", $cat_id);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
+    }
+    public function subscribeAll()
+    {
+        $user = $this->id;
+        $SQL = "DELETE FROM category_subscription WHERE user_id = :user_id;
+                INSERT INTO category_subscription(cat_id, user_id) SELECT cat_id , :user_id FROM categories";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
+    }
+
+    public function unsubscribeAll()
+    {
+        $user = $this->id;
+        $SQL = "DELETE FROM category_subscription WHERE user_id = :user_id;";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
+    }
+
+    public function isSubscribed(): bool
+    {
+        $user = $this->id;
+        $SQL = "SELECT COUNT(cat_id) FROM category_subscription WHERE user_id = :user_id";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
+        return $statement->fetchAll(\PDO::FETCH_COLUMN,0)[0]>0;
+    }
 
     public function save()
     {
@@ -108,17 +160,8 @@ class User extends UserModel
             $status = self::STATUS_ACTIVE;
         elseif ($status == self::STATUS_ACTIVE)
             $status = self::STATUS_INACTIVE;
-        //        echo '<pre>';
-        //        var_dump($this);
-        //        echo '</pre>';
-        //        exit();
 
         $SQL = "UPDATE users SET status=$status WHERE id=$id";
-        //        echo '<pre>';
-        //        var_dump($SQL);
-        //        var_dump($id);
-        //        echo '</pre>';
-        //        exit();
 
         $statement = self::prepare($SQL);
         try {
@@ -176,5 +219,24 @@ class User extends UserModel
         return $this->type;
     }
 
+    /**
+     * @return array
+     */
+    public function getSubscribeList(): array
+    {
+        if (App::isGuest()) return [];
+        $user = $this->id;
+        $SQL = "SELECT * FROM category_subscription WHERE user_id = :user_id";
+        $statement = self::prepare($SQL);
+        $statement->bindValue(":user_id", $user);
+        $statement->execute();
 
+        return $statement->fetchAll(\PDO::FETCH_COLUMN, 0);
+    }
+
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
 }
