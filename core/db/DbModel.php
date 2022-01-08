@@ -102,6 +102,12 @@ abstract class DbModel extends Model
             throw new \Exception("Item not Found",404);
         }
     }
+
+
+    /**
+     * @param $where
+     * @return $this[]
+     */
     public static function getAllWhere($where)
     {
         $tableName = static::tableName();
@@ -117,6 +123,10 @@ abstract class DbModel extends Model
 
         return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
+
+    /**
+     * @return DbModel[]
+     */
     public static function getAll()
     {
         $tableName = static::tableName();

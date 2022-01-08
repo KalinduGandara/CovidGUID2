@@ -36,4 +36,13 @@ class View
         include_once App::$ROOT_DIR . "/views/$view.php";
         return ob_get_clean();
     }
+    public function renderErrorPage($params)
+    {
+        ob_start();
+        foreach ($params as $key => $value) {
+            $$key = $value;
+        }
+        include_once App::$ROOT_DIR . "/views/_error.php";
+        return ob_get_clean();
+    }
 }

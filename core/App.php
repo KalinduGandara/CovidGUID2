@@ -4,6 +4,8 @@ namespace app\core;
 
 use app\core\db\Database;
 use app\core\db\DbModel;
+use app\models\Notification;
+use app\models\User;
 
 class App
 {
@@ -52,9 +54,13 @@ class App
             if(gettype($error_code) === 'string') {
                 $error_code = 500;
             }
-            $this->response->setStatusCode($e->getCode());
-            echo $this->view->renderView('_error',[
-                'exception'=> new \Exception($e->getMessage(), $error_code)
+            $this->response->setStatusCode($error_code);
+            echo $this->view->renderErrorPage([
+                'exception'=> new \Exception($e->getMessage(), $error_code),
+            ]);
+        }catch (\Error $error){
+            echo $this->view->renderErrorPage([
+                'exception'=> new \Exception($error->getMessage(), $error->getCode()),
             ]);
         }
     }
@@ -83,6 +89,7 @@ class App
         $primaryValue = $user->{$primaryKey};
 
         $this->session->set('user',$primaryValue);
+//      TODO  $this->user->notifications = Notification::getNotifications();
 
         return true;
     }
@@ -105,6 +112,14 @@ class App
         }
         return self::$app->user->type == 0;
     }
+    public static function isActive():bool
+    {
+        if (self::isGuest()){
+            return true;
+        }
+        return self::$app->user->status == User::STATUS_ACTIVE;
+    }
+
     public static function isOfficer():bool
     {
         if (self::isGuest()){
@@ -112,5 +127,23 @@ class App
         }
         return self::isAdmin() || self::$app->user->type == 1;
     }
+
+    /**
+     * @return UserModel|null
+     */
+    public function getUser(): ?UserModel
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param UserModel|null $user
+     */
+    public function setUser(?UserModel $user): void
+    {
+        $this->user = $user;
+    }
+
+
 
 }

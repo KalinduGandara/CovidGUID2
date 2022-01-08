@@ -10,6 +10,7 @@ class SubcategoryProxy
     private string $sub_category_id;
     private string $sub_category_name;
     private string $cat_id;
+    private string $sub_category_status;
 
     /**
      * @return string
@@ -75,4 +76,29 @@ class SubcategoryProxy
 
         return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
+
+    /**
+     * @param $id string
+     * @return SubcategoryProxy
+     */
+    public static function getById(string $id)
+    {
+        $tableName = 'sub_categories';
+        $SQL = "SELECT * FROM $tableName WHERE sub_category_id=$id";
+
+        $statement = App::$app->db->pdo->prepare($SQL);
+        $statement->execute();
+
+        return $statement->fetchObject( static::class);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubCategoryStatus(): string
+    {
+        return $this->sub_category_status;
+    }
+
+
 }
