@@ -8,7 +8,12 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
+                            <?php if (isset($_GET['edit_id'])){?>
+                                Edit Category
+                            <?php }else{?>
                             Categories
+                            <?php }?>
+
                         </h1>
                         <hr>
                     </div>

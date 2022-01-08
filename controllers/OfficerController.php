@@ -284,6 +284,18 @@ class OfficerController extends Controller
         throw new \Error("Invalid Password", 403);
 
     }
+    private function verifyUser(Request $request, Response $response)
+    {
+        if ($request->method() == 'post') return ;
+        if(App::$app->session->get('VERIFIED') === 'TRUE') {
+            App::$app->session->unset_key('VERIFIED');
+            return true;
+        }
+        else {
+            echo $this->requireVerifivation();
+            exit();
+        }
+    }
 
     private
     function requireVerification(Request $request)
