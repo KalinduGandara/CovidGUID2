@@ -4,41 +4,40 @@ namespace app\views\components\guideline;
 
 use app\core\exception\IllegalStateException;
 
-class Active extends State
+class Deleted extends State
 {
-    public static string $identifier = '1'; //to identify the state
+    public static string $identifier = '4'; //to identify the state
 
-    private static Active $instance;
-    private function  __construct()
+    private static Deleted $instance;
+
+    private function __construct()
     {
     }
 
+
     function setLayout(string $render_string): string
     {
-        return '<tr class="table-secondary">'.$render_string.'</tr>';
+        return '<tr class="table-dark">'.$render_string.'</tr>';
     }
 
     static function getInstance(): State
     {
         if( !isset(self::$instance)){
-            self::$instance = new Active();
+            self::$instance = new Deleted();
         }
         return self::$instance;
     }
 
     function makeDraft(Guideline $guideline)
     {
-        $guideline->setState(Drafted::getInstance());
+        throw new IllegalStateException();
     }
 
     function delete(Guideline $guideline)
     {
-        $guideline->setState(Deleted::getInstance());
+        throw new IllegalStateException();
     }
 
-    /**
-     * @throws IllegalStateException
-     */
     function activate(Guideline $guideline)
     {
         throw new IllegalStateException();
@@ -46,16 +45,18 @@ class Active extends State
 
     function expire(Guideline $guideline)
     {
-
-        $today = new \DateTime();
-        if ( $today > $guideline->getExpiryDate()){
-            $guideline->setState(Expired::getInstance());
-        }
-        else throw new IllegalStateException();
+        throw new IllegalStateException();
     }
 
+    /**
+     * @return string
+     */
     public static function getIdentifier(): string
     {
         return self::$identifier;
     }
+
+
+
+
 }

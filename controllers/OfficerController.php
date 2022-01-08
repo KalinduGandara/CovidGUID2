@@ -31,186 +31,53 @@ class OfficerController extends Controller
         $guideline = new Guideline();
         $categories = Category::getAll();
         $subcategories = SubCategory::getAll();
-
-
-//        var_dump($request->getBody());
-//        var_dump($request->method());
-//        exit();
-
-
-        if ($request->method() === "post")
-        {
-            $formAttributes = $request->getBody();
-            $havePermission = null; //will evaluate to true when officer reentered his correct email-pwd combination
-
-
-//            var_dump($request->getBody());
-//            exit();
-
-
-            if(isset($formAttributes['email']) && isset($formAttributes['password']))
-            {
-                $loginForm = new LoginForm();
-                $loginForm->loadData($request->getBody());
-                if ($loginForm->validate() && $loginForm->login())
-                {
-                    $havePermission = true;
-                }
-            }
-
-            if(!$havePermission)
-            {
-                App::$app->response->redirect("/officer/guidelines?edit_id=" . $_GET['edit_id']);
-                exit();
-            }
-            else
-            {
-                if(isset($_GET['edit_id']))
-                {
-//                    var_dump($formAttributes);
-//                    exit();
-                    $guideline = Guideline::findOne(['guid_id' => $_GET['edit_id']]);
-                    $guideline->update(['guid_id' => $_GET['edit_id']], $request->getBody());
-                    App::$app->response->redirect('/officer/guidelines');
-                    exit();
-                }
-
-                $delete_id = $formAttributes['delete_id1'];
-                $guideline->delete(['guid_id' => $delete_id]);
-                App::$app->response->redirect('/officer/guidelines');
-                exit();
-            }
-        }
-
-
         if (isset($_GET['delete_id'])) {
-//            $guideline->delete(['guid_id' => $_GET['delete_id']]);
-
+            $guideline->update(['guid_id' => $_GET['delete_id']], ['guid_status'=> '4']);
             App::$app->response->redirect('/officer/guidelines');
             exit();
-        }
-        elseif (isset($_GET['edit_id'])) {
-
-//            var_dump($request->getBody());
-//            var_dump($request->method());
-//            exit();
-
+        } elseif (isset($_GET['edit_id'])) {
             if ($request->method() === "post") {
-
-                $formAttributes = $request->getBody();
-                $havePermission = null; //will evaluate to true when officer reentered his correct email-pwd combination
-
-                if(isset($formAttributes['email']) && isset($formAttributes['password']))
-                {
-                    $loginForm = new LoginForm();
-                    $loginForm->loadData($request->getBody());
-                    if ($loginForm->validate() && $loginForm->login())
-                    {
-                        $havePermission = true;
-                    }
+                $data = $request->getBody();
+                if(! isset($data['guid_status'])){
+                    $data['guid_status'] = '0';
                 }
-
-                if(!$havePermission)
-                {
-                    App::$app->response->redirect("/officer/guidelines?edit_id=" . $_GET['edit_id']);
-                    exit();
-                }
-
-                $guideline->update(['guid_id' => $_GET['edit_id']], $request->getBody());
+                $guideline->update(['guid_id' => $_GET['edit_id']], $data );
                 App::$app->response->redirect('/officer/guidelines');
                 exit();
             }
             $guideline = Guideline::findOne(['guid_id' => $_GET['edit_id']]);
             return $this->render('officer_add_guideline', ['subcategories' => $subcategories, 'categories' => $categories, 'mode' => 'update', 'edit_guideline' => $guideline, 'display_guidelines'=> Guideline::getAll()]);
         }
-        $guidelines_fetched = Guideline::getAll();
-        $guidelines = [];
-        foreach ($guidelines_fetched as $guideline) {
-            $category =  array_search($guideline['cat_id'], array_column($categories, 'cat_id'));
-            $guideline['cat_title'] = $categories[$category]['cat_title'];
-            $subcategory =  array_search($guideline['sub_category_id'], array_column($subcategories, 'sub_category_id'));
-            $guideline['sub_category_name'] = $subcategories[$subcategory]['sub_category_name'];
-            $guidelines[] = $guideline;
+        elseif (isset($_GET['draft_id'])){
+            $guideline = Guideline::findOne(['guid_id'=>$_GET['draft_id']]);
+            if($guideline->getGuidStatus() === '2'){
+                $guideline->update(['guid_id' => $_GET['draft_id']], ['guid_status' => '0']);
+            }
+            else{
+                $guideline->update(['guid_id' => $_GET['draft_id']], ['guid_status' => '2']);
+            }
+            App::$app->response->redirect('/officer/guidelines');
+            exit();
         }
-//        foreach ($guidelines as $subcategory) {
-//            print_r($subcategory);
-//            echo "<br>";
-//        }
-//        exit();
-        return $this->render('officer_guidelines', ['subcategories'=> $subcategories,'guidelines' => $guidelines]);
+
+        return $this->render('officer_guidelines');
     }
 
     public function add_guideline(Request $request, Response $response)
     {
         $categories = Category::getAll();
         $subcategories = SubCategory::getAll();
-
-//        var_dump($request->getBody()); //comes to this add_guideline method but get request!!!
-//        echo $request->method();
-//        exit();
-
         if ($request->method() === 'post') {
-
-            $formAttributes = $request->getBody();
-//            var_dump($request->getBody());
-//            exit();
-            $havePermission = null; //will evaluate to true when officer reentered his correct email-pwd combination
-
-            if(isset($formAttributes['email']) && isset($formAttributes['password']))
-            {
-                $loginForm = new LoginForm();
-                $loginForm->loadData($request->getBody());
-                if ($loginForm->validate() && $loginForm->login())
-                {
-                    $havePermission = true;
-                }
-            }
-
-            if(!$havePermission)
-            {
-                App::$app->response->redirect('/officer/add-guideline');
-                exit();
-            }
-
             $guideline = new Guideline();
             $guideline->loadData($request->getBody());
-
-
-//            var_dump($request->getBody());
-//            exit();
             if ($guideline->save()) {
-//                var_dump($guideline);
-//                echo "saved!!!!!";
-//                exit();
                 App::$app->response->redirect('/officer/guidelines');
-//                App::$app->response->redirect('/officer/add-guideline');
                 exit();
             } else {
-
                 echo '<script>alert("Fail to save the guideline")</script>';
             }
         }
         return $this->render('officer_add_guideline', ['subcategories' => $subcategories, 'categories' => $categories, 'display_guidelines'=> Guideline::getAll()]);
-    }
-
-    public function show_guidelines(Request $request, Response $response)
-    {
-        $categories = Category::getAll();
-        $subcategories = SubCategory::getAll();
-
-        if(isset($_GET['guid_id']))
-        {
-            $guideline = Guideline::findOne(['guid_id' => $_GET['guid_id']]);
-            return $this->render('officer_show_guidelines', ['subcategories' => $subcategories, 'categories' => $categories, 'guideline' => $guideline, 'display_guidelines'=> Guideline::getAll()]);
-        }
-
-        else //cat_id and sub_category_id is set in this case
-        {
-            $category = Category::findOne(['cat_id' => $_GET['cat_id']]);
-            $subcategory = SubCategory::findOne(['sub_category_id' => $_GET['sub_category_id']]);
-
-            return $this->render('officer_show_guidelines', ['subcategories' => $subcategories, 'categories' => $categories, 'category' => $category, 'subcategory' => $subcategory,'display_guidelines'=> Guideline::getAll()]);
-        }
     }
 
     public function categories(Request $request, Response $response)
@@ -295,39 +162,16 @@ class OfficerController extends Controller
             $subcategory = SubCategory::findOne(['sub_category_id' => $_GET['edit_id']]);
         }
 
-        if ($request->method() === 'post')
-        {
-            $formAttributes = $request->getBody();
-            $havePermission = null; //will evaluate to true when officer reentered his correct email-pwd combination
-
-            if(isset($formAttributes['email']) && isset($formAttributes['password']))
-            {
-                $loginForm = new LoginForm();
-                $loginForm->loadData($request->getBody());
-                if ($loginForm->validate() && $loginForm->login())
-                {
-                    $havePermission = true;
-                }
-            }
-
-            if(!$havePermission)
-            {
-                App::$app->response->redirect('/officer/add-subcategory');
-                exit();
-            }
+        if ($request->method() === 'post') {
             if ($mode == 'update') {
                 $subcategory->update(['sub_category_id' => $_GET['edit_id']], $request->getBody());
                 App::$app->response->redirect('/officer/add-subcategory');
                 exit();
             }
-            else
-            {
-                $subcategory->loadData($request->getBody());
-
-                if ($subcategory->validate() && $subcategory->save()) {
-                    App::$app->response->redirect('/officer/add-subcategory');
-                    exit();
-                }
+            $subcategory->loadData($request->getBody());
+            if ($subcategory->save()) {
+                App::$app->response->redirect('/officer/add-subcategory');
+                exit();
             }
         }
         if (isset($_GET['delete_id'])) {
@@ -335,25 +179,12 @@ class OfficerController extends Controller
             $subcategory->delete(['sub_category_id' => $delete_id]);
         }
 
-        $formAttributes = $request->getBody();
 
-        if(isset($formAttributes['email']) && isset($formAttributes['password']))
-        {
-            $loginForm = new LoginForm();
-            $loginForm->loadData($request->getBody());
-            if ($loginForm->validate() && $loginForm->login())
-            {
-                $delete_id = $formAttributes["delete_id"];
-                $subcategory->delete(['sub_category_id' => $delete_id]);
-                App::$app->response->redirect('/officer/add-subcategory');
-                exit();
-            }
-        }
 
         $categories = Category::getAll();
         $subcategories = SubCategory::getAll();
 
 
-        return $this->render('officer_add_subcategory', ['subcategories' => $subcategories, 'categories' => $categories, 'model' => $subcategory]);
+        return $this->render('officer_add_subcategory', ['subcategories' => $subcategories, 'categories' => $categories, 'model' => $subcategory,]);
     }
 }

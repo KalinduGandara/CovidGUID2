@@ -9,7 +9,7 @@ namespace app\core\form;
  abstract class BaseField
 {
 
-     public Model $model;
+     public ?Model $model;
      public string $attribute;
 
      /**
@@ -17,7 +17,7 @@ namespace app\core\form;
       * @param Model $model
       * @param string $attribute
       */
-     public function __construct(Model $model, string $attribute)
+     public function __construct(?Model $model, string $attribute)
      {
          $this->model = $model;
          $this->attribute = $attribute;
@@ -35,8 +35,8 @@ namespace app\core\form;
             %s
         </div>
     </div>',
-             $this->model->getLabels($this->attribute),
+             $this->model === null? '': $this->model->getLabels($this->attribute),
              $this->renderInput(),
-             $this->model->getFirstError($this->attribute));
+             $this->model === null? '': $this->model->getFirstError($this->attribute));
      }
 }

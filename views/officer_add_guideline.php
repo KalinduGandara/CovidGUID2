@@ -1,29 +1,47 @@
 <?php
 $category_options = [];
 foreach ($categories as $category) {
-    $category_options[$category['cat_id']] = $category['cat_title'];
+    $category_options[$category->getCatId()] = $category->getCatTitle();
 }
 $subcategory_options = [];
 foreach ($subcategories as $subcategory) {
     if(isset($_GET['cat_id'])){
-        if($subcategory['cat_id'] === $_GET['cat_id'])
-            $subcategory_options[$subcategory['sub_category_id']] = $subcategory['sub_category_name'];
+        if($subcategory->getCatId() === $_GET['cat_id'])
+            $subcategory_options[$subcategory->getSubCategoryId()] = $subcategory->getSubCategoryName();
     }
     else{
-        $subcategory_options[$subcategory['sub_category_id']] = $subcategory['sub_category_name'];
+        $subcategory_options[$subcategory->getSubCategoryId()] = $subcategory->getSubCategoryName();
     }
 }
 ?>
 
-<style>
-    <?php include "../public/css/components/popupformStyles.css"; ?>
-</style>
-
 <div id="wrapper">
+
     <!-- Navigation -->
-    <?php include "includes/officer_navigation.php"; ?>
+    <?php include "includes/officer_navigation.php" ?>
 
 
+    <?php
+    //                    if (isset($_GET['source'])) {
+    //                        $source = $_GET['source'];
+    //                    }
+    //                    else $source = '';
+    //
+    //                    switch ($source) {
+    //                        case 'add_post':
+    //                            include "includes/add_post.php";
+    //                            break;
+    //
+    //                        case 'edit_post':
+    //                            include "includes/edit_post.php";
+    //                            break;
+    //
+    //                        default:
+    //                            include "includes/view_all_posts.php";
+    //                            break;
+    //                    }
+
+    ?>
     <div id="page-wrapper" class="container">
         <!-- Page Heading -->
         <h1 class="page-header">
@@ -42,29 +60,50 @@ foreach ($subcategories as $subcategory) {
             <?php
             $form = \app\core\form\Form::begin('', 'post');
             if(isset($_GET['edit_id'])){
-                echo $form->selectField($model, 'cat_id', $category_options,true, $edit_guideline->cat_id );
-                echo $form->selectField($model, 'sub_category_id', $subcategory_options,true,$edit_guideline->sub_category_id );
+                echo $form->selectField(new \app\models\SubCategory(), 'cat_id', $category_options,true, \app\models\SubCategory::findOne(['sub_category_id'=> $edit_guideline->getSubCategoryId()])->cat_id );
+                echo $form->selectField($model, 'sub_category_id', $subcategory_options,true,$edit_guideline->getSubCategoryId() );
 
-                $guid_id = $_GET['edit_id'];
-                echo "<br><a href='/officer/show-guidelines?guid_id=$guid_id'>See currently available guidelines</a><br><br>";
+                echo '<div class="container mb-3 pb-5" style="background-color: #f4f4f4">';
+                echo '<h5>Available guidelines: </h5>';
 
+                $display_guidelines = array_filter($display_guidelines, function ($guideline) use($edit_guideline){
+                    return $guideline->getSubCategoryId() === $edit_guideline->getSubCategoryId();
+                });
+                include 'components/officer_guideline.php';
+                echo '</div>';
                 echo $form->textareaField($model, 'guideline');
-                echo $form->selectField($model, 'guid_status', [0 => 'Active', 1 => 'Drafted'],false,$edit_guideline->guid_status);
+                echo '<div class = "row">';
+                echo '<div class = "col">';
+                echo $form->field($model, 'activate_date')->dateField();
+                echo '</div>';
+                echo '<div class="col">';
+                echo $form->field($model,'expiry_date')->dateField();
+                echo '</div>';
+                echo '</div>';
+                echo $form->checkbox($model,'guid_status', '2');
             }
             else if(isset($_GET['cat_id'])){
-                echo $form->selectField($model, 'cat_id', $category_options,false, $_GET['cat_id'] );
+                echo $form->selectField(new \app\models\SubCategory(), 'cat_id', $category_options,false, $_GET['cat_id'] );
 
                 if(isset($_GET['sub_category_id'])){
                     echo $form->selectField($model, 'sub_category_id', $subcategory_options,false, $_GET['sub_category_id']);
 
-                    $cat_id = $_GET['cat_id'];
-                    $sub_category_id = $_GET['sub_category_id'];
-                    echo "<br><a href='/officer/show-guidelines?cat_id=$cat_id&sub_category_id=$sub_category_id'> See currently available guidelines </a><br><br>";
+                    echo '<div class="container mb-3 pb-5" style="background-color: #f4f4f4">';
+                    echo '<h5>Available guidelines: </h5>';
+
+                    \app\views\components\subcategory\SubcategoryBuilder::buildOfficerVeiw($_GET['sub_category_id'])->render();
+                    echo '</div>';
 
                     echo $form->textareaField($model, 'guideline');
-                    echo $form->selectField($model, 'guid_status', [0 => 'Active', 1 => 'Drafted']);
-
-
+                    echo '<div class = "row">';
+                    echo '<div class = "col">';
+                    echo $form->field($model, 'activate_date')->dateField();
+                    echo '</div>';
+                    echo '<div class="col">';
+                    echo $form->field($model,'expiry_date')->dateField();
+                    echo '</div>';
+                    echo '</div>';
+                    echo $form->checkbox($model,'guid_status', '2');
                 }
                 else
                     echo $form->selectField($model, 'sub_category_id', $subcategory_options);
@@ -72,21 +111,16 @@ foreach ($subcategories as $subcategory) {
             }
 
             else
-                echo $form->selectField($model, 'cat_id', $category_options);
+                echo $form->selectField(new \app\models\SubCategory(), 'cat_id', $category_options);
 
             ?>
             <br />
-            <button type="submit" class="btn btn-primary" onclick="openForm()">Submit</button>
-
-            <?php
-                include "components/popupForm.php";
-                $form->end(); ?>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <?php $form->end(); ?>
 
         </div>
 
         <script>
-            <?php include "../public/js/components/popupformScript.js";?>
-
             $(document).ready(()=>{
                 $('select[name="cat_id"]').change(()=>{
                     window.location.href = "/officer/add-guideline?cat_id="+$('select[name="cat_id"]').val();

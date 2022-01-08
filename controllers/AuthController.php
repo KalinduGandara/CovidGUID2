@@ -10,6 +10,7 @@ use app\core\middlewares\AuthMiddleware;
 use app\core\Request;
 use app\core\Response;
 use app\models\LoginForm;
+use app\models\Notification;
 use app\models\User;
 
 class AuthController extends Controller
@@ -78,7 +79,14 @@ class AuthController extends Controller
         $currentuser = APP::$app->user;
         $user = User::findOne(['id' => $currentuser->id]);
         $user->password = '';
-
+        $notifications = [];
+        $unseenNotifications = 0;
+        if (!App::isGuest()) {
+            $notifications = Notification::getNotifications();
+            foreach ($notifications as $notification) {
+                if ($notification['status'] == 0) $unseenNotifications++;
+            }
+        }
 
         if ($request->method() === 'post') {
             $user->loadData($request->getBody());
@@ -92,6 +100,6 @@ class AuthController extends Controller
             return $this->render('profile', ['model' => $user]);
         }
         $this->setLayout('auth2');
-        return $this->render('profile', ['model' => $user]);
+        return $this->render('profile', ['model' => $user,'unseenNotifications' => $unseenNotifications, 'notifications' => $notifications]);
     }
 }

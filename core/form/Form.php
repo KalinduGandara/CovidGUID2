@@ -31,13 +31,17 @@ class Form
      * @param array $options Associative array ['value' => 'Display']
      * @return SelectField
      */
-    public function selectField(Model $model, string $attribute, array $options,bool $disabled=false, string $selected = '')
+    public function selectField(?Model $model, string $attribute, array $options,bool $disabled=false, string $selected = '')
     {
         return new SelectField($model,$attribute, $options,$disabled, $selected);
     }
 
     public function textareaField(Model $model, $attribute){
         return new TextareaField($model,$attribute);
+    }
+
+    public function checkbox(Model $model, $attribute, string $value = null, bool $checked = false){
+        return new CheckBox($model, $attribute, $value, $checked);
     }
 
 }

@@ -21,12 +21,12 @@
 
                 <?php
                 foreach ($users as $user) {
-                    $user_id = $user['id'];
-                    $user_firstname = $user['firstname'];
-                    $user_lastname = $user['lastname'];
-                    $user_email = $user['email'];
-                    $user_status = $user['status'];
-                    $user_role = $user['type'];
+                    $user_id = $user->getId();
+                    $user_firstname = $user->getFirstname();
+                    $user_lastname = $user->getLastname();
+                    $user_email = $user->getEmail();
+                    $user_status = $user->getStatus();
+                    $user_role = $user->getType();
                     ?>
 
                     <tr>
@@ -96,16 +96,6 @@
                 <?php echo $form->field($model,'firstname') ?>
 
                 <?php echo $form->field($model,'lastname') ?>
-
-<!--                --><?php //echo $form->field($model,'email') ?>
-                <!--                    --><?php //echo $form->selectField($model,'type') ?>
-<!--                <div class="mb-3">-->
-<!--                    <lable><b>Type</b></lable>-->
-<!--                    <select  required name="type" id="type" class="form-control">-->
-<!--                        <option  value="1">Officer</option>-->
-<!--                        <option selected value="2">Public User</option>-->
-<!--                    </select>-->
-<!--                </div>-->
                 <?php echo $form->selectField($model,'type',[1=>'Officer',2=>'Public User'])?>
                 <?php echo $form->field($model,'password')->passwordField() ?>
                 <?php echo $form->field($model,'confirmPassword')->passwordField() ?>
@@ -116,9 +106,7 @@
             <?php } ?>
 
         </div>
-        <!-- /.container-fluid -->
 
     </div>
-    <!-- /#page-wrapper -->
 
 

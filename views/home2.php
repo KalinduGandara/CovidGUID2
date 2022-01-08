@@ -8,22 +8,15 @@
 
             <h1 class="page-header">
                 New Normal Guidelines
-
             </h1>
 
             <!-- Display Categories -->
 
             <?php
 
-
-            foreach ($categories as $category) {
-
-                $cat_id = $category['cat_id'];
-                $cat_title = $category['cat_title'];
-                //                    $cat_status = $category['cat_status'];
-
-                $category_description = $category['category_description'];
-                include "components/category.php";
+            foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
+                $categoryVeiw = new \app\views\components\category\PublicCategory($category);
+                $categoryVeiw->render();
             }
             ?>
 

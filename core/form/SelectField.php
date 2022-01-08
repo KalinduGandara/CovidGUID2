@@ -19,7 +19,7 @@ class SelectField extends BaseField
      * @param bool $disabled
      * @param string $selected
      */
-    public function __construct(Model $model, string $attribute ,array $options,bool $disabled = false, string $selected = '')
+    public function __construct(?Model $model, string $attribute ,array $options,bool $disabled = false, string $selected = '')
     {
         $this->options = $options;
         $this->attribute = $attribute;
@@ -44,6 +44,15 @@ class SelectField extends BaseField
             }
         }
 
+        if($this->model === null){
+            return sprintf('<select name="%s" class="form-control" %s>
+                        '.
+                $options
+                .'</select>',
+                $this->attribute,
+                $this->disabled?"disabled":'');
+        }
+
         return sprintf('<select name="%s"  value="%s" class="form-control %s" %s>
                         '.
                                 $options
@@ -52,5 +61,9 @@ class SelectField extends BaseField
             $this->model->{$this->attribute},
             $this->model->hasError($this->attribute) ? 'is-invalid' : '',
             $this->disabled?"disabled":'');
+    }
+
+    public function select(string $value):void{
+        $this->selected = $value;
     }
 }

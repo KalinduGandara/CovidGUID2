@@ -10,7 +10,7 @@
     <div class="panel-body">
         <?php
         foreach ($sub_category_guidelines as $guideline) {
-            echo "<li>$guideline[guideline]</li>";
+            echo "<li>".$guideline->getGuideline()."</li>";
         }
 
         ?>
