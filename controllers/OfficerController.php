@@ -38,12 +38,7 @@ class OfficerController extends Controller
     {
         $guideline = new Guideline();
 
-        $query = mb_split("&", parse_url($request->getRequestURI(), PHP_URL_QUERY));
-        if (!empty($query)) foreach ($query as $qr) {
-            $vars = mb_split('=', $qr);
-            if ($vars[0] != null)
-                $_GET[$vars[0]] = $vars[1];
-        }
+        $this->setGetParams($request);
 
         if (isset($_GET['delete_id'])) {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
@@ -96,12 +91,7 @@ class OfficerController extends Controller
 
                 $guideline = new Guideline();
 
-                $query = mb_split("&", parse_url($request->getRequestURI(), PHP_URL_QUERY));
-                if (!empty($query)) foreach ($query as $qr) {
-                    $vars = mb_split('=', $qr);
-                    if ($vars[0] != null)
-                        $_GET[$vars[0]] = $vars[1];
-                }
+                $this->setGetParams($request);
 
                 if (isset($_GET["edit_id"])) {
                     $data = $request->getBody();
@@ -134,12 +124,7 @@ class OfficerController extends Controller
     {
         $category = new Category();
 
-        $query = mb_split("&", parse_url($request->getRequestURI(), PHP_URL_QUERY));
-        if (!empty($query)) foreach ($query as $qr) {
-            $vars = mb_split('=', $qr);
-            if ($vars[0] != null)
-                $_GET[$vars[0]] = $vars[1];
-        }
+        $this->setGetParams($request);
 
         if (isset($_GET['edit_id'])) {
             if ($request->method() === "post") {
@@ -173,12 +158,7 @@ class OfficerController extends Controller
         if ($request->method() === 'post') {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
                 App::$app->session->unset_key('VERIFIED');
-                $query = mb_split("&", parse_url($request->getRequestURI(), PHP_URL_QUERY));
-                if (!empty($query)) foreach ($query as $qr) {
-                    $vars = mb_split('=', $qr);
-                    if ($vars[0] != null)
-                        $_GET[$vars[0]] = $vars[1];
-                }
+                $this->setGetParams($request);
 
                 if (isset($_GET["edit_id"])) {
                     $data = $request->getBody();
@@ -188,11 +168,11 @@ class OfficerController extends Controller
                 }
 
                 $category->loadData($request->getBody());
-                if ($category->save()) {
+                if ($category->validate() && $category->save()) {
                     App::$app->response->redirect('/officer/categories');
                     exit();
                 } else {
-                    echo '<script>alert("Fail to save the category")</script>';
+                    return $this->render('officer_add_category', ['model' => $category]);
                 }
             }
             return $this->requireVerification($request);
@@ -204,6 +184,7 @@ class OfficerController extends Controller
     public function subcategory(Request $request, Response $response)
     {
         $subcategory = new SubCategory();
+        $this->setGetParams($request);
 
         if (isset($_GET['edit_id'])) {
             if ($request->method() === "post") {
@@ -221,7 +202,7 @@ class OfficerController extends Controller
                 App::$app->session->unset_key('VERIFIED');
 
                 $subcategory->update(['sub_category_id' => $_GET['delete_id']], ['sub_category_status' => '1']);
-                Notification::addNotification($cat_id, Notification::DELETE_NOTIFICATION, Notification::SUB_CATEGORY);
+                Notification::addNotification(SubCategory::getCategoryID($_GET['delete_id']), Notification::DELETE_NOTIFICATION, Notification::SUB_CATEGORY);
                 App::$app->response->redirect('/officer/subcategories');
                 exit();
 
@@ -239,12 +220,7 @@ class OfficerController extends Controller
         if ($request->method() === 'post') {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
                 App::$app->session->unset_key('VERIFIED');
-                $query = mb_split("&", parse_url($request->getRequestURI(), PHP_URL_QUERY));
-                if (!empty($query)) foreach ($query as $qr) {
-                    $vars = mb_split('=', $qr);
-                    if ($vars[0] != null)
-                        $_GET[$vars[0]] = $vars[1];
-                }
+                $this->setGetParams($request);
 
                 if (isset($_GET["edit_id"])) {
                     $subcategory->update(['sub_category_id' => $_GET['edit_id']], $request->getBody());
@@ -303,5 +279,20 @@ class OfficerController extends Controller
         App::$app->session->set('REQUEST', serialize($request));
         $this->setLayout('main');
         return $this->render('officer_verify');
+    }
+
+    /**
+     * @param Request $request
+     */
+    private function setGetParams(Request $request): void
+    {
+        $param = parse_url($request->getRequestURI(), PHP_URL_QUERY);
+        if ($param === null) return;
+        $query = mb_split("&", $param);
+        if (!empty($query)) foreach ($query as $qr) {
+            $vars = mb_split('=', $qr);
+            if ($vars[0] != null)
+                $_GET[$vars[0]] = $vars[1];
+        }
     }
 }

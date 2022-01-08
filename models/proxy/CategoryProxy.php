@@ -29,6 +29,16 @@ class CategoryProxy
         return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
 
+    public static function filterDeleted()
+    {
+        $tableName = 'categories';
+        $statement = App::$app->db->pdo->prepare("SELECT * FROM $tableName WHERE cat_status = 0");
+
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
+    }
+
     /**
      * @param $id string
      * @return CategoryProxy

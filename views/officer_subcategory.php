@@ -60,37 +60,7 @@ foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
 
                         <div class="col-xs-6">
 
-
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Subcategory name</th>
-                                    <th>Category</th>
-
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                <?php
-                                foreach (\app\models\proxy\SubcategoryProxy::getAll() as $subcategory) {
-                                    $sub_category_id = $subcategory->getSubCategoryId();
-                                    $sub_category_name = $subcategory->getSubCategoryName();
-                                    $cat_id = $subcategory->getCatId();
-
-                                    echo "<tr>
-                                            <td>$sub_category_name</td>
-                                            <td>$category_options[$cat_id]</td>
-                            
-                                            <td><a href='subcategories?delete_id=$sub_category_id'>Delete</a></td>
-                                            <td><a href='subcategories?edit_id=$sub_category_id'>Edit</a></td>
-                                            </tr>";
-                                }
-
-
-                                ?>
-
-                                </tbody>
-                            </table>
+                            <?php \app\views\components\subcategory\OfficerSubcategory::renderAllSubCategories()?>
                         </div>
                     </div>
 

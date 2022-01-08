@@ -10,6 +10,7 @@ class SubcategoryProxy
     private string $sub_category_id;
     private string $sub_category_name;
     private string $cat_id;
+    private string $sub_category_status;
 
     /**
      * @return string
@@ -90,4 +91,14 @@ class SubcategoryProxy
 
         return $statement->fetchObject( static::class);
     }
+
+    /**
+     * @return string
+     */
+    public function getSubCategoryStatus(): string
+    {
+        return $this->sub_category_status;
+    }
+
+
 }

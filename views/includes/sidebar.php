@@ -23,7 +23,7 @@
 
                     <?php
 
-                    foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
+                    foreach (\app\models\proxy\CategoryProxy::filterDeleted() as $category) {
                         echo "<li><a href='/home?cat_id=".$category->getCatId()."'>".$category->getCatTitle()."</a></li>";
 
                     }

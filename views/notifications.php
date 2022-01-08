@@ -31,14 +31,14 @@ use app\models\Notification;
                     default => "",
                 };
                 //TODO make styles for unseennotifications
-                $unseenStyle = '';
+                $unseenStyle = "bg-secondary";
                 $unseenBlock = '';
                 if ($notification->status == Notification::UNSEEN_NOTIFICATION) {
-                    $unseenStyle = "font-weight:bold;";
+                    $unseenStyle = "bg-primary";
                     $unseenBlock = '<a href="notification?not_id='.$not_id.'" class="card-link">Mark as read</a>';
                 }
-                echo '<div class="card" style="width: 50rem;">
-  <div class="card-body " style="">
+                echo '<div class="card " style="width: 50rem;">
+  <div class="card-body  bg-opacity-10 '.$unseenStyle.'" style="">
     <h5 class="card-title">'."$type $class in $title".'</h5>
     <h6 class="card-subtitle mb-2 text-muted">'.date('F j, Y', strtotime($notification->date)).'</h6>
     <a href="notification?not_id='.$not_id.'&cat_id='.$cat_id.'" class="card-link">Open</a>

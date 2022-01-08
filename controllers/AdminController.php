@@ -34,11 +34,12 @@ class AdminController extends Controller
     {
         $mode = 'show';
         $user = new User();
+        $this->setGetParams($request);
         if (isset($_GET['source'])) {
-            $this->verifyUser($request,$response);
             if ($_GET['source'] == 'add_user') {
                 $mode = 'create';
                 if ($request->method() == 'post') {
+                    $this->verifyUser($request,$response);
                     $user->loadData($request->getBody());
                     if ($user->validate() && $user->save()) {
                         return $response->redirect('/admin/users');
@@ -52,6 +53,7 @@ class AdminController extends Controller
                 $user = User::findOne(['id' => $_GET['edit_user_id']]);
                 $user->password = '';
                 if ($request->method() == 'post') {
+                    $this->verifyUser($request,$response);
                     $user->loadData($request->getBody());
                     //TODO need add validate (bug)
                     if ($user->validate('unique') && $user->update(['id' => $_GET['edit_user_id']], $request->getBody())) {
@@ -61,11 +63,13 @@ class AdminController extends Controller
                 return $this->render('admin_users', ['mode' => $mode, 'model' => $user]);
             }
             if ($_GET['source'] == 'change_status') {
+                $this->verifyUser($request,$response);
                 $user->changeStatus($_GET['user_id']);
-                return $response->redirect('/admin/users');
+                return App::$app->response->redirect('/admin/users');
             }
         }
         if (isset($_GET['del_id'])) {
+            $this->verifyUser($request,$response);
             $user->deleteUser($_GET['del_id']);
             return $response->redirect('/admin/users');
         }
@@ -73,28 +77,31 @@ class AdminController extends Controller
 
         return $this->render('admin_users', ['mode' => $mode, 'model' => $user]);
     }
-    public function verify(Request $request, Response $response){
-        var_dump(App::$app->user->getPassword());
-        if(password_verify($_POST['verify'],App::$app->user->getPassword()) ){
-            App::$app->session->set('VERIFIED','TRUE');
-            $request = App::$app->session->get('REQUEST');
+    public function verify(Request $request, Response $response)
+    {
+        if (password_verify($_POST['verify'], App::$app->user->getPassword())) {
+            App::$app->session->set('VERIFIED', 'TRUE');
+            $request_prev = unserialize(App::$app->session->get('REQUEST'));
             App::$app->session->unset_key('REQUEST');
-            $response->redirect($request);
+
+            //setting the previous request and resolving it
+            App::$app->router->request = $request_prev;
+            App::$app->run();
+
             exit();
         }
-        throw new \Error("Unauthorized Access", 403);
+        throw new \Error("Invalid Password", 403);
 
     }
 
     private function verifyUser(Request $request, Response $response)
     {
-        if ($request->method() == 'post') return ;
         if(App::$app->session->get('VERIFIED') === 'TRUE') {
             App::$app->session->unset_key('VERIFIED');
             return true;
         }
         else {
-            echo $this->requireVerifivation();
+            echo $this->requireVerification($request);
             exit();
         }
     }
@@ -102,9 +109,22 @@ class AdminController extends Controller
     /**
      * @return array|false|string|string[]
      */
-    private function requireVerifivation(){
-        App::$app->session->set('REQUEST', App::$app->request->getRequest());
+    private
+    function requireVerification(Request $request)
+    {
+        App::$app->session->set('REQUEST', serialize($request));
         $this->setLayout('main');
         return $this->render('officer_verify');
+    }
+    private function setGetParams(Request $request): void
+    {
+        $param = parse_url($request->getRequestURI(), PHP_URL_QUERY);
+        if ($param === null) return;
+        $query = mb_split("&", $param);
+        if (!empty($query)) foreach ($query as $qr) {
+            $vars = mb_split('=', $qr);
+            if ($vars[0] != null)
+                $_GET[$vars[0]] = $vars[1];
+        }
     }
 }

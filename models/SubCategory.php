@@ -8,6 +8,7 @@ class SubCategory extends \app\core\db\DbModel
 {
     public string $sub_category_id = '';
     public string $sub_category_name = '';
+    public string $sub_category_status = '';
     public string $cat_id = '';
 
     public function save()
@@ -23,7 +24,7 @@ class SubCategory extends \app\core\db\DbModel
 
     public function attributes(): array
     {
-        return ['sub_category_name', 'cat_id'];
+        return ['sub_category_name', 'cat_id','sub_category_status'];
     }
 
     public static function primaryKey(): string
