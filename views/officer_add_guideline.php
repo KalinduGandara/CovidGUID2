@@ -1,10 +1,10 @@
 <?php
 $category_options = [];
-foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
+foreach (\app\models\proxy\CategoryProxy::filterDeleted() as $category) {
     $category_options[$category->getCatId()] = $category->getCatTitle();
 }
 $subcategory_options = [];
-foreach (\app\models\proxy\SubcategoryProxy::getAll() as $subcategory) {
+foreach (\app\models\proxy\SubcategoryProxy::getAllWhere(['sub_category_status'=>0]) as $subcategory) {
     if(isset($_GET['cat_id'])){
         if($subcategory->getCatId() === $_GET['cat_id'])
             $subcategory_options[$subcategory->getSubCategoryId()] = $subcategory->getSubCategoryName();

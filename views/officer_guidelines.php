@@ -53,7 +53,7 @@
             ?>
             <hr>
             <?php
-            foreach(\app\models\Category::getAll() as $category){
+            foreach(\app\models\proxy\CategoryProxy::filterDeleted() as $category){
                 ?>
                 <div class="card card-default bg-white m-2">
                     <div class="card-header">
@@ -66,7 +66,7 @@
                     </div>
                     <div class="card-body">
                         <?php
-                        foreach (\app\models\SubCategory::getAllWhere(['cat_id'=> $category->getCatId()]) as $subcategory){
+                        foreach (\app\models\SubCategory::getAllWhere(['cat_id'=> $category->getCatId(), 'sub_category_status'=>'0']) as $subcategory){
                             $subcategoryView = \app\views\components\subcategory\SubcategoryBuilder::buildOfficerVeiw($subcategory->getSubCategoryId());
                             if(isset($_GET['status'])){
                                 $subcategoryView->filterByStatus($_GET['status']);

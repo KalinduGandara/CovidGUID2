@@ -35,7 +35,7 @@ class Deleted extends State
 
     function delete(Guideline $guideline)
     {
-        throw new IllegalStateException();
+        return;
     }
 
     function activate(Guideline $guideline)

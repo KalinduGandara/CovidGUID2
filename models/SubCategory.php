@@ -8,7 +8,7 @@ class SubCategory extends \app\core\db\DbModel
 {
     public string $sub_category_id = '';
     public string $sub_category_name = '';
-    public string $sub_category_status = '';
+    public string $sub_category_status = '0';
     public string $cat_id = '';
 
     public function save()

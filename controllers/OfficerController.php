@@ -141,6 +141,14 @@ class OfficerController extends Controller
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
                 App::$app->session->unset_key('VERIFIED');
 
+                foreach (SubCategory::getAllWhere(['cat_id'=> $_GET['delete_id'], 'sub_category_status'=>'0']) as $subCategory){
+                    foreach (Guideline::getAllWhere(['sub_category_id'=> $subCategory->getSubCategoryId()]) as $guideline){
+                        $guidelineView = new \app\views\components\guideline\OfficerGuideline($guideline);
+                        $guidelineView->getState()->delete($guidelineView);
+                    }
+                    $subCategory->update(['sub_category_id'=> $subCategory->getSubCategoryId()],['sub_category_status'=>'1']);
+                }
+
                 $category->update(['cat_id' => $_GET['delete_id']], ['cat_status' => '1']);
                 App::$app->response->redirect('/officer/categories');
                 exit();
@@ -200,6 +208,11 @@ class OfficerController extends Controller
         if (isset($_GET['delete_id'])) {
             if (App::$app->session->get('VERIFIED') === 'TRUE') {
                 App::$app->session->unset_key('VERIFIED');
+
+                foreach (Guideline::getAllWhere(['sub_category_id'=> $_GET['delete_id']]) as $guideline){
+                    $guidelineView = new \app\views\components\guideline\OfficerGuideline($guideline);
+                    $guidelineView->getState()->delete($guidelineView);
+                }
 
                 $subcategory->update(['sub_category_id' => $_GET['delete_id']], ['sub_category_status' => '1']);
                 Notification::addNotification(SubCategory::getCategoryID($_GET['delete_id']), Notification::DELETE_NOTIFICATION, Notification::SUB_CATEGORY);

@@ -1,7 +1,7 @@
 <?php
 
 $category_options = [];
-foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
+foreach (\app\models\proxy\CategoryProxy::filterDeleted() as $category) {
     $category_options[$category->getCatId()] = $category->getCatTitle();
 }
 
@@ -48,7 +48,7 @@ foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
                                 <tbody>
 
                                 <?php
-                                foreach (\app\models\proxy\SubcategoryProxy::getAll() as $subcategory) {
+                                foreach (\app\models\proxy\SubcategoryProxy::getAllWhere(['sub_category_status'=>0]) as $subcategory) {
                                     $sub_category_id = $subcategory->getSubCategoryId();
                                     $sub_category_name = $subcategory->getSubCategoryName();
                                     $cat_id = $subcategory->getCatId();
