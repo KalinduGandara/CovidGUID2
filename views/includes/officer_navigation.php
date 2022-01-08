@@ -27,13 +27,26 @@
                     <i class="fa fa-fw fa-arrows-v"></i> Categories <i class="fa fa-fw fa-caret-down"></i></a>
                 <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
                     <li class="w-100">
-                        <a href="/officer/categories" class="nav-link px-0 ms-4"> <span class="d-none d-sm-inline">Create a Category</span></a>
+                        <a href="/officer/categories" class="nav-link px-0 ms-4"> <span class="d-none d-sm-inline">View All Categories</span></a>
+                    </li>
+                    <li>
+                        <a href="/officer/add-category" class="nav-link px-0 ms-4"> <span class="d-none d-sm-inline">Add a Category</span></a>
+                    </li>
+                </ul>
+            </li>
+            <li class="m-2">
+                <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                    <i class="fa fa-fw fa-arrows-v"></i>Sub Categories <i class="fa fa-fw fa-caret-down"></i></a>
+                <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                    <li class="w-100">
+                        <a href="/officer/subcategories" class="nav-link px-0 ms-4"> <span class="d-none d-sm-inline">View All Sub Categories</span></a>
                     </li>
                     <li>
                         <a href="/officer/add-subcategory" class="nav-link px-0 ms-4"> <span class="d-none d-sm-inline">Add a Subcategory</span></a>
                     </li>
                 </ul>
             </li>
+
         </ul>
         <hr>
         <div class="dropdown pb-4">

@@ -43,11 +43,18 @@ $app->router->get('/officer/guidelines', [OfficerController::class, 'guidelines'
 $app->router->post('/officer/guidelines', [OfficerController::class, 'guidelines']);
 $app->router->post('/officer/add-guideline', [OfficerController::class, 'add_guideline']);
 $app->router->get('/officer/add-guideline', [OfficerController::class, 'add_guideline']);
-$app->router->get('/officer/categories', [OfficerController::class, 'categories']);
-$app->router->post('/officer/categories', [OfficerController::class, 'categories']);
+
+$app->router->get('/officer/categories', [OfficerController::class, 'category']);
+$app->router->post('/officer/categories', [OfficerController::class, 'category']);
+$app->router->get('/officer/add-category', [OfficerController::class, 'add_category']);
+$app->router->post('/officer/add-category', [OfficerController::class, 'add_category']);
+
+$app->router->get('/officer/subcategories', [OfficerController::class, 'subcategory']);
+$app->router->post('/officer/subcategories', [OfficerController::class, 'subcategory']);
 $app->router->get('/officer/add-subcategory', [OfficerController::class, 'add_subcategory']);
 $app->router->post('/officer/add-subcategory', [OfficerController::class, 'add_subcategory']);
-$app->router->get('/officer/verify', [OfficerController::class, 'verify']);
+
+
 $app->router->post('/officer/verify', [OfficerController::class, 'verify']);
 
 $app->router->get('/login', [AuthController::class, 'login']);

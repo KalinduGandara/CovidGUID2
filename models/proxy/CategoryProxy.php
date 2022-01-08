@@ -13,6 +13,7 @@ class CategoryProxy
     private string $cat_id;
     private string $cat_title;
     private string $category_description;
+    private string $cat_status;
 
 
     /**
@@ -58,6 +59,16 @@ class CategoryProxy
     {
         return $this->cat_title;
     }
+
+    /**
+     * @return string
+     */
+    public function getCatStatus(): string
+    {
+        return $this->cat_status;
+    }
+
+
 
     /**
      * @return string
