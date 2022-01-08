@@ -24,6 +24,9 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
 </head>
 
 <body>
@@ -35,8 +38,7 @@
 
 
 
-<!-- jQuery -->
-<script src="js/jquery.js"></script>
+
 
 <!-- Bootstrap Core JavaScript -->
 <script src="/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>

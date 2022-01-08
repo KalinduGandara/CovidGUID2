@@ -27,13 +27,10 @@
 
 
             <?php
-<<<<<<< Updated upstream
-            $subscribeList = App::$app->getUser()->getSubscribeList();
-            foreach (CategoryProxy::getAll() as $category) {
-=======
+
             $subscribeList = App::isGuest() ? []: App::$app->getUser()->getSubscribeList();
             foreach (CategoryProxy::filterDeleted() as $category) {
->>>>>>> Stashed changes
+
                 $categoryView = new PublicCategory($category);
                 if (in_array($category->getCatId() , $subscribeList)) {
                     $categoryView->setIsSubscribed(true);

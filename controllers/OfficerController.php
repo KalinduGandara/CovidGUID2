@@ -168,11 +168,11 @@ class OfficerController extends Controller
                 }
 
                 $category->loadData($request->getBody());
-                if ($category->validate() && $category->save()) {
+                if ($category->save()) {
                     App::$app->response->redirect('/officer/categories');
                     exit();
                 } else {
-                    return $this->render('officer_add_category', ['model' => $category]);
+                    echo '<script> alert("Failed to save") </script>';
                 }
             }
             return $this->requireVerification($request);
