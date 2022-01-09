@@ -13,15 +13,7 @@ class SiteController extends Controller
 {
     public function home()
     {
-        $unseenNotifications = 0;
-        $notifications = Notification::getNotifications();
-        foreach ($notifications as $notification) {
-            if ($notification->status == 0) $unseenNotifications++;
-        }
-        $params = [
-            'unseenNotifications' => $unseenNotifications,
-            'notifications' => $notifications,
-        ];
+        $params = [];
         if (isset($_GET['search'])) {
             return $this->render('search_sub_category', $params);
         }

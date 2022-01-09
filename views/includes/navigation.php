@@ -11,6 +11,13 @@ use app\models\Notification;?>
         </button>
         <span class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
+                <?php if (!App::isGuest()) {
+                    $unseenNotifications = 0;
+                    $notifications = Notification::getNotifications();
+                    foreach ($notifications as $notification) {
+                        if ($notification->status == 0) $unseenNotifications++;
+                    }
+                } ?>
                 <?php if (isset($notifications) && !App::isGuest()){?>
                     <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
