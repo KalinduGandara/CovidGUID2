@@ -57,6 +57,7 @@ $app->router->post('/officer/add-subcategory', [OfficerController::class, 'add_s
 
 
 $app->router->post('/officer/verify', [OfficerController::class, 'verify']);
+$app->router->get('/officer/cancel-verify', [OfficerController::class, 'cancel_verify']);
 
 $app->router->get('/login', [AuthController::class, 'login']);
 $app->router->post('/login', [AuthController::class, 'login']);

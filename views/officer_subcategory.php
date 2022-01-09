@@ -17,14 +17,12 @@ foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
                         <div class="col-lg-12">
                             <?php
                                 if(isset($_GET['edit_id'])){
-//                                    $model = \app\models\SubCategory::findOne(['sub_category_id'=>$_GET['edit_id']]);
                             ?>
                                 <h1 class="page-header">
                                         Edit a Subcategory
                                 </h1>
                             <?php } else
                                 {
-//                                    $model = new \app\models\SubCategory();
                                     ?>
                                     <h1 class="page-header">
                                     Subcategories

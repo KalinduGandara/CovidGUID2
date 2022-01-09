@@ -15,10 +15,22 @@ foreach (\app\models\proxy\CategoryProxy::filterDeleted() as $category) {
 
                     <div class="row">
                         <div class="col-lg-12">
-                         <h1 class="page-header">
+                            <?php
+                            if(isset($_GET['edit_id'])){
+                                ?>
+                                <h1 class="page-header">
+                                    Edit a Subcategory
+                                </h1>
+                            <?php } else
+                            {
+                                ?>
+                                <h1 class="page-header">
                                     Add a Subcategory
                                 </h1>
-<!--                            --><?php //$model = new \app\models\SubCategory(); ?>
+
+                                <?php
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="container">
@@ -37,34 +49,8 @@ foreach (\app\models\proxy\CategoryProxy::filterDeleted() as $category) {
                         <div class="col-xs-6">
 
 
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Subcategory name</th>
-                                    <th>Category</th>
+                            <?php \app\views\components\subcategory\OfficerSubcategory::renderAllSubCategories()?>
 
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                <?php
-                                foreach (\app\models\proxy\SubcategoryProxy::getAllWhere(['sub_category_status'=>0]) as $subcategory) {
-                                    $sub_category_id = $subcategory->getSubCategoryId();
-                                    $sub_category_name = $subcategory->getSubCategoryName();
-                                    $cat_id = $subcategory->getCatId();
-                                    if (isset($category_options[$cat_id]))
-
-                                    echo "<tr>
-                                            <td>$sub_category_name</td>
-                                            <td>$category_options[$cat_id]</td>
-                                            </tr>";
-                                }
-
-
-                                ?>
-
-                                </tbody>
-                            </table>
                         </div>
                     </div>
 

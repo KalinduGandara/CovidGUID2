@@ -168,12 +168,12 @@ class OfficerController extends Controller
                 App::$app->session->unset_key('VERIFIED');
                 $this->setGetParams($request);
 
-//                if (isset($_GET["edit_id"])) {
-//                    $data = $request->getBody();
-//                    $category->update(['cat_id' => $_GET['edit_id']], $data);
-//                    App::$app->response->redirect('/officer/categories');
-//                    exit();
-//                }
+                if (isset($_GET["edit_id"])) {
+                    $data = $request->getBody();
+                    $category->update(['cat_id' => $_GET['edit_id']], $data);
+                    App::$app->response->redirect('/officer/categories');
+                    exit();
+                }
 
                 $category->loadData($request->getBody());
                 if ($category->save()) {
@@ -235,12 +235,12 @@ class OfficerController extends Controller
                 App::$app->session->unset_key('VERIFIED');
                 $this->setGetParams($request);
 
-//                if (isset($_GET["edit_id"])) {
-//                    $subcategory->update(['sub_category_id' => $_GET['edit_id']], $request->getBody());
-//                    Notification::addNotification(SubCategory::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::SUB_CATEGORY);
-//                    App::$app->response->redirect('/officer/subcategories');
-//                    exit();
-//                }
+                if (isset($_GET["edit_id"])) {
+                    $subcategory->update(['sub_category_id' => $_GET['edit_id']], $request->getBody());
+                    Notification::addNotification(SubCategory::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::SUB_CATEGORY);
+                    App::$app->response->redirect('/officer/subcategories');
+                    exit();
+                }
 
                 $subcategory->loadData($request->getBody());
                 if ($subcategory->validate() && $subcategory->save()) {
@@ -270,16 +270,31 @@ class OfficerController extends Controller
 
             exit();
         }
-        throw new \Error("Invalid Password", 403);
+//        throw new \Error("Invalid Password", 403);
+        echo $this->requireVerification($request);
+        exit();
+    }
 
+    public function cancel_verify(Request $request, Response $response)
+    {
+        $request_prev = unserialize(App::$app->session->get('REQUEST'));
+        App::$app->session->unset_key('REQUEST');
+
+        //setting the previous request and resolving it
+        App::$app->router->request = $request_prev;
+
+        $response->redirect($request_prev->getPath());
     }
 
     private
     function requireVerification(Request $request)
     {
+        if (App::$app->session->isset('REQUEST')) {
+            return $this->render('officer_verify', ['fail' => true]);
+        }
         App::$app->session->set('REQUEST', serialize($request));
         $this->setLayout('main');
-        return $this->render('officer_verify');
+        return $this->render('officer_verify',['fail' => false]);
     }
 
     /**
