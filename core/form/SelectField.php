@@ -11,6 +11,7 @@ class SelectField extends BaseField
     private array $options;
     private bool $disabled;
     private string $selected;
+    private bool $required;
 
     /**
      * @param Model $model
@@ -19,12 +20,13 @@ class SelectField extends BaseField
      * @param bool $disabled
      * @param string $selected
      */
-    public function __construct(?Model $model, string $attribute ,array $options,bool $disabled = false, string $selected = '')
+    public function __construct(?Model $model, string $attribute ,array $options,bool $disabled = false, string $selected = '',bool $required = false)
     {
         $this->options = $options;
         $this->attribute = $attribute;
         $this->disabled = $disabled;
         $this->selected = $selected;
+        $this->required = $required;
         parent::__construct($model, $attribute);
     }
 
@@ -33,7 +35,7 @@ class SelectField extends BaseField
     {
         $options = '';
         if($this->selected === ''){
-            $options .= '<option selected disabled>' . '--- select ---'. '</option>';
+            $options .= '<option selected value="" disabled>' . '--- select ---'. '</option>';
         }
         foreach ($this->options as $value => $display){
             if ($value == $this->selected) {
@@ -53,14 +55,15 @@ class SelectField extends BaseField
                 $this->disabled?"disabled":'');
         }
 
-        return sprintf('<select name="%s"  value="%s" class="form-control %s" %s>
+        return sprintf('<select name="%s"  value="%s" class="form-control %s" %s %s>
                         '.
                                 $options
                                 .'</select>',
             $this->attribute,
             $this->model->{$this->attribute},
             $this->model->hasError($this->attribute) ? 'is-invalid' : '',
-            $this->disabled?"disabled":'');
+            $this->disabled?"disabled":'',
+            $this->required?'required':'');
     }
 
     public function select(string $value):void{

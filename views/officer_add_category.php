@@ -23,7 +23,7 @@
                 <div class="container">
                     <div>
                         <?php $form = \app\core\form\Form::begin('', 'post') ?>
-                        <?php echo $form->field($model, 'cat_title') ?>
+                        <?php echo $form->field($model, 'cat_title',true) ?>
                         <?php echo $form->textareaField($model, 'category_description') ?>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
