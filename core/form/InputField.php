@@ -15,16 +15,17 @@ class InputField extends BaseField
 
 
     public string $type;
-
+    private bool $required;
 
     /**
      * Field constructor.
      * @param Model $model
      * @param string $attribute
      */
-    public function __construct(Model $model, string $attribute)
+    public function __construct(Model $model, string $attribute, bool $required=false)
     {
         $this->type = self::TYPE_TEXT;
+        $this->required = $required;
         parent::__construct($model,$attribute);
     }
 
@@ -43,10 +44,11 @@ class InputField extends BaseField
 
     public function renderInput(): string
     {
-        return sprintf('<input name="%s" type="%s" value="%s" class="form-control %s">',
+        return sprintf('<input name="%s" type="%s" value="%s" class="form-control %s" %s>',
             $this->attribute,
             $this->type,
             $this->model->{$this->attribute},
-            $this->model->hasError($this->attribute) ? 'is-invalid' : '');
+            $this->model->hasError($this->attribute) ? 'is-invalid' : '',
+            $this->required?'required':'');
     }
 }
