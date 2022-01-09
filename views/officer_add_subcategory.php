@@ -52,6 +52,7 @@ foreach (\app\models\proxy\CategoryProxy::filterDeleted() as $category) {
                                     $sub_category_id = $subcategory->getSubCategoryId();
                                     $sub_category_name = $subcategory->getSubCategoryName();
                                     $cat_id = $subcategory->getCatId();
+                                    if (isset($category_options[$cat_id]))
 
                                     echo "<tr>
                                             <td>$sub_category_name</td>

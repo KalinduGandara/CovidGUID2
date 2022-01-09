@@ -8,11 +8,8 @@ use app\core\App;
 use app\core\Controller;
 use app\core\middlewares\ActiveMiddleware;
 use app\core\middlewares\AdminMiddleware;
-use app\core\middlewares\AuthMiddleware;
 use app\core\Request;
 use app\core\Response;
-use app\models\Category;
-use app\models\Guideline;
 use app\models\Post;
 use app\models\User;
 
@@ -90,8 +87,9 @@ class AdminController extends Controller
 
             exit();
         }
-        throw new \Error("Invalid Password", 403);
-
+//        throw new \Error("Invalid Password", 403);
+        echo $this->requireVerification($request);
+        exit();
     }
 
     private function verifyUser(Request $request, Response $response)
@@ -112,9 +110,11 @@ class AdminController extends Controller
     private
     function requireVerification(Request $request)
     {
+        if (App::$app->session->isset('REQUEST'))
+                return $this->render('admin_verify',['fail'=>true]);
         App::$app->session->set('REQUEST', serialize($request));
         $this->setLayout('main');
-        return $this->render('officer_verify');
+        return $this->render('admin_verify',['fail'=>false]);
     }
     private function setGetParams(Request $request): void
     {
