@@ -7,7 +7,8 @@
     <label for="verify">Enter Password</label>
     <input type="password" name="verify" class="form-control">
     <br/>
-    <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>
+    <a type="button" class="btn btn-secondary" href="/admin/cancel-verify">Cancel</a>
+<!--    <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>-->
     <button type="submit" class="btn btn-danger">Verify</button>
 
 </form>

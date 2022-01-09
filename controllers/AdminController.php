@@ -92,6 +92,17 @@ class AdminController extends Controller
         exit();
     }
 
+    public function cancel_verify(Request $request, Response $response)
+    {
+        $request_prev = unserialize(App::$app->session->get('REQUEST'));
+        App::$app->session->unset_key('REQUEST');
+
+        //setting the previous request and resolving it
+        App::$app->router->request = $request_prev;
+
+        $response->redirect($request_prev->getPath());
+    }
+
     private function verifyUser(Request $request, Response $response)
     {
         if(App::$app->session->get('VERIFIED') === 'TRUE') {
@@ -110,8 +121,9 @@ class AdminController extends Controller
     private
     function requireVerification(Request $request)
     {
-        if (App::$app->session->isset('REQUEST'))
-                return $this->render('admin_verify',['fail'=>true]);
+        if (App::$app->session->isset('REQUEST')) {
+            return $this->render('admin_verify', ['fail' => true]);
+        }
         App::$app->session->set('REQUEST', serialize($request));
         $this->setLayout('main');
         return $this->render('admin_verify',['fail'=>false]);

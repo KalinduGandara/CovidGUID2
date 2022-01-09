@@ -35,6 +35,7 @@ $app->router->get('/admin', [AdminController::class, 'index']);
 $app->router->get('/admin/users', [AdminController::class, 'users']);
 $app->router->post('/admin/users', [AdminController::class, 'users']);
 $app->router->post('/admin/verify', [AdminController::class, 'verify']);
+$app->router->get('/admin/cancel-verify', [AdminController::class, 'cancel_verify']);
 
 
 //officer routes
