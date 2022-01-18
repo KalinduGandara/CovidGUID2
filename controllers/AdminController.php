@@ -8,6 +8,7 @@ use app\core\App;
 use app\core\Controller;
 use app\core\middlewares\ActiveMiddleware;
 use app\core\middlewares\AdminMiddleware;
+use app\core\middlewares\VerifyMiddleware;
 use app\core\Request;
 use app\core\Response;
 use app\models\User;
@@ -19,6 +20,7 @@ class AdminController extends Controller
     {
         $this->registerMiddleware(new AdminMiddleware());
         $this->registerMiddleware(new ActiveMiddleware());
+        $this->registerMiddleware(new VerifyMiddleware(['verify']));
     }
 
     public function index()
@@ -30,7 +32,6 @@ class AdminController extends Controller
     {
         $mode = 'show';
         $user = new User();
-//        $this->setGetParams($request);
         if (isset($_GET['source'])) {
             if ($_GET['source'] == 'add_user') {
                 $mode = 'create';
@@ -116,17 +117,6 @@ class AdminController extends Controller
         }
     }
 
-    private function setGetParams(Request $request): void
-    {
-        $param = parse_url($request->getRequestURI(), PHP_URL_QUERY);
-        if ($param === null) return;
-        $query = mb_split("&", $param);
-        if (!empty($query)) foreach ($query as $qr) {
-            $vars = mb_split('=', $qr);
-            if ($vars[0] != null)
-                $_GET[$vars[0]] = $vars[1];
-        }
-    }
     private function getFormData():array
     {
         return App::$app->session->get('FORM_DATA');
