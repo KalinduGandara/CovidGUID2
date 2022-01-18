@@ -14,9 +14,9 @@ class User extends UserModel
     public const STATUS_ACTIVE = 1;
     public const STATUS_DELETE = 2;
 
-    public const ADMIN_USER = 0;
-    public const OFFICER_USER = 1;
-    public const PUBLIC_USER = 2;
+    public const ADMIN_USER = '0';
+    public const OFFICER_USER = '1';
+    public const PUBLIC_USER = '2';
 
 
     public string $id = '';
@@ -24,7 +24,7 @@ class User extends UserModel
     public string $lastname = '';
     public string $email = '';
     public int $status = self::STATUS_INACTIVE;
-    public int $type = self::PUBLIC_USER;
+    public string $type = '';
     public string $password = '';
     public string $confirmPassword = '';
     //TODO
@@ -102,6 +102,7 @@ class User extends UserModel
             'firstname' => [self::RULE_REQUIRED],
             'lastname' => [self::RULE_REQUIRED],
             'email' => [self::RULE_REQUIRED, self::RULE_EMAIL, [self::RULE_UNIQUE, 'class' => self::class]],
+            'type' => [self::RULE_REQUIRED],
             'password' => [self::RULE_REQUIRED, [self::RULE_MIN, 'min' => 8], [self::RULE_MAX, 'max' => 24]],
             'confirmPassword' => [self::RULE_REQUIRED, [self::RULE_MATCH, 'match' => 'password']]
         ];
@@ -212,9 +213,9 @@ class User extends UserModel
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getType(): int
+    public function getType(): string
     {
         return $this->type;
     }
