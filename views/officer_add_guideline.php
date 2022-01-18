@@ -22,10 +22,8 @@ foreach (\app\models\proxy\SubcategoryProxy::getAllWhere(['sub_category_status'=
                 <?php
                 if (isset($_GET['edit_id'])) {
                     echo 'Edit Guideline';
-                    $model = \app\models\Guideline::findOne(['guid_id'=>$_GET['edit_id']]);
                 } else {
                     echo 'Add a Guideline';
-                    $model = new \app\models\Guideline();
                 }
                 ?>
             </h1>
@@ -91,7 +89,7 @@ foreach (\app\models\proxy\SubcategoryProxy::getAllWhere(['sub_category_status'=
 
                 ?>
                 <br />
-                <button type="submit" onclick="return validate()" class="btn btn-primary" >Submit</button>
+                <button type="submit" class="btn btn-primary" >Submit</button>
                 <?php $form->end(); ?>
 
                 <!-- Modal To Show Errors -->
@@ -115,41 +113,6 @@ foreach (\app\models\proxy\SubcategoryProxy::getAllWhere(['sub_category_status'=
 
             </div>
 
-            <script>
-                $(document).ready(()=>{
-                    $('select[name="cat_id"]').change(()=>{
-                        window.location.href = "/officer/add-guideline?cat_id="+$('select[name="cat_id"]').val();
-                    });
-
-                    $('select[name="sub_category_id"]').change(()=>{
-                        window.location.href = "/officer/add-guideline?cat_id="+$('select[name="cat_id"]').val()+"&sub_category_id="+$('select[name="sub_category_id"]').val();
-                    });
-
-                });
-
-                function validate(){
-                    if ($('[name="guid_status"]').is(":checked")){
-                        return true;    //no check for draft
-                    }
-
-                    const guideline = $('[name="guideline"]').val();
-                    const activate_date = $('[name="activate_date"]').val();
-                    const expiry_date = $('[name="expiry_date"]').val();
-
-                    //validation logic
-                    let error;
-                    if(guideline === '') error =  "Guideline field is empty";
-                    else if(activate_date === '') error = "Activation date not given";
-                    else if(expiry_date === '') error = "Expiry date not given";
-                    else if(new Date(activate_date) > new Date(expiry_date)) error= "Invalid date range"
-                    else return true;
-
-                    $("#guideline-error").text(error);
-                    $("#popup").modal("show");
-                    return false;
-                }
-
-            </script>
         </div>
     </div>
 </div>

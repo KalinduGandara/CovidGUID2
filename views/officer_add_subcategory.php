@@ -36,8 +36,8 @@ foreach (\app\models\proxy\CategoryProxy::filterDeleted() as $category) {
                     <div class="container">
                         <div class="col-xs-6">
                             <?php $form = \app\core\form\Form::begin('', 'post') ?>
-                            <?php echo $form->selectField($model, 'cat_id', $category_options, !($model->getCatId() === ''), $model->getCatId() , required: true); ?>
-                            <?php echo $form->field($model, 'sub_category_name',true) ?>
+                            <?php echo $form->selectField($model, 'cat_id', $category_options, !($model->getCatId() === ''), $model->getCatId()); ?>
+                            <?php echo $form->field($model, 'sub_category_name') ?>
                             <button type="submit" class="btn btn-primary">Submit</button>
 
                             <?php \app\core\form\Form::end(); ?>

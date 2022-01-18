@@ -41,8 +41,6 @@ class Guideline extends \app\core\db\DbModel
         return [
             'sub_category_id' => [self::RULE_REQUIRED],
             'guideline' => [self::RULE_REQUIRED],
-            'cat_id' => [self::RULE_REQUIRED],
-            'guid_status' => [self::RULE_REQUIRED],
             'activate_date' => [self::RULE_REQUIRED],
             'expiry_date'=>[self::RULE_REQUIRED],
         ];

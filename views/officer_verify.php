@@ -3,6 +3,7 @@
     <?php if ($fail) {?>
         <h6 class="text-danger">Wrong Password</h6>
     <?php }?>
+
     <label for="verify">Enter Password</label>
     <input type="password" name="verify" class="form-control">
     <br/>
