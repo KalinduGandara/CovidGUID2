@@ -41,7 +41,7 @@ class Guideline extends \app\core\db\DbModel
         return [
             'sub_category_id' => [self::RULE_REQUIRED],
             'guideline' => [self::RULE_REQUIRED],
-            'activate_date' => [self::RULE_REQUIRED],
+            'activate_date' => [self::RULE_REQUIRED,[self::RULE_INVALID_DATE_RANGE,'2nd'=>'expiry_date']],
             'expiry_date'=>[self::RULE_REQUIRED],
         ];
     }
@@ -53,8 +53,8 @@ class Guideline extends \app\core\db\DbModel
             'guideline' => "Enter description",
             'cat_id' => "Select Category",
             'guid_status' => "save as draft",  // only state that can be determined at creation. others are set according to date.
-            'activate_date' => "Select Activate Date",
-            'expiry_date' => "Select Expiry Date"
+            'activate_date' => "Activate Date",
+            'expiry_date' => "Expiry Date"
         ];
     }
 

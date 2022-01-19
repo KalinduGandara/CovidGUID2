@@ -12,6 +12,7 @@ abstract class Model
     public const RULE_MAX = 'max';
     public const RULE_MATCH = 'match';
     public const RULE_UNIQUE = 'unique';
+    public const RULE_INVALID_DATE_RANGE = 'invalid_date_range';
     public array $errors = [];
 
     public function loadData($data)
@@ -49,6 +50,11 @@ abstract class Model
                 if ($ruleName === self::RULE_MATCH && $value !== $this->{$rule['match']} && $ruleName !== $srule) {
                     $rule['match'] = $this->getLabels($rule['match']);
                     $this->addErrorForRule($attribute, self::RULE_MATCH, $rule);
+                }
+                if ($ruleName === self::RULE_INVALID_DATE_RANGE && $value > $this->{$rule['2nd']} && $ruleName !== $srule) {
+                    $rule['1st'] = $this->getLabels($attribute);
+                    $rule['2nd'] = $this->getLabels($rule['2nd']);
+                    $this->addErrorForRule($attribute, self::RULE_INVALID_DATE_RANGE, $rule);
                 }
                 if ($ruleName === self::RULE_UNIQUE && $ruleName !== $srule) {
                     $className = $rule['class'];
@@ -94,7 +100,8 @@ abstract class Model
             self::RULE_MIN => "Min length of this field must be {min}",
             self::RULE_MAX => "Min length of this field must be {max}",
             self::RULE_MATCH => "This field must be same as {match}",
-            self::RULE_UNIQUE => "Record with this {field} already exist"
+            self::RULE_UNIQUE => "Record with this {field} already exist",
+            self::RULE_INVALID_DATE_RANGE => "{1st} and {2nd} are invalid range"
         ];
     }
 

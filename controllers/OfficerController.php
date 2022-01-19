@@ -56,6 +56,11 @@ class OfficerController extends Controller
                     $data['guid_status'] = '0';
                 }
                 $guideline->loadData($data);
+                if ($data['guid_status'] === '2'){// if draft then don't validate
+                    $guideline->update(['guid_id' => $_GET['edit_id']], $data);
+                    App::$app->response->redirect('/officer/guidelines');
+                    exit();
+                }
                 if ($guideline->validate() && $guideline->update(['guid_id' => $_GET['edit_id']], $data)) {
                     Notification::addNotification(Guideline::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::GUIDELINE);
                     App::$app->response->redirect('/officer/guidelines');
@@ -87,7 +92,13 @@ class OfficerController extends Controller
         $guideline = new Guideline();
         if ($request->method() === 'post') {
                 $this->verifyUser($request,$response);
-                $guideline->loadData($this->getFormData());
+                $data = $this->getFormData();
+                $guideline->loadData($data);
+                if ($data['guid_status'] === '2'){// if draft then don't validate
+                    $guideline->save();
+                    App::$app->response->redirect('/officer/guidelines');
+                    exit();
+                }
                 if ($guideline->validate() && $guideline->save()) {
                     Notification::addNotification(Guideline::getCategoryID(DbModel::lastInsertID()), Notification::CREATE_NOTIFICATION, Notification::GUIDELINE);
                     App::$app->response->redirect('/officer/guidelines');
