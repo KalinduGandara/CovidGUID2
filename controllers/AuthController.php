@@ -54,14 +54,13 @@ class AuthController extends Controller
 
         if ($request->method() === 'post') {
             $user->loadData($request->getBody());
-
+            $user->setType(User::PUBLIC_USER);
+            $user->setStatus(User::STATUS_ACTIVE);
             if ($user->validate() && $user->save()) {
                 App::$app->session->setFlash('success','Thanks for Registering');
                 App::$app->response->redirect('/home');
                 exit;
             }
-            $this->setLayout('auth2');
-            return $this->render('register',['model'=>$user]);
         }
         $this->setLayout('auth2');
         return $this->render('register',['model'=>$user]);
