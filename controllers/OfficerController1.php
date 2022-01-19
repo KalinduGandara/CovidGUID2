@@ -7,7 +7,6 @@ use app\core\Controller;
 use app\core\db\DbModel;
 use app\core\middlewares\ActiveMiddleware;
 use app\core\middlewares\OfficerMiddleware;
-use app\core\middlewares\VerifyMiddleware;
 use app\core\Request;
 use app\core\Response;
 use app\core\Router;
@@ -19,7 +18,7 @@ use app\models\proxy\CategoryProxy;
 use app\models\proxy\SubcategoryProxy;
 use app\models\SubCategory;
 
-class OfficerController extends Controller
+class OfficerController1 extends Controller
 {
     public string $layout = 'officer';
 
@@ -27,7 +26,7 @@ class OfficerController extends Controller
     {
         $this->registerMiddleware(new OfficerMiddleware());
         $this->registerMiddleware(new ActiveMiddleware());
-        $this->registerMiddleware(new VerifyMiddleware(['verify']));
+
     }
 
     public function index()
@@ -39,39 +38,33 @@ class OfficerController extends Controller
     {
         $guideline = new Guideline();
 
+        $this->setGetParams($request);
+
         if (isset($_GET['delete_id'])) {
-            $this->verifyUser($request,$response);
+            if (App::$app->session->get('VERIFIED') === 'TRUE') {
+                App::$app->session->unset_key('VERIFIED');
 
                 $guideline->update(['guid_id' => $_GET['delete_id']], ['guid_status' => '4']);
                 Notification::addNotification(Guideline::getCategoryID($_GET['delete_id']), Notification::DELETE_NOTIFICATION, Notification::GUIDELINE);
                 App::$app->response->redirect('/officer/guidelines');
                 exit();
 
+            }
+            return $this->requireVerification($request);
         } elseif (isset($_GET['edit_id'])) {
-            $guideline = Guideline::findOne(['guid_id'=>$_GET['edit_id']]);
             if ($request->method() === "post") {
-                $this->verifyUser($request,$response);
-                $data = $this->getFormData();
-                if (!isset($data['guid_status'])) {
-                    $data['guid_status'] = '0';
-                }
-                $guideline->loadData($data);
-                if ($data['guid_status'] === '2'){// if draft then don't validate
-                    $guideline->update(['guid_id' => $_GET['edit_id']], $data);
-                    App::$app->response->redirect('/officer/guidelines');
-                    exit();
-                }
-                if ($guideline->validate() && $guideline->update(['guid_id' => $_GET['edit_id']], $data)) {
-                    Notification::addNotification(Guideline::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::GUIDELINE);
-                    App::$app->response->redirect('/officer/guidelines');
-                    exit();
-                }
+                $request->setRequestUri("/officer/add-guideline?edit_id=" . $_GET['edit_id']);
+                $request->setPath("/officer/add-guideline");
+                App::$app->run();
+                exit();
             }
 
-            return $this->render('officer_add_guideline',['model'=>$guideline]);
+            return $this->render('officer_add_guideline');
 
         } elseif (isset($_GET['draft_id'])) {
-            $this->verifyUser($request,$response);
+            if (App::$app->session->get('VERIFIED') === 'TRUE') {
+                App::$app->session->unset_key('VERIFIED');
+
                 $guideline = Guideline::findOne(['guid_id' => $_GET['draft_id']]);
                 if ($guideline->getGuidStatus() === '2') {
                     $guideline->update(['guid_id' => $_GET['draft_id']], ['guid_status' => '0']);
@@ -80,6 +73,9 @@ class OfficerController extends Controller
                 }
                 App::$app->response->redirect('/officer/guidelines');
                 exit();
+            }
+
+            return $this->requireVerification($request);
 
         }
 
@@ -89,24 +85,37 @@ class OfficerController extends Controller
     public function add_guideline(Request $request, Response $response)
     {
 
-        $guideline = new Guideline();
         if ($request->method() === 'post') {
-                $this->verifyUser($request,$response);
-                $data = $this->getFormData();
-                $guideline->loadData($data);
-                if ($data['guid_status'] === '2'){// if draft then don't validate
-                    $guideline->save();
-                    App::$app->response->redirect('/officer/guidelines');
-                    exit();
-                }
-                if ($guideline->validate() && $guideline->save()) {
-                    Notification::addNotification(Guideline::getCategoryID(DbModel::lastInsertID()), Notification::CREATE_NOTIFICATION, Notification::GUIDELINE);
+            if (App::$app->session->get('VERIFIED') === 'TRUE') {
+                App::$app->session->unset_key('VERIFIED');
+
+                $guideline = new Guideline();
+
+                $this->setGetParams($request);
+
+                if (isset($_GET["edit_id"])) {
+                    $data = $request->getBody();
+                    if (!isset($data['guid_status'])) {
+                        $data['guid_status'] = '0';
+                    }
+                    $guideline->update(['guid_id' => $_GET['edit_id']], $data);
+                    Notification::addNotification(Guideline::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::GUIDELINE);
                     App::$app->response->redirect('/officer/guidelines');
                     exit();
                 }
 
+                $guideline->loadData($request->getBody());
+                if ($guideline->save()) {
+                    Notification::addNotification(Guideline::getCategoryID(DbModel::lastInsertID()), Notification::CREATE_NOTIFICATION, Notification::GUIDELINE);
+                    App::$app->response->redirect('/officer/guidelines');
+                    exit();
+                } else {
+                    echo '<script>alert("Fail to save the guideline")</script>';
+                }
+            }
+            return $this->requireVerification($request);
         }
-        return $this->render('officer_add_guideline',['model'=>$guideline]);
+        return $this->render('officer_add_guideline');
 
 
     }
@@ -115,23 +124,23 @@ class OfficerController extends Controller
     {
         $category = new Category();
 
+        $this->setGetParams($request);
 
         if (isset($_GET['edit_id'])) {
-            $category = CategoryProxy::getById($_GET['edit_id'])->getCategoryObject();
             if ($request->method() === "post") {
-                $this->verifyUser($request,$response);
-                $data = $this->getFormData();
-                $category->loadData($data);
-                if ($category->validate() && $category->update(['cat_id' => $_GET['edit_id']], $data)){
-                    App::$app->response->redirect('/officer/categories');
-                    exit();
-                }
+                $request->setRequestUri("/officer/add-category?edit_id=" . $_GET['edit_id']);
+                $request->setPath("/officer/add-category");
+                App::$app->run();
+                exit();
             }
-            return $this->render('officer_add_category', ['model' => $category]);
+
+            return $this->render('officer_add_category', ['model' => CategoryProxy::getById($_GET['edit_id'])->getCategoryObject()]);
         }
 
         if (isset($_GET['delete_id'])) {
-            $this->verifyUser($request,$response);
+            if (App::$app->session->get('VERIFIED') === 'TRUE') {
+                App::$app->session->unset_key('VERIFIED');
+
                 foreach (SubCategory::getAllWhere(['cat_id'=> $_GET['delete_id'], 'sub_category_status'=>'0']) as $subCategory){
                     foreach (Guideline::getAllWhere(['sub_category_id'=> $subCategory->getSubCategoryId()]) as $guideline){
                         $guidelineView = new \app\views\components\guideline\OfficerGuideline($guideline);
@@ -143,6 +152,9 @@ class OfficerController extends Controller
                 $category->update(['cat_id' => $_GET['delete_id']], ['cat_status' => '1']);
                 App::$app->response->redirect('/officer/categories');
                 exit();
+
+            }
+            return $this->requireVerification($request);
         }
         return $this->render('officer_categories', ['model' => $category]);
     }
@@ -152,12 +164,26 @@ class OfficerController extends Controller
         $category = new Category();
 
         if ($request->method() === 'post') {
-            $this->verifyUser($request,$response);
-                $category->loadData($this->getFormData());
-                if ($category->validate() && $category->save()) {
+            if (App::$app->session->get('VERIFIED') === 'TRUE') {
+                App::$app->session->unset_key('VERIFIED');
+                $this->setGetParams($request);
+
+                if (isset($_GET["edit_id"])) {
+                    $data = $request->getBody();
+                    $category->update(['cat_id' => $_GET['edit_id']], $data);
                     App::$app->response->redirect('/officer/categories');
                     exit();
                 }
+
+                $category->loadData($request->getBody());
+                if ($category->save()) {
+                    App::$app->response->redirect('/officer/categories');
+                    exit();
+                } else {
+                    echo '<script> alert("Failed to save") </script>';
+                }
+            }
+            return $this->requireVerification($request);
         }
         return $this->render('officer_add_category', ['model' => $category]);
 
@@ -166,23 +192,23 @@ class OfficerController extends Controller
     public function subcategory(Request $request, Response $response)
     {
         $subcategory = new SubCategory();
+        $this->setGetParams($request);
 
         if (isset($_GET['edit_id'])) {
-            $subcategory = SubcategoryProxy::getById($_GET['edit_id'])->getSubcategoryObject();
             if ($request->method() === "post") {
-                $this->verifyUser($request,$response);
-                $subcategory->loadData($this->getFormData());
-                if ($subcategory->validate() && $subcategory->update(['sub_category_id' => $_GET['edit_id']], $request->getBody())) {
-                    Notification::addNotification(SubCategory::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::SUB_CATEGORY);
-                    App::$app->response->redirect('/officer/subcategories');
-                    exit();
-                }
+                $request->setRequestUri("/officer/add-subcategory?edit_id=" . $_GET['edit_id']);
+                $request->setPath("/officer/add-subcategory");
+                App::$app->run();
+                exit();
             }
-            return $this->render('officer_add_subcategory', ['model' => $subcategory]);
+
+            return $this->render('officer_add_subcategory', ['model' => SubcategoryProxy::getById($_GET['edit_id'])->getSubcategoryObject()]);
         }
 
         if (isset($_GET['delete_id'])) {
-            $this->verifyUser($request,$response);
+            if (App::$app->session->get('VERIFIED') === 'TRUE') {
+                App::$app->session->unset_key('VERIFIED');
+
                 foreach (Guideline::getAllWhere(['sub_category_id'=> $_GET['delete_id']]) as $guideline){
                     $guidelineView = new \app\views\components\guideline\OfficerGuideline($guideline);
                     $guidelineView->getState()->delete($guidelineView);
@@ -193,6 +219,8 @@ class OfficerController extends Controller
                 App::$app->response->redirect('/officer/subcategories');
                 exit();
 
+            }
+            return $this->requireVerification($request);
         }
 
         return $this->render('officer_subcategory', ['model' => $subcategory]);
@@ -203,62 +231,84 @@ class OfficerController extends Controller
         $subcategory = new SubCategory();
         $subcategory->loadData($request->getBody());
         if ($request->method() === 'post') {
-            $this->verifyUser($request,$response);
-                $subcategory->loadData($this->getFormData());
+            if (App::$app->session->get('VERIFIED') === 'TRUE') {
+                App::$app->session->unset_key('VERIFIED');
+                $this->setGetParams($request);
+
+                if (isset($_GET["edit_id"])) {
+                    $subcategory->update(['sub_category_id' => $_GET['edit_id']], $request->getBody());
+                    Notification::addNotification(SubCategory::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::SUB_CATEGORY);
+                    App::$app->response->redirect('/officer/subcategories');
+                    exit();
+                }
+
+                $subcategory->loadData($request->getBody());
                 if ($subcategory->validate() && $subcategory->save()) {
                     Notification::addNotification(SubCategory::getCategoryID(DbModel::lastInsertID()), Notification::CREATE_NOTIFICATION, Notification::SUB_CATEGORY);
                     App::$app->response->redirect('/officer/subcategories');
                     exit();
+                } else {
+                    echo '<script>alert("Fail to save the subcategory")</script>';
                 }
+            }
+            return $this->requireVerification($request);
         }
         return $this->render('officer_add_subcategory', ['model' => $subcategory,]);
+
     }
 
     public function verify(Request $request, Response $response)
     {
-        if ($request->method() === 'post') {
-            if (password_verify($_POST['verify'], App::$app->user->getPassword())) {
-                App::$app->session->set('VERIFIED', 'TRUE');
-                $request_prev = unserialize(App::$app->session->get('REQUEST'));
-                App::$app->session->unset_key('REQUEST');
-                App::$app->session->unset_key('fail');
+        if (password_verify($_POST['verify'], App::$app->user->getPassword())) {
+            App::$app->session->set('VERIFIED', 'TRUE');
+            $request_prev = unserialize(App::$app->session->get('REQUEST'));
+            App::$app->session->unset_key('REQUEST');
 
-                //setting the previous request and resolving it
-                App::$app->session->set('FORM_DATA',$request_prev->getBody());
-                $response->temporaryRedirect($request_prev->getRequestURI());
-                exit();
-            }
+            //setting the previous request and resolving it
+            App::$app->router->request = $request_prev;
+            App::$app->run();
+
+            exit();
         }
-        if (App::$app->session->get('fail'))
-            return $this->render('officer_verify',['fail'=>true]);
-        App::$app->session->set('fail', true);
-        return $this->render('officer_verify',['fail'=>false]);
+//        throw new \Error("Invalid Password", 403);
+        echo $this->requireVerification($request);
+        exit();
     }
 
     public function cancel_verify(Request $request, Response $response)
     {
         $request_prev = unserialize(App::$app->session->get('REQUEST'));
         App::$app->session->unset_key('REQUEST');
-        App::$app->session->unset_key('fail');
+
+        //setting the previous request and resolving it
+        App::$app->router->request = $request_prev;
 
         $response->redirect($request_prev->getPath());
     }
 
-    private function verifyUser(Request $request, Response $response)
+    private
+    function requireVerification(Request $request)
     {
-        if(App::$app->session->get('VERIFIED') === 'TRUE') {
-            App::$app->session->unset_key('VERIFIED');
+        if (App::$app->session->isset('REQUEST')) {
+            return $this->render('officer_verify', ['fail' => true]);
         }
-        else {
-            App::$app->session->set('REQUEST', serialize($request));
-            App::$app->session->set('fail',false);
-            $response->redirect('/officer/verify');
-            exit();
-        }
+        App::$app->session->set('REQUEST', serialize($request));
+        $this->setLayout('main');
+        return $this->render('officer_verify',['fail' => false]);
     }
 
-    private function getFormData():array
+    /**
+     * @param Request $request
+     */
+    private function setGetParams(Request $request): void
     {
-        return App::$app->session->get('FORM_DATA');
+        $param = parse_url($request->getRequestURI(), PHP_URL_QUERY);
+        if ($param === null) return;
+        $query = mb_split("&", $param);
+        if (!empty($query)) foreach ($query as $qr) {
+            $vars = mb_split('=', $qr);
+            if ($vars[0] != null)
+                $_GET[$vars[0]] = $vars[1];
+        }
     }
 }

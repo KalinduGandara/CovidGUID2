@@ -34,7 +34,9 @@ $app->router->get('/notification', [SiteController::class, 'notification']);
 $app->router->get('/admin', [AdminController::class, 'index']);
 $app->router->get('/admin/users', [AdminController::class, 'users']);
 $app->router->post('/admin/users', [AdminController::class, 'users']);
+$app->router->get('/admin/verify', [AdminController::class, 'verify']);
 $app->router->post('/admin/verify', [AdminController::class, 'verify']);
+$app->router->get('/admin/cancel-verify', [AdminController::class, 'cancel_verify']);
 
 
 //officer routes
@@ -56,7 +58,9 @@ $app->router->get('/officer/add-subcategory', [OfficerController::class, 'add_su
 $app->router->post('/officer/add-subcategory', [OfficerController::class, 'add_subcategory']);
 
 
+$app->router->get('/officer/verify', [OfficerController::class, 'verify']);
 $app->router->post('/officer/verify', [OfficerController::class, 'verify']);
+$app->router->get('/officer/cancel-verify', [OfficerController::class, 'cancel_verify']);
 
 $app->router->get('/login', [AuthController::class, 'login']);
 $app->router->post('/login', [AuthController::class, 'login']);

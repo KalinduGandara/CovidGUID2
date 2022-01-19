@@ -9,7 +9,7 @@ class Category extends \app\core\db\DbModel
     public string $cat_title = '';
     public string $category_description = '';
     public string $cat_id = '';
-    public string $cat_status = '';
+    public string $cat_status = '0';
 
     public function save()
     {

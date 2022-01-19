@@ -64,4 +64,8 @@ class Session
         $_SESSION[self::FLASH_KEY] = $flashMessages;
     }
 
+    public function isset($key)
+    {
+        return isset($_SESSION[$key]);
+    }
 }

@@ -19,7 +19,7 @@ class AuthController extends Controller
 
     public function __construct()
     {
-        $this->registerMiddleware(new AuthMiddleware(['profile','subscribe']));
+        $this->registerMiddleware(new AuthMiddleware(['profile']));
         $this->registerMiddleware(new ActiveMiddleware(['profile','subscribe']));
     }
 
@@ -78,14 +78,6 @@ class AuthController extends Controller
         $currentUser = APP::$app->user;
         $user = User::findOne(['id' => $currentUser->id]);
         $user->password = '';
-        $notifications = [];
-        $unseenNotifications = 0;
-        if (!App::isGuest()) {
-            $notifications = Notification::getNotifications();
-            foreach ($notifications as $notification) {
-                if ($notification->status == 0) $unseenNotifications++;
-            }
-        }
 
         if ($request->method() === 'post') {
             $user->loadData($request->getBody());
@@ -99,7 +91,7 @@ class AuthController extends Controller
             return $this->render('profile', ['model' => $user]);
         }
         $this->setLayout('auth2');
-        return $this->render('profile', ['model' => $user,'unseenNotifications' => $unseenNotifications, 'notifications' => $notifications]);
+        return $this->render('profile', ['model' => $user]);
     }
 
     public function subscribe(Request $request,Response $response)

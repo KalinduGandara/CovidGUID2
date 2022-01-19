@@ -22,9 +22,9 @@ class Form
         echo '</form>';
     }
 
-    public function field(Model $model, $attribute)
+    public function field(Model $model, $attribute, bool $required= false)
     {
-        return new InputField($model, $attribute);
+        return new InputField($model, $attribute, $required);
     }
 
 
@@ -34,9 +34,9 @@ class Form
      * @param array $options Associative array ['value' => 'Display']
      * @return SelectField
      */
-    public function selectField(?Model $model, string $attribute, array $options,bool $disabled=false, string $selected = '')
+    public function selectField(?Model $model, string $attribute, array $options,bool $disabled=false, string $selected = '', bool $required = false)
     {
-        return new SelectField($model,$attribute, $options,$disabled, $selected);
+        return new SelectField($model,$attribute, $options,$disabled, $selected, $required);
     }
 
     public function textareaField(Model $model, $attribute){
