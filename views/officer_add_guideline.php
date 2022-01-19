@@ -109,7 +109,21 @@ foreach (\app\models\proxy\SubcategoryProxy::getAllWhere(['sub_category_status'=
                         </div>
                     </div>
                 </div>
+                <script>
+                    $(document).ready(()=>{
+                        $('select[name="cat_id"]').change(()=>{
+                            window.location.href = "/officer/add-guideline?cat_id="+$('select[name="cat_id"]').val();
+                        });
 
+                        $('select[name="sub_category_id"]').change(()=>{
+                            window.location.href = "/officer/add-guideline?cat_id="+$('select[name="cat_id"]').val()+"&sub_category_id="+$('select[name="sub_category_id"]').val();
+                        });
+
+                    });
+
+
+
+                </script>
 
             </div>
 
