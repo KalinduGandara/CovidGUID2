@@ -27,9 +27,9 @@ class OfficerSubcategory extends Subcategory
             'end' => $end,
         ];
     }
-    public static function renderAllSubCategories(){
-        $subcategories = \app\models\proxy\SubcategoryProxy::getAll();
-        $subcategories = array_filter($subcategories, function (SubcategoryProxy $subcategoryProxy){return $subcategoryProxy->getSubCategoryStatus() === '0';});
+    public static function renderAllSubCategories(string $status){
+        $subcategories = \app\models\proxy\SubcategoryProxy::getAllWhere(['sub_category_status'=>$status]);
+//        $subcategories = array_filter($subcategories,$status,function (SubcategoryProxy $subcategoryProxy,string $status){return $subcategoryProxy->getSubCategoryStatus() === $status;});
 
         $render = '<table class="table table-bordered table-hover">
                                 <thead>
@@ -49,10 +49,11 @@ class OfficerSubcategory extends Subcategory
 
             $render .= "<tr>
                                             <td>$sub_category_name</td>
-                                            <td>$category_title</td>
-                            
-                                            <td><a href='subcategories?delete_id=$sub_category_id'>Delete</a></td>
-                                            <td><a href='subcategories?edit_id=$sub_category_id'>Edit</a></td>
+                                            <td>$category_title</td>";
+            if ($status === '0')
+            $render .=  "
+                                            <td><a href='subcategories?edit_id=$sub_category_id'><i class=\"ms-3 mt-2 fa fa-pencil\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"Edit\"></i></a></td>
+                                            <td><a href='subcategories?delete_id=$sub_category_id'><i class=\"ms-3 mt-2 fa fa-minus-circle\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"Delete\"></i></a></td>
                                             </tr>";
         }
 

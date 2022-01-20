@@ -29,7 +29,7 @@
                     </div>
                     <hr>
                     <div>
-                        <?php \app\views\components\category\OfficerCategory::renderAllCategories()?>
+                        <?php \app\views\components\category\OfficerCategory::renderAllCategories('0')?>
                     </div>
                 </div>
 
