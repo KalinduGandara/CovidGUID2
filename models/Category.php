@@ -13,7 +13,7 @@ class Category extends \app\core\db\DbModel
 
     public function save()
     {
-        $this->cat_status = 0;
+        $this->cat_status = '0';
         return parent::save();
     }
 

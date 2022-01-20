@@ -49,7 +49,7 @@ foreach (\app\models\proxy\CategoryProxy::filterDeleted() as $category) {
                         <div class="col-xs-6">
 
 
-                            <?php \app\views\components\subcategory\OfficerSubcategory::renderAllSubCategories()?>
+                            <?php \app\views\components\subcategory\OfficerSubcategory::renderAllSubCategories('0')?>
 
                         </div>
                     </div>

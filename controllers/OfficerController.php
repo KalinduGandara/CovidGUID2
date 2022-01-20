@@ -172,7 +172,7 @@ class OfficerController extends Controller
             if ($request->method() === "post") {
                 $this->verifyUser($request,$response);
                 $subcategory->loadData($this->getFormData());
-                if ($subcategory->validate() && $subcategory->update(['sub_category_id' => $_GET['edit_id']], $request->getBody())) {
+                if ($subcategory->validate() && $subcategory->update(['sub_category_id' => $_GET['edit_id']], $this->getFormData())) {
                     Notification::addNotification(SubCategory::getCategoryID($_GET['edit_id']), Notification::UPDATE_NOTIFICATION, Notification::SUB_CATEGORY);
                     App::$app->response->redirect('/officer/subcategories');
                     exit();

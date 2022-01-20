@@ -22,9 +22,9 @@ class OfficerCategory extends Category
         return '';
     }
 
-    public static function renderAllCategories(){
-        $categories = \app\models\proxy\CategoryProxy::getAll();
-        $categories = array_filter($categories, function (CategoryProxy $categoryProxy){return $categoryProxy->getCatStatus() === '0';});
+    public static function renderAllCategories(string $status){
+        $categories = \app\models\proxy\CategoryProxy::getAllWhere(['cat_status'=>$status]);
+//        $categories = array_filter($categories, function (CategoryProxy $categoryProxy){return $categoryProxy->getCatStatus() === '0';});
 
         $render = '<table class="table table-bordered table-hover">
                             <thead>
@@ -41,8 +41,9 @@ class OfficerCategory extends Category
             $category_description = $category->getCategoryDescription();
             $render.= "<tr>
                                 <td>$cat_title</td>
-                                <td>$category_description</td>
-                                <td><a href=\"categories?edit_id=$cat_id\"><i class=\"ms-3 mt-2 fa fa-pencil\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"Edit\"></i></a></td>
+                                <td>$category_description</td>";
+            if ($status === '0')
+            $render.= "                   <td><a href=\"categories?edit_id=$cat_id\"><i class=\"ms-3 mt-2 fa fa-pencil\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"Edit\"></i></a></td>
                                 <td><a href=\"categories?delete_id=$cat_id\"><i class=\"ms-3 mt-2 fa fa-minus-circle\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"Delete\"></i></a></td>
                                 </tr>";
         }

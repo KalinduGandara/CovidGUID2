@@ -7,21 +7,52 @@
                 <!-- Page Heading -->
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">
-                            <?php if (isset($_GET['edit_id'])){?>
-                                Edit Category
-                            <?php }else{?>
-                            Categories
-                            <?php }?>
 
-                        </h1>
+                            <?php if (isset($_GET['edit_id'])){?>
+                            <h1 class="page-header">
+                                Edit Category
+                            </h1>
+                            <?php }else{?>
+                            <h1 class="page-header">
+                                Categories
+                            </h1>
+                                <?php
+                                $form = \app\core\form\Form::begin('', 'get');
+                                $filter =  $form->selectField(null, 'status', [
+                                    '0' => 'Active',
+                                    '1' => 'Deleted',
+                                ]);
+                                if(isset($_GET['status'])){
+                                    $filter->select($_GET['status']);
+                                }
+                                echo $filter;
+                                ?>
+                                <div>
+                                    <?php if(!isset($_GET['status'])){?>
+                                        <button type="submit" class="btn btn-success">Apply</button>
+                                    <?php }
+                                    else {?>
+                                        <a href="/officer/categories" class="btn btn-secondary">Clear filters</a>
+                                    <?php }?>
+                                    <a href="/officer/add-category" class="btn btn-primary">Add New Category</a>
+                                </div>
+                                <?php
+                                $form::end();
+                                ?>
+                                <hr>
+                            <?php }?>
                         <hr>
                     </div>
                 </div>
                 <!-- /.row -->
                 <div class="container">
 
-                            <?php \app\views\components\category\OfficerCategory::renderAllCategories()?>
+                            <?php
+                            if (isset($_GET['status']) && $_GET['status']==='1')
+                                \app\views\components\category\OfficerCategory::renderAllCategories('1');
+                            else
+                                \app\views\components\category\OfficerCategory::renderAllCategories('0');
+                            ?>
                         </div>
 
             </div>
