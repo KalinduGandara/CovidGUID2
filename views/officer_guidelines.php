@@ -40,10 +40,8 @@
             ?>
 
             <div>
-                <?php if(!isset($_GET['status'])){?>
-                    <button type="submit" class="btn btn-success">Apply</button>
-                <?php }
-                else {?>
+                <button type="submit" class="btn btn-success">Apply</button>
+                <?php if(isset($_GET['status'])){?>
                     <a href="/officer/guidelines" class="btn btn-secondary">Clear filters</a>
                 <?php }?>
                 <a href="/officer/add-guideline" class="btn btn-primary">Add new guideline</a>
