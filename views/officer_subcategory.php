@@ -40,10 +40,9 @@ foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
                                     ?>
 
                                     <div>
-                                        <button type="submit" class="btn btn-success">Apply</button>
                                         <?php if(isset($_GET['status'])){?>
                                             <a href="/officer/subcategories" class="btn btn-secondary">Clear filters</a>
-                                        <?php }?>
+                                        <?php } ?>
                                         <a href="/officer/add-subcategory" class="btn btn-primary">Add new Sub Category</a>
                                     </div>
                                     <?php
@@ -92,6 +91,13 @@ foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
                     </div>
 
                 </div>
+                <script>
+                    $(document).ready(()=>{
+                        $('select[name="status"]').change(()=>{
+                            window.location.href = "/officer/subcategories?status="+$('select[name="status"]').val();
+                        });
+                    });
+                </script>
             </div>
         </div>
     </div>

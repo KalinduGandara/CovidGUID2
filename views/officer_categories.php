@@ -28,10 +28,9 @@
                                 echo $filter;
                                 ?>
                                 <div>
-                                    <button type="submit" class="btn btn-success">Apply</button>
                                     <?php if(isset($_GET['status'])){?>
                                         <a href="/officer/categories" class="btn btn-secondary">Clear filters</a>
-                                    <?php }?>
+                                    <?php } ?>
                                     <a href="/officer/add-category" class="btn btn-primary">Add New Category</a>
                                 </div>
                                 <?php
@@ -55,5 +54,12 @@
 
             </div>
         </div>
+        <script>
+            $(document).ready(()=>{
+                $('select[name="status"]').change(()=>{
+                    window.location.href = "/officer/categories?status="+$('select[name="status"]').val();
+                });
+            });
+        </script>
     </div>
 </div>

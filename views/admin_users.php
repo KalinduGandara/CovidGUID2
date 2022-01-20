@@ -37,12 +37,10 @@
                 </div>
             </div>
             <div>
-                <?php if(((!isset($_GET['status'])) && (!isset($_GET['type'])))){?>
-                    <button type="submit" class="btn btn-success">Apply</button>
-                <?php }
-                else {?>
+                <?php if(((isset($_GET['status'])) || (isset($_GET['type'])))){?>
                     <a href="/admin/users" class="btn btn-secondary">Clear filters</a>
-                <?php }?>
+                <?php } ?>
+
                 <a href="/admin/users?source=add_user" class="btn btn-primary">Add New User</a>
             </div>
             <?php
@@ -118,6 +116,28 @@
                 <?php } ?>
 
             </div>
+            <script>
+                $(document).ready(()=>{
+                    $('select[name="status"]').change(()=>{
+                        if ($('select[name="type"]').val() != undefined)
+                            window.location.href = "/admin/users?status="+$('select[name="status"]').val()+"&type="+$('select[name="type"]').val();
+                        else
+                            window.location.href = "/admin/users?status="+$('select[name="status"]').val();
+
+                    });
+
+                    $('select[name="type"]').change(()=>{
+                        if ($('select[name="status"]').val() != undefined)
+                            window.location.href = "/admin/users?status="+$('select[name="status"]').val()+"&type="+$('select[name="type"]').val();
+                        else
+                            window.location.href = "/admin/users?status="+$('select[name="type"]').val();
+                    });
+
+                });
+
+
+
+            </script>
         </div>
     </div>
 </div>
