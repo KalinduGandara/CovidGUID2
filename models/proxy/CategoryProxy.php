@@ -28,6 +28,25 @@ class CategoryProxy
 
         return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
+    /**
+     * @param $where
+     * @return CategoryProxy[]
+     */
+    public static function getAllWhere($where)
+    {
+        $tableName = 'categories';
+        $attribute = array_keys($where);
+        $sql = implode(" AND ",array_map(fn($attr)=>"$attr = :$attr",$attribute));
+        $SQL = "SELECT * FROM $tableName WHERE $sql";
+
+        $statement = App::$app->db->pdo->prepare($SQL);
+        foreach ($where as $key => $value) {
+            $statement->bindValue(":$key",$value);
+        }
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
+    }
 
     public static function filterDeleted()
     {

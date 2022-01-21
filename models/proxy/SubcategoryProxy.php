@@ -66,7 +66,7 @@ class SubcategoryProxy
         $tableName = 'sub_categories';
         $attribute = array_keys($where);
         $sql = implode(" AND ",array_map(fn($attr)=>"$attr = :$attr",$attribute));
-        $SQL = "SELECT * FROM $tableName WHERE $sql";
+        $SQL = "SELECT * FROM $tableName WHERE $sql ORDER BY cat_id";
 
         $statement = App::$app->db->pdo->prepare($SQL);
         foreach ($where as $key => $value) {

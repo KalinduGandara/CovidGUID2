@@ -27,6 +27,28 @@ foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
                                     <h1 class="page-header">
                                     Subcategories
                                     </h1>
+                                    <?php
+                                    $form = \app\core\form\Form::begin('', 'get');
+                                    $filter =  $form->selectField(null, 'status', [
+                                        '0' => 'Active',
+                                        '1' => 'Deleted',
+                                    ]);
+                                    if(isset($_GET['status'])){
+                                        $filter->select($_GET['status']);
+                                    }
+                                    echo $filter;
+                                    ?>
+
+                                    <div>
+                                        <?php if(isset($_GET['status'])){?>
+                                            <a href="/officer/subcategories" class="btn btn-secondary">Clear filters</a>
+                                        <?php } ?>
+                                        <a href="/officer/add-subcategory" class="btn btn-primary">Add new Sub Category</a>
+                                    </div>
+                                    <?php
+                                    $form::end();
+                                    ?>
+                                    <hr>
 
                                     <?php
                                 }
@@ -58,11 +80,24 @@ foreach (\app\models\proxy\CategoryProxy::getAll() as $category) {
 
                         <div class="col-xs-6">
 
-                            <?php \app\views\components\subcategory\OfficerSubcategory::renderAllSubCategories()?>
+                            <?php
+                            if (isset($_GET['status']) && $_GET['status']==='1')
+                                \app\views\components\subcategory\OfficerSubcategory::renderAllSubCategories('1');
+                            else
+                                \app\views\components\subcategory\OfficerSubcategory::renderAllSubCategories('0');
+
+                            ?>
                         </div>
                     </div>
 
                 </div>
+                <script>
+                    $(document).ready(()=>{
+                        $('select[name="status"]').change(()=>{
+                            window.location.href = "/officer/subcategories?status="+$('select[name="status"]').val();
+                        });
+                    });
+                </script>
             </div>
         </div>
     </div>

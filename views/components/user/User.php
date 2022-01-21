@@ -47,23 +47,24 @@ class User implements IComponent
             \app\models\User::PUBLIC_USER => "Public User",
             default => '',
         };
-        $hidden = $this->user->getStatus() == \app\models\User::STATUS_DELETE ? 'hidden':'';
         $view_type =  match ($this->user->getStatus()) {
             \app\models\User::STATUS_ACTIVE => "table-primary",
             \app\models\User::STATUS_INACTIVE => "table-warning",
             \app\models\User::STATUS_DELETE => "table-danger",
             default => '',
         };
-
-       return '<tr class="'.$view_type.'">
+        $render = '<tr class="'.$view_type.'">
                             <td>'.$user_firstname.'</td>
                             <td>'.$user_lastname.'</td>
                             <td>'.$user_email.'</td>
                             <td>'.$user_role.'</td>
-                            <td>'.$user_status.'</td>
-                            <td><a '.$hidden.' href="users?source=change_status&user_id='.$user_id.'">Change Status</a></td>
-                            <td><a '.$hidden.' href="users?source=edit_user&edit_user_id='.$user_id.'">Edit</a></td>
-                            <td><a '.$hidden.' href="users?del_id='.$user_id.'">Delete</a></td>
+                            <td>'.$user_status.'</td>';
+        if (!($this->user->getStatus() == \app\models\User::STATUS_DELETE))
+            $render .=      '<td><a  href="users?source=change_status&user_id='.$user_id.'"><i class="ms-3 mt-2 fa fa-print" data-bs-toggle="tooltip" data-bs-placement="top" title="Change Status"></i></a></td>
+                            <td><a href="users?source=edit_user&edit_user_id='.$user_id.'"><i class="ms-3 mt-2 fa fa-pencil" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a></td>
+                            <td><a href="users?del_id='.$user_id.'"><i class="ms-3 mt-2 fa fa-minus-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i></a></td>
                 </tr>';
+
+       return $render;
     }
 }

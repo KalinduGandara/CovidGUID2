@@ -15,7 +15,7 @@
 
                     </h1>';
 
-                foreach (\app\models\proxy\SubCategoryProxy::getAllWhere(['cat_id'=> $categoryProxy->getCatId()]) as $subcategory){
+                foreach (\app\models\proxy\SubCategoryProxy::getAllWhere(['cat_id'=> $categoryProxy->getCatId(),'sub_category_status'=>'0']) as $subcategory){
                     $subcategoryView = \app\views\components\subcategory\SubcategoryBuilder::buildPublicVeiw($subcategory->getSubCategoryId());
                     $subcategoryView->includeTitle()->render();
                 }

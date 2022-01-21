@@ -80,12 +80,12 @@ foreach (\app\models\proxy\SubcategoryProxy::getAllWhere(['sub_category_status'=
                         echo $form->checkbox($model,'guid_status', '2');
                     }
                     else
-                        echo $form->selectField($model, 'sub_category_id', $subcategory_options);
+                        echo $form->selectField($model, 'sub_category_id', $subcategory_options, required: true);
 
                 }
 
                 else
-                    echo $form->selectField(new \app\models\SubCategory(), 'cat_id', $category_options);
+                    echo $form->selectField(new \app\models\SubCategory(), 'cat_id', $category_options, required: true);
 
                 ?>
                 <br />
