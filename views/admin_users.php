@@ -6,23 +6,23 @@
             <h1>Manage Users </h1>
             <?php
             $form = \app\core\form\Form::begin('', 'get');
-            $filter1 =  $form->selectField(null, 'status', [
+            $filter1 =  $form->selectField(null, 'qstatus', [
                 '0' => 'Inactive',
                 '1' => 'Active',
                 '2' => 'Deleted',
             ]);
             $selectStatus = false;
             $selectType = false;
-            if(isset($_GET['status'])){
-                $filter1->select($_GET['status']);
+            if(isset($_GET['qstatus'])){
+                $filter1->select($_GET['qstatus']);
                 $selectStatus = true;
             }
-            $filter2 =  $form->selectField(null, 'type', [
+            $filter2 =  $form->selectField(null, 'qtype', [
                 '1' => 'Officer',
                 '2' => 'Public User',
             ]);
-            if(isset($_GET['type'])){
-                $filter2->select($_GET['type']);
+            if(isset($_GET['qtype'])){
+                $filter2->select($_GET['qtype']);
                 $selectType = true;
             }
             ?>
@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div>
-                <?php if(((isset($_GET['status'])) || (isset($_GET['type'])))){?>
+                <?php if(((isset($_GET['qstatus'])) || (isset($_GET['qtype'])))){?>
                     <a href="/admin/users" class="btn btn-secondary">Clear filters</a>
                 <?php } ?>
 
@@ -63,11 +63,11 @@
 
                     <?php
                     if ($selectType && $selectStatus)
-                        $users = \app\models\User::getAllWhere(['status'=>$_GET['status'],'type'=>$_GET['type']]);
+                        $users = \app\models\User::getAllWhere(['status'=>$_GET['qstatus'],'type'=>$_GET['qtype']]);
                     elseif ($selectType)
-                        $users = \app\models\User::getAllWhere(['type'=>$_GET['type']]);
+                        $users = \app\models\User::getAllWhere(['type'=>$_GET['qtype']]);
                     elseif ($selectStatus)
-                        $users = \app\models\User::getAllWhere(['status'=>$_GET['status']]);
+                        $users = \app\models\User::getAllWhere(['status'=>$_GET['qstatus']]);
                     else
                         $users = \app\models\User::getAll();
                     foreach ($users as $user) {
@@ -118,19 +118,19 @@
             </div>
             <script>
                 $(document).ready(()=>{
-                    $('select[name="status"]').change(()=>{
-                        if ($('select[name="type"]').val() != undefined)
-                            window.location.href = "/admin/users?status="+$('select[name="status"]').val()+"&type="+$('select[name="type"]').val();
+                    $('select[name="qstatus"]').change(()=>{
+                        if ($('select[name="qtype"]').val() != undefined)
+                            window.location.href = "/admin/users?qstatus="+$('select[name="qstatus"]').val()+"&qtype="+$('select[name="qtype"]').val();
                         else
-                            window.location.href = "/admin/users?status="+$('select[name="status"]').val();
+                            window.location.href = "/admin/users?qstatus="+$('select[name="qstatus"]').val();
 
                     });
 
-                    $('select[name="type"]').change(()=>{
-                        if ($('select[name="status"]').val() != undefined)
-                            window.location.href = "/admin/users?status="+$('select[name="status"]').val()+"&type="+$('select[name="type"]').val();
+                    $('select[name="qtype"]').change(()=>{
+                        if ($('select[name="qstatus"]').val() != undefined)
+                            window.location.href = "/admin/users?qstatus="+$('select[name="qstatus"]').val()+"&qtype="+$('select[name="qtype"]').val();
                         else
-                            window.location.href = "/admin/users?status="+$('select[name="type"]').val();
+                            window.location.href = "/admin/users?qstatus="+$('select[name="qtype"]').val();
                     });
 
                 });
