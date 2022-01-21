@@ -130,7 +130,7 @@
                         if ($('select[name="qstatus"]').val() != undefined)
                             window.location.href = "/admin/users?qstatus="+$('select[name="qstatus"]').val()+"&qtype="+$('select[name="qtype"]').val();
                         else
-                            window.location.href = "/admin/users?qstatus="+$('select[name="qtype"]').val();
+                            window.location.href = "/admin/users?qtype="+$('select[name="qtype"]').val();
                     });
 
                 });
