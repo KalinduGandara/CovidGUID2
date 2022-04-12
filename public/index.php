@@ -53,6 +53,7 @@ $app->router->post('/officer/add-category', [OfficerController::class, 'add_cate
 
 $app->router->get('/officer/subcategories', [OfficerController::class, 'subcategory']);
 $app->router->post('/officer/subcategories', [OfficerController::class, 'subcategory']);
+
 $app->router->get('/officer/add-subcategory', [OfficerController::class, 'add_subcategory']);
 $app->router->post('/officer/add-subcategory', [OfficerController::class, 'add_subcategory']);
 

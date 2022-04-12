@@ -48,6 +48,9 @@ abstract class DbModel extends Model
     {
         $tableName = $this->tableName();
         $attributes = array_filter($this->attributes(),array($this, 'checkParamsEmpty'));
+        echo "AAAAAAAAAA";
+        var_dump($attributes);
+        exit();
         $params = array_map(fn($v)=>":$v",$attributes);
         $SQL = "INSERT INTO $tableName (".implode(',',$attributes).")VALUES(".implode(',',$params).")";
         $statement = self::prepare($SQL);
@@ -165,6 +168,7 @@ abstract class DbModel extends Model
 
     public function checkParamsEmpty($attribute)
     {
+        var_dump($this->{$attribute});
         if (isset($this->{$attribute}))
             return true;
         return false;
